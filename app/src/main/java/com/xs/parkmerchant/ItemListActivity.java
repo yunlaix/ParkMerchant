@@ -2,16 +2,14 @@ package com.xs.parkmerchant;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.xs.parkmerchant.Adapter.SimpleItemRecyclerViewAdapter;
+import com.xs.parkmerchant.Helper.ItemTouchHelperAdapter;
+import com.xs.parkmerchant.Helper.ItemTouchHelperViewHolder;
+import com.xs.parkmerchant.Helper.OnStartDragListener;
+import com.xs.parkmerchant.Helper.SimpleItemTouchHelperCallback;
 import com.xs.parkmerchant.dummy.DummyContent;
 
 import java.util.List;
@@ -32,17 +35,13 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ItemListActivity extends AppCompatActivity {
-
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
+public class ItemListActivity extends AppCompatActivity implements OnStartDragListener {
 
     private boolean isLoadingMore = false;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private ItemTouchHelper mItemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +73,11 @@ public class ItemListActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-        if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS, this);
+        recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -100,74 +92,14 @@ public class ItemListActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<DummyContent.DummyItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        ItemDetailFragment fragment = new ItemDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ItemDetailActivity.class);
-                        intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-        }
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }
