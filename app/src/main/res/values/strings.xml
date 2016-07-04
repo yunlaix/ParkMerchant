@@ -2,4 +2,6 @@
     <string name="app_name">ParkMerchant</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title11">商家版</string>
+    <string name="tab1">停车券</string>
+    <string name="tab2">活动</string>
 </resources>

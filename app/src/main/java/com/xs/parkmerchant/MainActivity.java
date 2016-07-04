@@ -1,6 +1,5 @@
 package com.xs.parkmerchant;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -9,28 +8,22 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.xs.parkmerchant.Adapter.MyViewPagerAdapter;
-import com.xs.parkmerchant.Adapter.SimpleItemRecyclerViewAdapter;
-import com.xs.parkmerchant.View.MyListView;
+import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
+import com.xs.parkmerchant.View.ActivityListView;
 import com.xs.parkmerchant.View.MyViewPager;
-import com.xs.parkmerchant.dummy.DummyContent;
-
+import com.xs.parkmerchant.Net.ActivityContent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +31,15 @@ import java.util.List;
  * An activity representing a list of Items. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
+ * lead to a {@link ActivityDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ItemListActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private boolean isLoadingMore = false;
-    private SimpleItemRecyclerViewAdapter adapter;
+    private ActivityListViewAdapter adapter;
+    private ActivityContent ac;
     private SwipeRefreshLayout swipeRefreshLayout;
     int lastItem;
 
@@ -61,7 +55,7 @@ public class ItemListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
+        setContentView(R.layout.activity_main);
 
         //viewPager
         initImageView();
@@ -71,7 +65,7 @@ public class ItemListActivity extends AppCompatActivity {
         //listView
         View listView = view2.findViewById(R.id.item_list);
         assert listView != null;
-        setupRecyclerView((MyListView) listView);
+        setupRecyclerView((ActivityListView) listView);
 
         //refresh
         swipeRefreshLayout = (SwipeRefreshLayout) view2.findViewById(R.id.swipeLayout);
@@ -90,8 +84,8 @@ public class ItemListActivity extends AppCompatActivity {
         viewPager = (MyViewPager) findViewById(R.id.vPager);
         views = new ArrayList<View>();
         LayoutInflater layoutInflater = getLayoutInflater();
-        view1 = layoutInflater.inflate(R.layout.tab1, null);
-        view2 = layoutInflater.inflate(R.layout.tab2, null);
+        view1 = layoutInflater.inflate(R.layout.tab_tickets, null);
+        view2 = layoutInflater.inflate(R.layout.tab_activities, null);
         views.add(view1);
         views.add(view2);
         viewPager.setAdapter(new MyViewPagerAdapter(views));
@@ -149,18 +143,18 @@ public class ItemListActivity extends AppCompatActivity {
         imageView.setImageMatrix(matrix);
     }
 
-    private void setupRecyclerView(@NonNull final MyListView listView) {
-        adapter = new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS, this, listView);
+    private void setupRecyclerView(@NonNull final ActivityListView listView) {
+        ac = new ActivityContent(adapter);
+        adapter = new ActivityListViewAdapter(ac.getITEMS(), this, listView);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(listView.canClick() && !MyListView.isOn){
-                    Intent intent = new Intent(getApplicationContext(), ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, i);
+                if(listView.canClick() && !ActivityListView.isOn){
+                    Intent intent = new Intent(getApplicationContext(), ActivityDetailActivity.class);
                     startActivity(intent);
                 }
-                if(listView.canClick()) MyListView.isOn = false;
+                if(listView.canClick()) ActivityListView.isOn = false;
             }
         });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {

@@ -12,7 +12,7 @@ import android.widget.ListView;
 /**
  * Created by Man on 2016/7/4.
  */
-public class MyListView extends ListView{
+public class ActivityListView extends ListView{
 
     private int screenWidth;
     private int downX, downY;
@@ -24,7 +24,7 @@ public class MyListView extends ListView{
 
     public static boolean isOn = false;
 
-    public MyListView(Context context, AttributeSet attrs){
+    public ActivityListView(Context context, AttributeSet attrs){
         super(context, attrs);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();

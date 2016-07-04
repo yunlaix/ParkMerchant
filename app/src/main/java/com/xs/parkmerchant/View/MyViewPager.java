@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import com.xs.parkmerchant.ItemListActivity;
+import com.xs.parkmerchant.MainActivity;
 
 /**
  * Created by Man on 2016/7/4.
@@ -30,7 +30,7 @@ public class MyViewPager extends ViewPager {
                 break;
             case MotionEvent.ACTION_MOVE:
                 int nowX = (int)e.getX();
-                if(nowX < downX && ItemListActivity.currIndex == 1){//to left
+                if(nowX < downX && MainActivity.currIndex == 1){//to left
                     return false;
                 }
             case MotionEvent.ACTION_UP:

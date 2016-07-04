@@ -1,40 +1,27 @@
 package com.xs.parkmerchant.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.xs.parkmerchant.Helper.ItemTouchHelperAdapter;
-import com.xs.parkmerchant.Helper.ItemTouchHelperViewHolder;
-import com.xs.parkmerchant.Helper.OnStartDragListener;
-import com.xs.parkmerchant.ItemDetailActivity;
-import com.xs.parkmerchant.ItemDetailFragment;
 import com.xs.parkmerchant.R;
-import com.xs.parkmerchant.View.MyListView;
-import com.xs.parkmerchant.dummy.DummyContent;
-
-import java.util.Collections;
+import com.xs.parkmerchant.View.ActivityListView;
+import com.xs.parkmerchant.Net.ActivityContent;
 import java.util.List;
 
 /**
  * Created by Man on 2016/7/1.
  */
-public class SimpleItemRecyclerViewAdapter extends BaseAdapter {
+public class ActivityListViewAdapter extends BaseAdapter {
 
-    private List<DummyContent.DummyItem> mValues;
+    private List<ActivityContent.ActivityItem> mValues;
     private Holder holder;
     private LayoutInflater mInflater;
-    private MyListView myListView;
+    private ActivityListView myListView;
 
-    public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items, Context context, MyListView my) {
+    public ActivityListViewAdapter(List<ActivityContent.ActivityItem> items, Context context, ActivityListView my) {
         mValues = items;
         mInflater = LayoutInflater.from(context);
         myListView = my;
@@ -44,7 +31,7 @@ public class SimpleItemRecyclerViewAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null){
             holder = new Holder();
-            view = mInflater.inflate(R.layout.item_list_content, null);
+            view = mInflater.inflate(R.layout.list_content_activity, null);
             holder.mIdView = (TextView) view.findViewById(R.id.id);
             holder.mContentView = (TextView) view.findViewById(R.id.content);
             view.setTag(holder);
