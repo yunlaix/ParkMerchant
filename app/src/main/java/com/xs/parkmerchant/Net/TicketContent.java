@@ -1,10 +1,14 @@
 package com.xs.parkmerchant.Net;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
 import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +30,22 @@ public class TicketContent {
 
     public void refresh(){
         Toast.makeText(context, "刷新...", Toast.LENGTH_SHORT).show();
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    params.add(new BasicNameValuePair("seller_id", "seller"));
+                    params.add(new BasicNameValuePair("num", 0+""));
+                    String result = NetCore.postResulttoNet(Url.ticketList_7, params);
+                    Log.d("result", result+"aaaaaa");
+                    Log.d("ccccc", "ccccccccccccccccccc");
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("aaaa", "ccccccccccccccccccc");
+                }
+            }
+        }).start();
     }
 
     public List<TicketContent.TicketItem> getITEMS(){

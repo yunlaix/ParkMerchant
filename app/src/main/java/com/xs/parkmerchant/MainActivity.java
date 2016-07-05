@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ticketContent.refresh();
-        adapterTicket.notifyDataSetChanged();
     }
 
     private void initViewPager(){
