@@ -17,10 +17,13 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.xs.parkmerchant.Adapter.MyViewPagerAdapter;
 import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
+import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
+import com.xs.parkmerchant.Net.TicketContent;
 import com.xs.parkmerchant.View.ActivityListView;
 import com.xs.parkmerchant.View.MyViewPager;
 import com.xs.parkmerchant.Net.ActivityContent;
@@ -37,11 +40,19 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private ImageView iv_me, iv_publish;
+
     private boolean isLoadingMore = false;
     private ActivityListViewAdapter adapter;
-    private ActivityContent ac;
+    private ActivityContent activityContent;
     private SwipeRefreshLayout swipeRefreshLayout;
     int lastItem;
+
+    private boolean isLoadingMoreTicket = false;
+    private TicketListViewAdapter adapterTicket;
+    private TicketContent ticketContent;
+    private SwipeRefreshLayout swipeRefreshLayoutTicket;
+    int lastItemTicket;
 
     private MyViewPager viewPager;
     private ImageView imageView;
@@ -56,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        iv_me = (ImageView) findViewById(R.id.me);
+        iv_publish = (ImageView) findViewById(R.id.publish);
+        iv_me.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MeActivity.class);
+                startActivity(intent);
+            }
+        });
+        iv_publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PublishActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //viewPager
         initImageView();
@@ -66,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
         View listView = view2.findViewById(R.id.item_list);
         assert listView != null;
         setupRecyclerView((ActivityListView) listView);
+
+        View listViewTicket = view1.findViewById(R.id.item_list);
+        assert listViewTicket != null;
+        setupTicketList((ListView) listViewTicket);
 
         //refresh
         swipeRefreshLayout = (SwipeRefreshLayout) view2.findViewById(R.id.swipeLayout);
@@ -78,6 +109,21 @@ public class MainActivity extends AppCompatActivity {
                 //onRefresh
             }
         });
+
+        swipeRefreshLayoutTicket = (SwipeRefreshLayout) view1.findViewById(R.id.swipeLayout);
+        swipeRefreshLayoutTicket.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        swipeRefreshLayoutTicket.setColorSchemeResources(android.R.color.holo_green_light, android.R.color.white, android.R.color.holo_green_light, android.R.color.white);
+        swipeRefreshLayoutTicket.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayoutTicket.setRefreshing(false);
+                //onRefresh
+                ticketContent.refresh();
+            }
+        });
+
+        ticketContent.refresh();
+        adapterTicket.notifyDataSetChanged();
     }
 
     private void initViewPager(){
@@ -144,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull final ActivityListView listView) {
-        ac = new ActivityContent(adapter);
-        adapter = new ActivityListViewAdapter(ac.getITEMS(), this, listView);
+        activityContent = new ActivityContent(adapter);
+        adapter = new ActivityListViewAdapter(activityContent.getITEMS(), this, listView);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -173,4 +219,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setupTicketList(@NonNull final ListView listView) {
+        ticketContent = new TicketContent(this, adapterTicket);
+        adapterTicket = new TicketListViewAdapter(ticketContent.getITEMS(), this);
+        listView.setAdapter(adapterTicket);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), TicketDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                if(lastItemTicket >= adapterTicket.getCount()-1 && i== AbsListView.OnScrollListener.SCROLL_STATE_IDLE && !isLoadingMoreTicket){
+                    isLoadingMoreTicket = true;
+                    //onLoadMore
+                    Toast.makeText(getApplicationContext(), "加载更多...", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                lastItemTicket = i+i1-1;
+            }
+        });
+    }
+
 }

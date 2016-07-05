@@ -27,6 +27,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity android:name=".MeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".PublishActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".TicketDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

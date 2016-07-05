@@ -8,22 +8,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height">
-        <TextView
+        <ImageView
+            android:id="@+id/me"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="我的"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:src="@mipmap/me"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/title11"/>
-        <TextView
+        <ImageView
+            android:id="@+id/publish"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="发布"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/publish"/>
     </RelativeLayout>
 
     <LinearLayout
