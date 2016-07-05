@@ -5,6 +5,6 @@ package com.xs.parkmerchant.Net;
  */
 public class Url {
 
-    public static String ticketList_7 = "http://139.129.24.127/parking_app/User/seller_getactlistandcount.php";
+    public static String ticketList_7 = "http://139.129.24.127/parking_app/Seller/seller_getactlistandcount.php";
 
 }

@@ -116,12 +116,11 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayoutTicket.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayoutTicket.setRefreshing(false);
                 //onRefresh
                 ticketContent.refresh();
             }
         });
-
+        ticketContent.setSwipe(swipeRefreshLayoutTicket);
         ticketContent.refresh();
     }
 
@@ -220,8 +219,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupTicketList(@NonNull final ListView listView) {
-        ticketContent = new TicketContent(this, adapterTicket);
+        ticketContent = new TicketContent(this);
         adapterTicket = new TicketListViewAdapter(ticketContent.getITEMS(), this);
+        ticketContent.setAdapter(adapterTicket);
         listView.setAdapter(adapterTicket);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
