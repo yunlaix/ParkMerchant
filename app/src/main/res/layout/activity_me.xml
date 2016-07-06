@@ -11,7 +11,6 @@
             android:layout_margin="5dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
             android:src="@mipmap/back"/>
         <TextView
             android:layout_width="wrap_content"
@@ -24,8 +23,14 @@
             android:layout_margin="5dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:foregroundGravity="center_vertical"
             android:layout_alignParentRight="true"
             android:src="@mipmap/logout"/>
     </RelativeLayout>
+
+    <view
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background=""/>
 
 </LinearLayout>
