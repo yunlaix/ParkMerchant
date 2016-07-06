@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="70dp"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/id"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="20dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="20dp"
-        android:textAppearance="?attr/textAppearanceListItem" />
-
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:src="@mipmap/dark"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/delete"
         android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:background="#FFFF0000"
+        android:background="#3ebdc6"
         android:gravity="center"
         android:paddingLeft="20dp"
-        android:textColor="@android:color/white"
+        android:textColor="#fefefe"
         android:paddingRight="20dp"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="取消活动"/>
 </LinearLayout>

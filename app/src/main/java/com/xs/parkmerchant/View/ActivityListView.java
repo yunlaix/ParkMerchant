@@ -54,10 +54,12 @@ public class ActivityListView extends ListView{
         downX = (int) e.getX();
         downY = (int) e.getY();
         mPointChild = (ViewGroup) getChildAt(pointToPosition(downX, downY)-getFirstVisiblePosition());
-        btnWidth =  mPointChild.getChildAt(1).getLayoutParams().width;
-        mLayoutParams = (LinearLayout.LayoutParams)mPointChild.getChildAt(0).getLayoutParams();
-        mLayoutParams.width = screenWidth;
-        mPointChild.getChildAt(0).setLayoutParams(mLayoutParams);
+        if(mPointChild!=null) {
+            btnWidth =  mPointChild.getChildAt(1).getLayoutParams().width;
+            mLayoutParams = (LinearLayout.LayoutParams)mPointChild.getChildAt(0).getLayoutParams();
+            mLayoutParams.width = screenWidth;
+            mPointChild.getChildAt(0).setLayoutParams(mLayoutParams);
+        }
     }
 
     private boolean performActionMove(MotionEvent e){
@@ -66,7 +68,7 @@ public class ActivityListView extends ListView{
         //level move
         if(Math.abs(nowX-downX) > Math.abs(nowY-downY)){
             //to left
-            if(nowX < downX){
+            if(nowX < downX && mLayoutParams!=null && mPointChild!=null){
                 int scroll = (nowX-downX)/2;
                 if(-scroll >= btnWidth){
                     scroll = -btnWidth;
@@ -80,6 +82,7 @@ public class ActivityListView extends ListView{
     }
 
     private void performActionUp(){
+        if(mLayoutParams==null || mPointChild==null) return;
         if(-mLayoutParams.leftMargin >= btnWidth /2){
             mLayoutParams.leftMargin = -btnWidth;
             isDeleteShown = true;
@@ -91,6 +94,7 @@ public class ActivityListView extends ListView{
     }
 
     public void turnToNormal(){
+        if(mPointChild==null || mLayoutParams==null) return;
         mLayoutParams.leftMargin = 0;
         mPointChild.getChildAt(0).setLayoutParams(mLayoutParams);
         isDeleteShown = false;

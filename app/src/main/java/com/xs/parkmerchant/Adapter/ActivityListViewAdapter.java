@@ -32,17 +32,20 @@ public class ActivityListViewAdapter extends BaseAdapter {
         if(view == null){
             holder = new Holder();
             view = mInflater.inflate(R.layout.list_content_activity, null);
-            holder.mIdView = (TextView) view.findViewById(R.id.id);
-            holder.mContentView = (TextView) view.findViewById(R.id.content);
+            holder.name = (TextView) view.findViewById(R.id.name);
+            holder.address = (TextView) view.findViewById(R.id.address);
+            holder.time = (TextView) view.findViewById(R.id.time);
+            holder.delete = (TextView) view.findViewById(R.id.delete);
             view.setTag(holder);
         }else{
             holder = (Holder) view.getTag();
         }
-        holder.mIdView.setText(mValues.get(i).id);
-        holder.mContentView.setText(mValues.get(i).content);
+        holder.name.setText(mValues.get(i).name);
+        holder.address.setText(mValues.get(i).address);
+        holder.time.setText(mValues.get(i).time);
 
         final int pos = i;
-        holder.mContentView.setOnClickListener(new View.OnClickListener() {
+        holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mValues.remove(pos);
@@ -67,7 +70,9 @@ public class ActivityListViewAdapter extends BaseAdapter {
     }
 
     private class Holder{
-        private TextView mIdView;
-        private TextView mContentView;
+        private TextView name;
+        private TextView address;
+        private TextView time;
+        private TextView delete;
     }
 }

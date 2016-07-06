@@ -1,58 +1,109 @@
 package com.xs.parkmerchant.Net;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
+
 import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
+import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
+import com.xs.parkmerchant.View.MySwipeRefreshLayout;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityContent {
 
-    private List<ActivityItem> ITEMS = new ArrayList<ActivityItem>();
-    private static final int COUNT = 25;
+    private List<ActivityItem> items = new ArrayList<ActivityItem>();
+    private JSONObject jsonObject;
+    private int count;
+    private String address;
+    private JSONArray jsonArray;
     private ActivityListViewAdapter myListViewAdapter;
-
-    public ActivityContent(ActivityListViewAdapter mla){
-        myListViewAdapter = mla;
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
+    private MySwipeRefreshLayout swipeRefreshLayout;
+    private Context context;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                swipeRefreshLayout.setRefreshing(true);
+            }else if(msg.what == 2){
+                myListViewAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
         }
+    };
+
+    public ActivityContent(Context c){
+        context = c;
+    }
+
+    public void setAdapter(ActivityListViewAdapter mla){
+        myListViewAdapter = mla;
+    }
+
+    public void setSwipe(MySwipeRefreshLayout srl){
+        swipeRefreshLayout = srl;
     }
 
     public List<ActivityContent.ActivityItem> getITEMS(){
-        return ITEMS;
+        return items;
     }
 
-    private void addItem(ActivityItem item) {
-        ITEMS.add(item);
-    }
-
-    private ActivityItem createDummyItem(int position) {
-        return new ActivityItem(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
-
-    private String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
+    public void refresh(){
+        handler.sendEmptyMessage(1);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    params.add(new BasicNameValuePair("seller_id", "seller"));
+                    params.add(new BasicNameValuePair("num", "0"));
+                    String result = NetCore.postResulttoNet(Url.activityList_5, params);
+                    if(result != null && !result.equalsIgnoreCase("")){
+                        try {
+                            items.clear();
+                            jsonObject = new JSONObject(result);
+                            count = Integer.parseInt(jsonObject.getString("count"));
+//                            address = jsonObject.getString("seller_address");
+                            jsonArray = jsonObject.getJSONArray("array");
+                            for(int i=0; i<count; i++){
+                                JSONObject jo = jsonArray.getJSONObject(i);
+                                ActivityItem tmp = new ActivityItem(jo.getString("activity_name"), "address", jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"));
+                                Log.d("image", jo.getString("activity_img"));
+                                items.add(tmp);
+                            }
+                            handler.sendEmptyMessage(2);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                    Log.d("result", result+"aaaaaa");
+                }catch (Exception e){
+                    e.printStackTrace();
+                    handler.sendEmptyMessage(1);
+                    Log.d("aaaa", "ccccccccccccccccccc");
+                }
+            }
+        }).start();
     }
 
     public class ActivityItem {
-        public final String id;
-        public final String content;
-        public final String details;
+        public final String name;
+        public final String address;
+        public final String time;
 
-        public ActivityItem(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
-        }
-
-        @Override
-        public String toString() {
-            return content;
+        public ActivityItem(String n, String a, String t) {
+            this.name = n;
+            this.address = a;
+            this.time = t;
         }
     }
 }

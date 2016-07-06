@@ -25,6 +25,7 @@ import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
 import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
 import com.xs.parkmerchant.Net.TicketContent;
 import com.xs.parkmerchant.View.ActivityListView;
+import com.xs.parkmerchant.View.MySwipeRefreshLayout;
 import com.xs.parkmerchant.View.MyViewPager;
 import com.xs.parkmerchant.Net.ActivityContent;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLoadingMore = false;
     private ActivityListViewAdapter adapter;
     private ActivityContent activityContent;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private MySwipeRefreshLayout mySwipeRefreshLayout;
     int lastItem;
 
     private boolean isLoadingMoreTicket = false;
@@ -99,13 +100,13 @@ public class MainActivity extends AppCompatActivity {
         setupTicketList((ListView) listViewTicket);
 
         //refresh
-        swipeRefreshLayout = (SwipeRefreshLayout) view2.findViewById(R.id.swipeLayout);
-        swipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light, android.R.color.white, android.R.color.holo_green_light, android.R.color.white);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mySwipeRefreshLayout = (MySwipeRefreshLayout) view2.findViewById(R.id.swipeLayout);
+        mySwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        mySwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light, android.R.color.white, android.R.color.holo_green_light, android.R.color.white);
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
+                mySwipeRefreshLayout.setRefreshing(false);
                 //onRefresh
             }
         });
@@ -121,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         ticketContent.setSwipe(swipeRefreshLayoutTicket);
+        activityContent.setSwipe(mySwipeRefreshLayout);
         ticketContent.refresh();
+        activityContent.refresh();
     }
 
     private void initViewPager(){
@@ -188,8 +191,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull final ActivityListView listView) {
-        activityContent = new ActivityContent(adapter);
+        activityContent = new ActivityContent(this);
         adapter = new ActivityListViewAdapter(activityContent.getITEMS(), this, listView);
+        activityContent.setAdapter(adapter);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

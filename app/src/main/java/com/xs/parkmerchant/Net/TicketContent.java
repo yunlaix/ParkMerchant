@@ -75,11 +75,11 @@ public class TicketContent {
                         e.printStackTrace();
                     }
                 }
-                Log.d("result", result+"aaaaaa");
+//                Log.d("result", result+"aaaaaa");
             }catch (Exception e){
                 e.printStackTrace();
                 handler.sendEmptyMessage(1);
-                Log.d("aaaa", "ccccccccccccccccccc");
+//                Log.d("aaaa", "ccccccccccccccccccc");
             }
             }
         }).start();
