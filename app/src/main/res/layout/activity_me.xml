@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/background">
 
+    <!--这里是导航栏-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height">
+        android:layout_height="@dimen/app_bar_height"
+        android:background="@color/navigationBar">
         <ImageView
             android:id="@+id/back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
             android:src="@mipmap/back"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp" />
+            android:layout_marginLeft="@dimen/iconMargin"
+            android:layout_marginStart="@dimen/iconMargin" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
+            android:textSize="@dimen/titleSize"
+            android:textColor="@color/textTitle"
             android:text="个人中心"/>
         <ImageView
             android:id="@+id/logout"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
             android:gravity="center_vertical"
             android:src="@mipmap/logout"
-            android:layout_alignTop="@+id/back"
+            android:layout_marginRight="@dimen/iconMargin"
+            android:layout_marginEnd="@dimen/iconMargin"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
@@ -37,5 +45,96 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/lineGreen"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="50dp"
+        android:id="@+id/add_image"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/add_image"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:orientation="horizontal"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商家名称"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGreen"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <TextView
+            android:id="@+id/buss_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商家名称..."
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGray"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:orientation="horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商家地点"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGreen"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <TextView
+            android:id="@+id/buss_addr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商家地点..."
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGray"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:orientation="horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系方式"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGreen"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <TextView
+            android:id="@+id/buss_tell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商家联系方式..."
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGray"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"/>
+
+    </LinearLayout>
 
 </LinearLayout>
