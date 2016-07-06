@@ -64,7 +64,7 @@ public class ActivityContent {
             public void run() {
                 try{
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("seller_id", "seller"));
+                    params.add(new BasicNameValuePair("seller_id", "a"));
                     params.add(new BasicNameValuePair("num", "0"));
                     String result = NetCore.postResulttoNet(Url.activityList_5, params);
                     if(result != null && !result.equalsIgnoreCase("")){
@@ -76,7 +76,7 @@ public class ActivityContent {
                             jsonArray = jsonObject.getJSONArray("array");
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
-                                ActivityItem tmp = new ActivityItem(jo.getString("activity_name"), "address", jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"));
+                                ActivityItem tmp = new ActivityItem(jo.getString("activity_name"), "address", jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"), jo.getString("activity_img"));
                                 Log.d("image", jo.getString("activity_img"));
                                 items.add(tmp);
                             }
@@ -99,11 +99,13 @@ public class ActivityContent {
         public final String name;
         public final String address;
         public final String time;
+        public final String imgUrl;
 
-        public ActivityItem(String n, String a, String t) {
+        public ActivityItem(String n, String a, String t, String i) {
             this.name = n;
             this.address = a;
             this.time = t;
+            this.imgUrl = i;
         }
     }
 }
