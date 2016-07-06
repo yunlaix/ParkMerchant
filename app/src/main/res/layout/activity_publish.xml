@@ -1,6 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:background="@color/navigationBar">
+        <ImageView
+            android:id="@+id/edit_back"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
+            android:src="@mipmap/back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/iconMargin"
+            android:layout_marginStart="@dimen/iconMargin" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textSize="@dimen/titleSize"
+            android:textColor="@color/textTitle"
+            android:text="发布活动"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="@color/lineGreen"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/listMargin"
+        android:background="@color/lineGray"/>
+    
+    <LinearLayout
+        android:id="@+id/edit_activity_image"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginTop="@dimen/listMargin"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:background="@mipmap/dark"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="活动图片"
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textBlack"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/listMargin"
+                android:text="点击上传"
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGray"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/listMargin"
+        android:background="@color/lineGray"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="@color/lineGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
+            android:background="@mipmap/activity_name"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动名称"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textBlack"/>
+
+        <EditText
+            android:id="@+id/edit_activity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"
+            android:hint="请填写活动名称"
+            android:background="@null"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGray"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="@dimen/iconSize"
+            android:background="@mipmap/location"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动地点"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textBlack"/>
+
+        <EditText
+            android:id="@+id/edit_activity_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"
+            android:hint="请填写活动地点"
+            android:background="@null"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGray"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginTop="@dimen/listMargin"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
+            android:background="@mipmap/activity_time"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/listSize"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开始时间"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMargin"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textBlack"/>
+
+                <EditText
+                    android:id="@+id/edit_activity_starttime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMarginText"
+                    android:hint="请填写开始时间"
+                    android:background="@null"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textGray"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/textMargin"
+                android:background="@color/lineGray"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/listSize"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="结束时间"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMargin"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textBlack"/>
+
+                <EditText
+                    android:id="@+id/edit_activity_endtime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMarginText"
+                    android:hint="请填写结束时间"
+                    android:background="@null"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textGray"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginTop="@dimen/listMargin"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
+            android:background="@mipmap/activity_detail"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/listSize"
+                    android:text="活动详情"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMargin"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textBlack"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/textMargin"
+                android:background="@color/lineGray"/>
+
+                <EditText
+                    android:id="@+id/edit_activity_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMargin"
+                    android:hint="请填写活动详情"
+                    android:background="@null"
+                    android:minLines="5"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textGray"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="@color/lineGray"/>
 
 </LinearLayout>

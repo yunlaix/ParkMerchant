@@ -4,18 +4,26 @@
     <dimen name="app_bar_height">50dp</dimen>
     <dimen name="item_width">200dp</dimen>
 
+    <!--文字与屏幕边缘的距离-->
     <dimen name="textMargin">10dp</dimen>
+    <!--文字与文字的距离，特别是如，商家名称：德克士这样的组合-->
     <dimen name="textMarginText">40dp</dimen>
-    <dimen name="listMargin">5dp</dimen>
+    <!--list之间的距离-->
+    <dimen name="listMargin">7dp</dimen>
 
+    <!--list的高度-->
     <dimen name="listSize">50dp</dimen>
 
+    <!--图标的大小-->
     <dimen name="iconSize">30dp</dimen>
+    <!--图标与屏幕边缘的距离-->
     <dimen name="iconMargin">10dp</dimen>
 
 
     <!-- text的大小用px做单位 -->
+    <!--顶部导航栏的字体大小-->
     <dimen name="titleSize">40px</dimen>
+    <!--list中的字体大小，仅次于顶部导航栏种字体的大小，一般在参数中标注为18-->
     <dimen name="secondSize">32px</dimen>
 
 </resources>

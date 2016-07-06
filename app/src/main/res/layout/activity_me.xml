@@ -11,7 +11,7 @@
         android:layout_height="@dimen/app_bar_height"
         android:background="@color/navigationBar">
         <ImageView
-            android:id="@+id/back"
+            android:id="@+id/mine_back"
             android:layout_width="@dimen/iconSize"
             android:layout_height="@dimen/iconSize"
             android:src="@mipmap/back"
@@ -70,7 +70,7 @@
             android:layout_marginLeft="@dimen/textMargin"/>
 
         <TextView
-            android:id="@+id/buss_name"
+            android:id="@+id/mine_buss_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="商家名称..."
@@ -98,7 +98,7 @@
             android:layout_marginLeft="@dimen/textMargin"/>
 
         <TextView
-            android:id="@+id/buss_addr"
+            android:id="@+id/mine_buss_addr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="商家地点..."
@@ -126,7 +126,7 @@
             android:layout_marginLeft="@dimen/textMargin"/>
 
         <TextView
-            android:id="@+id/buss_tell"
+            android:id="@+id/mine_buss_tel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="商家联系方式..."

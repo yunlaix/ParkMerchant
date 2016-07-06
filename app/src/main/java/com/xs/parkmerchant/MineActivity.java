@@ -72,13 +72,13 @@ public class MineActivity extends AppCompatActivity {
 //    }
 
     public void initView(){
-        back = (ImageView)findViewById(R.id.back);
+        back = (ImageView)findViewById(R.id.mine_back);
         logout = (ImageView)findViewById(R.id.logout);
         addImage = (ImageView) findViewById(R.id.add_image);
 
-        bussName = (TextView) findViewById(R.id.buss_name);
-        bussAddr = (TextView) findViewById(R.id.buss_addr);
-        bussTel = (TextView) findViewById(R.id.buss_tell);
+        bussName = (TextView) findViewById(R.id.mine_buss_name);
+        bussAddr = (TextView) findViewById(R.id.mine_buss_addr);
+        bussTel = (TextView) findViewById(R.id.mine_buss_tel);
 
     }
 }
