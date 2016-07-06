@@ -89,7 +89,6 @@ public class ActivityContent {
                 }catch (Exception e){
                     e.printStackTrace();
                     handler.sendEmptyMessage(1);
-                    Log.d("aaaa", "ccccccccccccccccccc");
                 }
             }
         }).start();
