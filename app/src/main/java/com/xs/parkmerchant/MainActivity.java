@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), TicketsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), TicketActivity.class);
                 startActivity(intent);
             }
         });

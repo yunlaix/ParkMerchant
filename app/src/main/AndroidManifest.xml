@@ -33,7 +33,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".PublishActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".TicketsActivity"
+        <activity android:name=".TicketActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by Man on 2016/7/5.
  */
-public class TicketsActivity extends AppCompatActivity{
+public class TicketActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
