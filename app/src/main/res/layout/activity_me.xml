@@ -8,10 +8,14 @@
         android:layout_height="@dimen/app_bar_height">
         <ImageView
             android:id="@+id/back"
-            android:layout_margin="5dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@mipmap/back"/>
+            android:src="@mipmap/back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -20,17 +24,18 @@
             android:text="个人中心"/>
         <ImageView
             android:id="@+id/logout"
-            android:layout_margin="5dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:foregroundGravity="center_vertical"
+            android:gravity="center_vertical"
+            android:src="@mipmap/logout"
+            android:layout_alignTop="@+id/back"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/logout"/>
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
-    <view
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background=""/>
+        android:background="@color/lineGreen"/>
 
 </LinearLayout>
