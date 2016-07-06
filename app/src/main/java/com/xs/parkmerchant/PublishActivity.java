@@ -3,11 +3,13 @@ package com.xs.parkmerchant;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 /**
  * Created by Man on 2016/7/5.
  */
 public class PublishActivity extends AppCompatActivity{
+    private ImageView back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
