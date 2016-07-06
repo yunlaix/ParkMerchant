@@ -29,11 +29,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".MeActivity"
+        <activity android:name=".MineActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".PublishActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".TicketDetailActivity"
+        <activity android:name=".TicketsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
