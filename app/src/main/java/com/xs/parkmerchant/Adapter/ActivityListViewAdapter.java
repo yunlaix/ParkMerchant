@@ -1,11 +1,17 @@
 package com.xs.parkmerchant.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.xs.parkmerchant.R;
 import com.xs.parkmerchant.View.ActivityListView;
 import com.xs.parkmerchant.Net.ActivityContent;
@@ -20,11 +26,20 @@ public class ActivityListViewAdapter extends BaseAdapter {
     private Holder holder;
     private LayoutInflater mInflater;
     private ActivityListView myListView;
+    private Context context;
+    private DisplayImageOptions options;
 
-    public ActivityListViewAdapter(List<ActivityContent.ActivityItem> items, Context context, ActivityListView my) {
+    public ActivityListViewAdapter(List<ActivityContent.ActivityItem> items, Context c, ActivityListView my) {
         mValues = items;
-        mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(c);
         myListView = my;
+        this.context = c;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.dark)
+                .showImageForEmptyUri(R.mipmap.dark)
+                .showImageOnFail(R.mipmap.dark)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565).build();
     }
 
     @Override
@@ -36,6 +51,7 @@ public class ActivityListViewAdapter extends BaseAdapter {
             holder.address = (TextView) view.findViewById(R.id.address);
             holder.time = (TextView) view.findViewById(R.id.time);
             holder.delete = (TextView) view.findViewById(R.id.delete);
+            holder.img = (ImageView) view.findViewById(R.id.img);
             view.setTag(holder);
         }else{
             holder = (Holder) view.getTag();
@@ -53,6 +69,10 @@ public class ActivityListViewAdapter extends BaseAdapter {
                 myListView.turnToNormal();
             }
         });
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
+        imageLoader.displayImage(mValues.get(i).imgUrl, holder.img, options);
         return view;
     }
 
@@ -70,6 +90,7 @@ public class ActivityListViewAdapter extends BaseAdapter {
     }
 
     private class Holder{
+        private ImageView img;
         private TextView name;
         private TextView address;
         private TextView time;
