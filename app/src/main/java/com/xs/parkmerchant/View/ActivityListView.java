@@ -3,6 +3,7 @@ package com.xs.parkmerchant.View;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -18,11 +19,12 @@ public class ActivityListView extends ListView{
     private int downX, downY;
     private int btnWidth;
 
-    private boolean isDeleteShown = false;
+    public static boolean isDeleteShown = false;
     private ViewGroup mPointChild;	// 当前处理的item
     private LinearLayout.LayoutParams mLayoutParams;
 
     public static boolean isOn = false;
+    private boolean isOn2 = false;
 
     public ActivityListView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -30,6 +32,12 @@ public class ActivityListView extends ListView{
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
         screenWidth = dm.widthPixels;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(isDeleteShown) return true;
+        return super.onInterceptTouchEvent(ev);//true;//
     }
 
     @Override
@@ -41,16 +49,17 @@ public class ActivityListView extends ListView{
             case MotionEvent.ACTION_MOVE:
                 return performActionMove(e);
             case MotionEvent.ACTION_UP:
-                performActionUp();
+                performActionUp(e);
                 break;
         }
         return super.onTouchEvent(e);
     }
 
     private void performActionDown(MotionEvent e){
-        if(isDeleteShown) {
-            turnToNormal();
-        }
+//        if(isDeleteShown) {
+//            turnToNormal();
+//        }
+        if(isOn2) return;
         downX = (int) e.getX();
         downY = (int) e.getY();
         mPointChild = (ViewGroup) getChildAt(pointToPosition(downX, downY)-getFirstVisiblePosition());
@@ -69,6 +78,7 @@ public class ActivityListView extends ListView{
         if(Math.abs(nowX-downX) > Math.abs(nowY-downY)){
             //to left
             if(nowX < downX && mLayoutParams!=null && mPointChild!=null){
+                isDeleteShown = true;//
                 int scroll = (nowX-downX)/2;
                 if(-scroll >= btnWidth){
                     scroll = -btnWidth;
@@ -81,20 +91,32 @@ public class ActivityListView extends ListView{
         return super.onTouchEvent(e);
     }
 
-    private void performActionUp(){
+    private void performActionUp(MotionEvent e){
+        Log.d("isOn", "A"+isOn2+"A"+isDeleteShown);
+        if(isOn2) {
+            turnToNormal();
+            isOn2 = false;
+            if(pointToPosition((int)e.getX(), (int)e.getY())==-1) isOn = false;
+        }
         if(mLayoutParams==null || mPointChild==null) return;
         if(-mLayoutParams.leftMargin >= btnWidth /2){
             mLayoutParams.leftMargin = -btnWidth;
             isDeleteShown = true;
             isOn = true;
+            isOn2 = true;
+            Log.d("isOnnnn", "fsdfsdfsdddddddddddddddd");
         }else{
             turnToNormal();
         }
+
         mPointChild.getChildAt(0).setLayoutParams(mLayoutParams);
     }
 
     public void turnToNormal(){
-        if(mPointChild==null || mLayoutParams==null) return;
+        if(mPointChild==null || mLayoutParams==null){
+            Log.d("isOn", "sddssssssssssssssssssssss");
+            return;
+        }
         mLayoutParams.leftMargin = 0;
         mPointChild.getChildAt(0).setLayoutParams(mLayoutParams);
         isDeleteShown = false;
