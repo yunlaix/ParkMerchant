@@ -3,6 +3,7 @@ package com.xs.parkmerchant.View;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -17,37 +18,49 @@ public class MySwipeRefreshLayout extends SwipeRefreshLayout {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent e) {
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                performActionDown(e);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                return performActionMove(e);
-            case MotionEvent.ACTION_UP:
-                performActionUp();
-                break;
-        }
-        return super.onTouchEvent(e);
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 
-    private void performActionDown(MotionEvent e){
-        downX = (int) e.getX();
-        downY = (int) e.getY();
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(ActivityListView.isDeleteShown) return false;
+        return super.onInterceptTouchEvent(ev);//false;//
     }
 
-    private boolean performActionMove(MotionEvent e){
-        int nowX = (int)e.getX();
-        int nowY = (int)e.getY();
-        //level move
-        if(Math.abs(nowX-downX) > Math.abs(nowY-downY)){
-            return false;
-        }
-        return super.onTouchEvent(e);
-    }
-
-    private void performActionUp(){
-
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent e) {
+//        switch (e.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                performActionDown(e);
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                return performActionMove(e);
+//            case MotionEvent.ACTION_UP:
+//                performActionUp();
+//                break;
+//        }
+//        return super.onTouchEvent(e);
+//    }
+//
+//    private void performActionDown(MotionEvent e){
+//        downX = (int) e.getX();
+//        downY = (int) e.getY();
+//    }
+//
+//    private boolean performActionMove(MotionEvent e){
+//        int nowX = (int)e.getX();
+//        int nowY = (int)e.getY();
+//        Log.d("move", "aaaaaaaaaaa"+(nowY-downY));
+//        //level move
+//        if(ActivityListView.isDeleteShown || Math.abs(nowX-downX) > Math.abs(nowY-downY)){
+//            return false;
+//        }
+//        return super.onTouchEvent(e);
+//    }
+//
+//    private void performActionUp(){
+//
+//    }
 
 }
