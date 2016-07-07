@@ -90,7 +90,8 @@ public class MineActivity extends AppCompatActivity {
                 // 将裁剪后的图片进行上传
                 case REQUEST_CODE_CROP_IMAGE:
                     // 上传图片操作
-                    Log.d("mine","sssssssssssssssss");
+                    Log.d("mine","sssssssssssssssss"+getIntent().getData());
+
                     break;
                 default:
                     break;
@@ -117,7 +118,7 @@ public class MineActivity extends AppCompatActivity {
         intent.putExtra("outputX", dip2px(this, 120));
         intent.putExtra("outputY", dip2px(this, 80));
         // 传递原图路径
-        File cropFile = new File(Environment.getExternalStorageDirectory() + "crop_image.jpg");
+        File cropFile = new File(Environment.getExternalStorageDirectory() + "seller.JPG");
         Uri cropImageUri = Uri.fromFile(cropFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
         // 设置裁剪区域的形状，默认为矩形，也可设置为原形
