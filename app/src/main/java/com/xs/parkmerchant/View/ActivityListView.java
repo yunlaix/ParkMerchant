@@ -56,9 +56,6 @@ public class ActivityListView extends ListView{
     }
 
     private void performActionDown(MotionEvent e){
-//        if(isDeleteShown) {
-//            turnToNormal();
-//        }
         if(isOn2) return;
         downX = (int) e.getX();
         downY = (int) e.getY();
@@ -104,7 +101,6 @@ public class ActivityListView extends ListView{
             isDeleteShown = true;
             isOn = true;
             isOn2 = true;
-            Log.d("isOnnnn", "fsdfsdfsdddddddddddddddd");
         }else{
             turnToNormal();
         }
@@ -113,10 +109,7 @@ public class ActivityListView extends ListView{
     }
 
     public void turnToNormal(){
-        if(mPointChild==null || mLayoutParams==null){
-            Log.d("isOn", "sddssssssssssssssssssssss");
-            return;
-        }
+        if(mPointChild==null || mLayoutParams==null) return;
         mLayoutParams.leftMargin = 0;
         mPointChild.getChildAt(0).setLayoutParams(mLayoutParams);
         isDeleteShown = false;
