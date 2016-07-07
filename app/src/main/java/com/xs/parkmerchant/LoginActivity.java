@@ -70,6 +70,10 @@ public class LoginActivity extends AppCompatActivity{
                                     JSONObject jsonObject = new JSONObject(result);
                                     String state = jsonObject.getString("state");
                                     if(state.equals("0")){
+                                        Constants.seller_name = jsonObject.getString("seller_name");
+                                        Constants.seller_address = jsonObject.getString("seller_address");
+                                        Constants.seller_contact = jsonObject.getString("seller_contact");
+                                        Constants.seller_img = jsonObject.getString("seller_img");
                                         setSharePreference();
                                         handler.sendEmptyMessage(1);
                                         Log.d("login", "ssssssssssssssssss");
@@ -104,7 +108,10 @@ public class LoginActivity extends AppCompatActivity{
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("seller_id", Constants.seller_id);
         editor.putString("seller_password", Constants.seller_password);
-        //other info
+        editor.putString("seller_name", Constants.seller_name);
+        editor.putString("seller_address", Constants.seller_address);
+        editor.putString("seller_contact", Constants.seller_contact);
+        editor.putString("seller_img", Constants.seller_img);
         editor.commit();
         Log.d("login", "A"+sharedPreferences.getString("seller_id", "")+sharedPreferences.getString("seller_password", "")+"B");
     }
