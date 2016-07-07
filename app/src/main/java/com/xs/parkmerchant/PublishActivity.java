@@ -145,6 +145,7 @@ public class PublishActivity extends AppCompatActivity{
                         Looper.loop();
                         break;
                     case 1:
+                        Toast.makeText(getApplication(),  "上传成功", Toast.LENGTH_LONG).show();
                         Intent toSetting = new Intent(PublishActivity.this,MainActivity.class);
                         startActivity(toSetting);
                         break;

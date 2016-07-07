@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import com.xs.parkmerchant.View.QRCoderView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 
 /**
  * Created by ml on 2016/7/7.
@@ -37,19 +41,15 @@ public class QRActivity extends AppCompatActivity {
 
         initView();
 
-
-
-        QR_name = null;
-        QR_time = null;
-
-
+        Bundle bd = new Bundle();
+        QR_name.setText(bd.getString("activity_name","活动名称"));
+        QR_time.setText(bd.getString("activity_tiem",getDate()));
 
         //传入活动名称+随机数
         int index = (int)(Math.random() *5);
         context = QR_name.getText().toString() + Integer.toString(index);
         Log.v("context", context);
         createQR(context);
-
 
         close_QR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +67,17 @@ public class QRActivity extends AppCompatActivity {
         QR_image = (ImageView)findViewById(R.id.qr_image);
         close_QR = (Button)findViewById(R.id.qr_close);
 
+    }
+
+    public String getDate(){
+        Calendar ca = Calendar.getInstance();
+        int year = ca.get(Calendar.YEAR);
+        int month = ca.get(Calendar.MONTH);
+        int date = ca.get(Calendar.DATE);
+
+        String str = Integer.toString(year)+" 年 "+ Integer.toString(month)+ " 月 " + Integer.toString(date) + " 日";
+
+        return str;
     }
 
     /**产生二维码*/
