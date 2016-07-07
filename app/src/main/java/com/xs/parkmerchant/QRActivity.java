@@ -1,8 +1,10 @@
 package com.xs.parkmerchant;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -13,11 +15,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xs.parkmerchant.Net.Constants;
+import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.View.QRCoderView;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -32,7 +41,7 @@ public class QRActivity extends AppCompatActivity {
 
     private Bitmap logo;
 
-    private String context,activity_id,activity_time;
+    private String context,ticket_id,activity_id,activity_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +57,17 @@ public class QRActivity extends AppCompatActivity {
         QR_time.setText(activity_time);
 
         //传入活动名称+随机数
-        int ticket_id = (int)(Math.random() *5);
-        context = QR_name.getText().toString() + Integer.toString(ticket_id);
+        int random = (int)(Math.random() *5);
+        ticket_id = Integer.toString(random);
+        context = QR_name.getText().toString() + ticket_id;
         Log.v("context", context);
         createQR(context);
+
+        List<NameValuePair> param=new ArrayList<NameValuePair>();
+        param.add(new BasicNameValuePair("ticket_id", ticket_id));
+        param.add(new BasicNameValuePair("activity_id", activity_id));
+        param.add(new BasicNameValuePair("ticket_deadline", activity_time));
+        upload(param);
 
         close_QR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +86,28 @@ public class QRActivity extends AppCompatActivity {
         close_QR = (Button)findViewById(R.id.qr_close);
 
     }
+
+    public void upload(List<NameValuePair> param){
+        NetCore string=new NetCore();
+        try {
+            String data=string.postResulttoNet("http://139.129.24.127/parking_app/Seller/seller_produce_ticket.php", param);
+            data = data.substring(0, 1);
+            int result = Integer.parseInt(data);
+            switch (result){
+                case 0:
+                    Looper.prepare();
+                    Toast.makeText(getApplication(),  "生成成功", Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    break;
+                case 1:
+                    Toast.makeText(getApplication(),  "生成失败", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public String getDate(){
         Calendar ca = Calendar.getInstance();
