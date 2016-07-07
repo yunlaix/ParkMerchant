@@ -72,7 +72,7 @@ public class QRActivity extends AppCompatActivity {
     /**产生二维码*/
     private void createQR(String content) {
 
-        logo= BitmapFactory.decodeResource(super.getResources(),R.mipmap.qr_logo);
+        logo= BitmapFactory.decodeResource(super.getResources(),R.mipmap.logo_qr);
 
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);

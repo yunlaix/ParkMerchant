@@ -135,7 +135,7 @@ public class PublishActivity extends AppCompatActivity{
             param.add(new BasicNameValuePair("activity_name", ValueName[5]));
 
             try {
-                String data=string.postResulttoNet("http://1.miac.sinaapp.com/csireg.php", param);
+                String data=string.postResulttoNet("http://139.129.24.127/parking_app/Seller/seller_add_activity.php", param);
                 data = data.substring(0, 1);
                 int result = Integer.parseInt(data);
                 switch (result){
@@ -153,7 +153,6 @@ public class PublishActivity extends AppCompatActivity{
                 e.printStackTrace();
             }
         }
-
     }
 
     /**
