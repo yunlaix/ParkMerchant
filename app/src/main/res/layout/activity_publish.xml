@@ -264,16 +264,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:background="@color/white"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_marginTop="@dimen/listMargin"
+            android:layout_marginTop="@dimen/textMarginText"
             android:layout_width="@dimen/iconSize"
             android:layout_height="@dimen/iconSize"
             android:background="@mipmap/activity_detail"
-            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/textMargin"/>
 
         <LinearLayout
@@ -313,9 +312,29 @@
 
     </LinearLayout>
 
+   <!-- <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="@color/lineGray"/>
+   -->
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
         android:background="@color/lineGray"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:id="@+id/edit_publish"
+        android:layout_marginLeft="@dimen/textMargin"
+        android:layout_marginRight="@dimen/textMargin"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="bottom"
+        android:text="发布活动"
+        android:textColor="@color/textWhite"
+        android:textSize="@dimen/titleSize"
+        android:background="@mipmap/bule_button"/>
 
 </LinearLayout>

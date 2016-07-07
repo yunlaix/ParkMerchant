@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/listSize"
         android:orientation="horizontal"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="@dimen/listMargin"
         android:background="@color/white">
 
         <TextView
@@ -113,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/listSize"
         android:orientation="horizontal"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="@dimen/listMargin"
         android:background="@color/white">
 
         <TextView
