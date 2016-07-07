@@ -9,4 +9,6 @@ public class Url {
 
     public static String activityList_5 = "http://139.129.24.127/parking_app/Seller/seller_getactlist.php";
 
+    public static String login_1 = "http://139.129.24.127/parking_app/Seller/seller_login.php";
+
 }
