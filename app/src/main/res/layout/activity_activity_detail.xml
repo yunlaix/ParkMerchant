@@ -1,11 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".ActivityDetailActivity"
-    tools:ignore="MergeRootFrame"
-    android:orientation="vertical">
+    android:background="@color/background">
+
+    <!--这里是导航栏-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:background="@color/navigationBar">
+        <ImageView
+            android:id="@+id/activity_detail_back"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
+            android:src="@mipmap/back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/iconMargin"
+            android:layout_marginStart="@dimen/iconMargin" />
+        <TextView
+            android:id="@+id/activity_detail_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textSize="@dimen/titleSize"
+            android:textColor="@color/textTitle"
+            android:text="活动名称"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineGreen"/>
+
+    <ImageView
+            android:layout_width="420dp"
+            android:layout_height="164dp"
+            android:id="@+id/activity_detail_image"
+            android:layout_gravity="center"
+            android:background="@mipmap/dark_big"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动时间"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGreen"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <TextView
+            android:id="@+id/activity_detail_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动时间..."
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textBlack"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/listMargin"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动地点"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGreen"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <TextView
+            android:id="@+id/activity_detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动地点..."
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textBlack"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/listMargin"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动详情"
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textGreen"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMargin"/>
+
+        <TextView
+            android:id="@+id/activity_detail_descri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动详情..."
+            android:textSize="@dimen/secondSize"
+            android:textColor="@color/textBlack"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/textMarginText"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:id="@+id/createQR"
+        android:text="生成停车券"
+        android:textColor="@color/textWhite"
+        android:textSize="@dimen/secondSize"
+        android:background="@mipmap/bule_button"
+        android:layout_marginTop="@dimen/textMarginText"
+        android:layout_marginLeft="@dimen/textMargin"
+        android:layout_marginRight="@dimen/textMargin"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listSize"
+        android:id="@+id/delete_activity"
+        android:text="删除该活动"
+        android:layout_gravity="bottom"
+        android:textColor="@color/textWhite"
+        android:textSize="@dimen/secondSize"
+        android:background="@mipmap/red_button"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="@dimen/textMargin"
+        android:layout_marginRight="@dimen/textMargin"/>
 
 </LinearLayout>

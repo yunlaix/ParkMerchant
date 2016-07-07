@@ -31,22 +31,21 @@ public class MineActivity extends AppCompatActivity {
         back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MineActivity.this,MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
         logout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MineActivity.this, "注销登陆", Toast.LENGTH_LONG);
+                Toast.makeText(MineActivity.this, "注销登陆", Toast.LENGTH_LONG).show();
             }
         });
 
         addImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MineActivity.this, "添加头像", Toast.LENGTH_LONG);
+                Toast.makeText(MineActivity.this, "添加头像", Toast.LENGTH_LONG).show();
             }
         });
 
