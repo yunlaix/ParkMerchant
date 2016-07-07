@@ -61,12 +61,8 @@ public class PublishActivity extends AppCompatActivity{
         editPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkFinished()){
-                    updateActivity();
-                    Toast.makeText(PublishActivity.this, "提交成功", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(PublishActivity.this, "失败", Toast.LENGTH_LONG).show();
-                }
+                getInfo();
+
             }
         });
 
@@ -124,7 +120,7 @@ public class PublishActivity extends AppCompatActivity{
             Looper.loop();
         }
         else {
-            NetCore string=new NetCore();
+
             List<NameValuePair> param=new ArrayList<NameValuePair>();
             param.add(new BasicNameValuePair("seller_id", Constants.seller_id));
             param.add(new BasicNameValuePair("activity_name", ValueName[0]));
@@ -134,45 +130,31 @@ public class PublishActivity extends AppCompatActivity{
             param.add(new BasicNameValuePair("activity_name", ValueName[4]));
             param.add(new BasicNameValuePair("activity_name", ValueName[5]));
 
-            try {
-                String data=string.postResulttoNet("http://139.129.24.127/parking_app/Seller/seller_add_activity.php", param);
-                data = data.substring(0, 1);
-                int result = Integer.parseInt(data);
-                switch (result){
-                    case 0:
-                        Looper.prepare();
-                        Toast.makeText(getApplication(),  "上传失败", Toast.LENGTH_LONG).show();
-                        Looper.loop();
-                        break;
-                    case 1:
-                        Toast.makeText(getApplication(),  "上传成功", Toast.LENGTH_LONG).show();
-                        Intent toSetting = new Intent(PublishActivity.this,MainActivity.class);
-                        startActivity(toSetting);
-                        break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            upload(param);
         }
     }
 
-    /**
-     * 检查活动内容是否填写完整
-     * */
-    public boolean checkFinished(){
-
-        isFinished = true;
-
-        return isFinished;
-
-    }
-
-    /**
-     * 上传新增活动的信息
-     * */
-    public void updateActivity(){
-
-
+    public void upload(List<NameValuePair> param){
+        NetCore string=new NetCore();
+        try {
+            String data=string.postResulttoNet("http://139.129.24.127/parking_app/Seller/seller_add_activity.php", param);
+            data = data.substring(0, 1);
+            int result = Integer.parseInt(data);
+            switch (result){
+                case 0:
+                    Looper.prepare();
+                    Toast.makeText(getApplication(),  "上传失败", Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    break;
+                case 1:
+                    Toast.makeText(getApplication(),  "上传成功", Toast.LENGTH_LONG).show();
+                    Intent toSetting = new Intent(PublishActivity.this,MainActivity.class);
+                    startActivity(toSetting);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getImageUrl(){

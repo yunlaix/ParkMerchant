@@ -32,7 +32,7 @@ public class QRActivity extends AppCompatActivity {
 
     private Bitmap logo;
 
-    private String context;
+    private String context,activity_id,activity_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +42,14 @@ public class QRActivity extends AppCompatActivity {
         initView();
 
         Bundle bd = new Bundle();
-        QR_name.setText(bd.getString("activity_name","活动名称"));
-        QR_time.setText(bd.getString("activity_tiem",getDate()));
+        activity_id = bd.getString("activity_id","活动id");
+        activity_time = bd.getString("activity_time",getDate());
+        QR_name.setText(activity_id);
+        QR_time.setText(activity_time);
 
         //传入活动名称+随机数
-        int index = (int)(Math.random() *5);
-        context = QR_name.getText().toString() + Integer.toString(index);
+        int ticket_id = (int)(Math.random() *5);
+        context = QR_name.getText().toString() + Integer.toString(ticket_id);
         Log.v("context", context);
         createQR(context);
 
