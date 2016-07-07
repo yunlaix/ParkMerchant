@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.xs.parkmerchant.Net.Constants;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by Man on 2016/7/5.
@@ -83,20 +84,45 @@ public class MineActivity extends AppCompatActivity {
                 // 将选择的图片进行裁剪
                 case REQUEST_CODE_CHOOSE_IMAGE:
                     if (data.getData() != null) {
-                        Uri iconUri = data.getData();
+                        Uri iconUri = data.getData();Log.d("mine", "A"+iconUri+"A");
                         startCropImage(iconUri);
                     }
                     break;
                 // 将裁剪后的图片进行上传
                 case REQUEST_CODE_CROP_IMAGE:
                     // 上传图片操作
-                    Log.d("mine","sssssssssssssssss"+getIntent().getData());
-
+                    Log.d("mine","sssssssssssssssss"+data.getData());
+                    if(data!=null){
+                        setImageToHeadView(data);
+                    }
                     break;
                 default:
                     break;
 
             }
+        }
+    }
+
+    private void setImageToHeadView(Intent data){
+        Bundle bundle = data.getExtras();
+        if(bundle!=null){
+            Bitmap bitmap = data.getParcelableExtra("data");
+            addImage.setImageBitmap(bitmap);
+            saveBitMap(bitmap, "seller_img.PNG");
+        }
+    }
+
+    private void saveBitMap(Bitmap bitmap, String name){
+        File file = new File(Environment.getExternalStorageDirectory(), name);
+        if(file.exists()) file.delete();
+        try{
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)){
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -110,25 +136,25 @@ public class MineActivity extends AppCompatActivity {
         // 使图片处于可裁剪状态
         intent.putExtra("crop", "true");
         // 裁剪框的比例（根据需要显示的图片比例进行设置）
-        intent.putExtra("aspectX", 3);
-        intent.putExtra("aspectY", 2);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
         // 让裁剪框支持缩放
         intent.putExtra("scale", true);
         // 裁剪后图片的大小（注意和上面的裁剪比例保持一致）
-        intent.putExtra("outputX", dip2px(this, 120));
+        intent.putExtra("outputX", dip2px(this, 80));
         intent.putExtra("outputY", dip2px(this, 80));
         // 传递原图路径
-        File cropFile = new File(Environment.getExternalStorageDirectory() + "seller.JPG");
-        Uri cropImageUri = Uri.fromFile(cropFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
+//        File cropFile = new File(Environment.getExternalStorageDirectory() + "seller.JPG");
+//        Uri cropImageUri = Uri.fromFile(cropFile);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
         // 设置裁剪区域的形状，默认为矩形，也可设置为原形
-        //intent.putExtra("circleCrop", true);
+//        intent.putExtra("circleCrop", "true");
         // 设置图片的输出格式
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败
-        intent.putExtra("return-data", false);
+        intent.putExtra("return-data", true);
         // 是否需要人脸识别
-        intent.putExtra("noFaceDetection", true);
+//        intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
 
@@ -153,7 +179,8 @@ public class MineActivity extends AppCompatActivity {
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
-        imageLoader.displayImage(Constants.seller_img, addImage, options);
+//        imageLoader.displayImage(Constants.seller_img, addImage, options);
+        imageLoader.displayImage("file:///mnt/sdcard/seller_img.PNG", addImage);
     }
 
 
