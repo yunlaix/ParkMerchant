@@ -11,4 +11,6 @@ public class Url {
 
     public static String login_1 = "http://139.129.24.127/parking_app/Seller/seller_login.php";
 
+    public static String register_2 = "http://139.129.24.127/parking_app/Seller/seller_register.php";
+
 }

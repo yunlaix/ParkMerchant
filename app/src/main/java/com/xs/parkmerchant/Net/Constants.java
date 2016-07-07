@@ -5,7 +5,11 @@ package com.xs.parkmerchant.Net;
  */
 public class Constants {
 
+    public static String seller_id="";
     public static String seller_name="";
     public static String seller_password="";
+    public static String seller_address="";
+    public static String seller_contact="";
+    public static String seller_img="";
 
 }
