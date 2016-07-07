@@ -154,14 +154,13 @@
             android:textSize="@dimen/secondSize"
             android:textColor="@color/textBlack"/>
 
-        <EditText
+        <TextView
             android:id="@+id/edit_activity_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:text="商家地点"
             android:layout_marginLeft="@dimen/textMarginText"
-            android:hint="请填写活动地点"
-            android:background="@null"
             android:textSize="@dimen/secondSize"
             android:textColor="@color/textGray"/>
 
