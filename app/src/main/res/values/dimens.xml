@@ -25,5 +25,7 @@
     <dimen name="titleSize">40px</dimen>
     <!--list中的字体大小，仅次于顶部导航栏种字体的大小，一般在参数中标注为18-->
     <dimen name="secondSize">32px</dimen>
+    <!--最小的字体的大小-->
+    <dimen name="thirdSize">22.5px</dimen>
 
 </resources>
