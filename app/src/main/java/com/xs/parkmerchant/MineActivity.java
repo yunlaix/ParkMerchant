@@ -36,14 +36,17 @@ public class MineActivity extends AppCompatActivity {
     private TextView bussAddr;
     private TextView bussTel;
     private DisplayImageOptions options;
+    private File file;
 
     private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     private final int REQUEST_CODE_CROP_IMAGE = 2;
+    private final int REQUEST_CODE_TAKE_PHOTO = 3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_me);
+        file = new File(Environment.getExternalStorageDirectory(), "seller_img.PNG");
         initView();
 
         back.setOnClickListener(new OnClickListener() {
@@ -64,12 +67,23 @@ public class MineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MineActivity.this, "添加头像", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Intent.ACTION_PICK, null);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, REQUEST_CODE_CHOOSE_IMAGE);
+//                getFromLocal();
+                getFromCamera();
             }
         });
 
+    }
+
+    private void getFromCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo.JPG")));
+        startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
+    }
+
+    private void getFromLocal(){
+        Intent intent = new Intent(Intent.ACTION_PICK, null);
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intent, REQUEST_CODE_CHOOSE_IMAGE);
     }
 
     @Override
@@ -78,13 +92,14 @@ public class MineActivity extends AppCompatActivity {
         if(data!=null){
             switch (requestCode) {
                 // 将拍摄的照片进行裁剪(注意，这里需要传递的是照片的路径，而不是intent.getData(), 因为intent.getData()返回的是缩略图的数据)
-//                case REQUEST_CODE_TAKE_PHOTO:
-//                    startCropImage(iconUri);
-//                    break;
+                case REQUEST_CODE_TAKE_PHOTO:
+                    Uri uri_photo = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo.JPG"));
+                    startCropImage(data.getData());
+                    break;
                 // 将选择的图片进行裁剪
                 case REQUEST_CODE_CHOOSE_IMAGE:
                     if (data.getData() != null) {
-                        Uri iconUri = data.getData();Log.d("mine", "A"+iconUri+"A");
+                        Uri iconUri = data.getData();
                         startCropImage(iconUri);
                     }
                     break;
@@ -113,23 +128,19 @@ public class MineActivity extends AppCompatActivity {
     }
 
     private void saveBitMap(Bitmap bitmap, String name){
-        File file = new File(Environment.getExternalStorageDirectory(), name);
         if(file.exists()) file.delete();
         try{
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)){
                 fileOutputStream.flush();
                 fileOutputStream.close();
+                //upload
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    /**
-     * 裁减图片操作
-     * @param uri
-     */
     private void startCropImage(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
@@ -144,15 +155,19 @@ public class MineActivity extends AppCompatActivity {
         intent.putExtra("outputX", dip2px(this, 80));
         intent.putExtra("outputY", dip2px(this, 80));
         // 传递原图路径
-//        File cropFile = new File(Environment.getExternalStorageDirectory() + "seller.JPG");
+
+//        File cropFile = new File(Environment.getExternalStorageDirectory() + "photo.JPG");
 //        Uri cropImageUri = Uri.fromFile(cropFile);
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
         // 设置裁剪区域的形状，默认为矩形，也可设置为原形
 //        intent.putExtra("circleCrop", "true");
         // 设置图片的输出格式
-//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+//        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
         // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败
-        intent.putExtra("return-data", true);
+
+        intent.putExtra("return-data", true);//true
+
+
         // 是否需要人脸识别
 //        intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
@@ -179,10 +194,12 @@ public class MineActivity extends AppCompatActivity {
                 .bitmapConfig(Bitmap.Config.RGB_565).build();
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
-//        imageLoader.displayImage(Constants.seller_img, addImage, options);
-        imageLoader.displayImage("file:///mnt/sdcard/seller_img.PNG", addImage);
+        if(file.exists()){
+            imageLoader.displayImage("file:///mnt/sdcard/seller_img.PNG", addImage);
+        }else {
+            imageLoader.displayImage(Constants.seller_img, addImage, options);
+        }
     }
-
 
     public static int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
