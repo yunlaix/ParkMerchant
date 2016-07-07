@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity{
         editor.putString("seller_contact", Constants.seller_contact);
         editor.putString("seller_img", Constants.seller_img);
         editor.commit();
-        Log.d("login", "A"+sharedPreferences.getString("seller_id", "")+sharedPreferences.getString("seller_password", "")+"B");
+        Log.d("login", "A"+sharedPreferences.getString("seller_id", "")+sharedPreferences.getString("seller_password", ""));
     }
 
     @Override
