@@ -67,7 +67,7 @@ public class TicketContent {
                         jsonArray = jsonObject.getJSONArray("array");
                         for(int i=0; i<count; i++){
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            TicketItem tmp = new TicketItem(jo.getString("activity_name"), address, jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"));
+                            TicketItem tmp = new TicketItem(jo.getString("activity_id"), jo.getString("activity_name"), address, jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"));
                             items.add(tmp);
                         }
                         handler.sendEmptyMessage(2);
@@ -88,11 +88,13 @@ public class TicketContent {
     }
 
     public class TicketItem {
+        public final String id;
         public final String name;
         public final String address;
         public final String time;
 
-        public TicketItem(String n, String a, String t) {
+        public TicketItem(String i, String n, String a, String t) {
+            this.id = i;
             this.name = n;
             this.address = a;
             this.time = t;

@@ -26,20 +26,22 @@ public class TicketDetailContent {
     private TicketDetailAdapter myListViewAdapter;
     private SwipeRefreshLayout swipeRefreshLayoutTicket;
     private Context context;
+    private String activity_id;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
                 swipeRefreshLayoutTicket.setRefreshing(true);
             }else if(msg.what == 2){
-//                myListViewAdapter.notifyDataSetChanged();
+                myListViewAdapter.notifyDataSetChanged();
                 swipeRefreshLayoutTicket.setRefreshing(false);
             }
         }
     };
 
-    public TicketDetailContent(Context c){
+    public TicketDetailContent(Context c, String i){
         context = c;
+        activity_id = i;
     }
 
     public void setAdapter(TicketDetailAdapter mla){
@@ -57,20 +59,19 @@ public class TicketDetailContent {
             public void run() {
                 try{
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
+                    params.add(new BasicNameValuePair("activity_id", activity_id));
                     params.add(new BasicNameValuePair("num", "0"));
-                    String result = NetCore.postResulttoNet(Url.ticketList_7, params);
+                    String result = NetCore.postResulttoNet(Url.ticketDetail_8, params);
                     if(result != null && !result.equalsIgnoreCase("")){
                         try {
                             items.clear();
                             jsonObject = new JSONObject(result);
                             count = Integer.parseInt(jsonObject.getString("count"));
-                            address = jsonObject.getString("seller_address");
                             jsonArray = jsonObject.getJSONArray("array");
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
-//                                TicketDetailItem tmp = new TicketDetailItem(jo.getString("activity_name"), address, jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"));
-//                                items.add(tmp);
+                                TicketDetailItem tmp = new TicketDetailItem(jo.getString("ticket_id"), jo.getString("user_name"), jo.getString("ticket_deadline"), jo.getString("ticket_state"));
+                                items.add(tmp);
                             }
                             handler.sendEmptyMessage(2);
                         }catch (JSONException e){
