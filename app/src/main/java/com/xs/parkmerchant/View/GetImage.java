@@ -41,8 +41,8 @@ public class GetImage {
         // 让裁剪框支持缩放
         intent.putExtra("scale", true);
         // 裁剪后图片的大小（注意和上面的裁剪比例保持一致）
-        intent.putExtra("outputX", dip2px(this, 80));
-        intent.putExtra("outputY", dip2px(this, 80));
+//        intent.putExtra("outputX", dip2px(this, 80));
+//        intent.putExtra("outputY", dip2px(this, 80));
         // 传递原图路径
 
 //        File cropFile = new File(Environment.getExternalStorageDirectory() + "photo.JPG");
@@ -59,6 +59,6 @@ public class GetImage {
 
         // 是否需要人脸识别
 //        intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
+//        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
 }
