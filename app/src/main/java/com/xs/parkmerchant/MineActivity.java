@@ -1,7 +1,5 @@
 package com.xs.parkmerchant;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +11,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,21 +21,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -63,7 +62,6 @@ public class MineActivity extends AppCompatActivity {
     private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     private final int REQUEST_CODE_CROP_IMAGE = 2;
     private final int REQUEST_CODE_TAKE_PHOTO = 3;
-
     private SharedPreferences sharedPreferences;
 
     private Handler handler = new Handler(){
@@ -73,10 +71,8 @@ public class MineActivity extends AppCompatActivity {
                 sharedPreferences = getSharedPreferences("login_parkmerchant", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("seller_img", Constants.seller_img).commit();
-                Log.d("handler", "sssssssssssssssss");
             }else if(msg.what==2){
                 if(file.exists()) file.delete();
-                Log.d("handler", "fffffffffffffffff");
             }
         }
     };
@@ -172,7 +168,6 @@ public class MineActivity extends AppCompatActivity {
                 // 将裁剪后的图片进行上传
                 case REQUEST_CODE_CROP_IMAGE:
                     // 上传图片操作
-                    Log.d("mine","sssssssssssssssss"+data.getData());
                     if(data!=null) setImageToHeadView(data);
                     break;
                 default:
@@ -186,7 +181,10 @@ public class MineActivity extends AppCompatActivity {
         Bundle bundle = data.getExtras();
         if(bundle!=null){
             Bitmap bitmap = data.getParcelableExtra("data");
-            addImage.setImageBitmap(bitmap);
+            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+            roundedBitmapDrawable.setCornerRadius(bitmap.getWidth()/2);
+            roundedBitmapDrawable.setAntiAlias(true);
+            addImage.setImageDrawable(roundedBitmapDrawable);
             saveBitMap(bitmap);
         }
     }
@@ -272,10 +270,9 @@ public class MineActivity extends AppCompatActivity {
         // 让裁剪框支持缩放
         intent.putExtra("scale", true);
         // 裁剪后图片的大小（注意和上面的裁剪比例保持一致）
-        intent.putExtra("outputX", dip2px(this, 80));
-        intent.putExtra("outputY", dip2px(this, 80));
+        intent.putExtra("outputX", 100);
+        intent.putExtra("outputY", 100);
         // 传递原图路径
-
 //        File cropFile = new File(Environment.getExternalStorageDirectory() + "photo.JPG");
 //        Uri cropImageUri = Uri.fromFile(cropFile);
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
@@ -284,11 +281,7 @@ public class MineActivity extends AppCompatActivity {
         // 设置图片的输出格式
 //        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
         // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败
-
-        intent.putExtra("return-data", true);//true
-
-
-        // 是否需要人脸识别
+        intent.putExtra("return-data", true);
 //        intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
@@ -297,15 +290,12 @@ public class MineActivity extends AppCompatActivity {
         back = (ImageView)findViewById(R.id.mine_back);
         logout = (ImageView)findViewById(R.id.logout);
         addImage = (ImageView) findViewById(R.id.add_image);
-
         bussName = (TextView) findViewById(R.id.mine_buss_name);
         bussAddr = (TextView) findViewById(R.id.mine_buss_addr);
         bussTel = (TextView) findViewById(R.id.mine_buss_tel);
         bussName.setText(Constants.seller_name);
         bussAddr.setText(Constants.seller_address);
         bussTel.setText(Constants.seller_contact);
-        Log.d("mine", "A"+Constants.seller_img+"A"+Constants.seller_id);
-        //img
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.add_image)
                 .showImageForEmptyUri(R.mipmap.add_image)
@@ -315,15 +305,48 @@ public class MineActivity extends AppCompatActivity {
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
         if(file.exists()){
-            imageLoader.displayImage("file:///mnt/sdcard/seller_img.PNG", addImage);
+            imageLoader.displayImage("file:///mnt/sdcard/seller_img.PNG", addImage, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String s, View view) {}
+
+                @Override
+                public void onLoadingFailed(String s, View view, FailReason failReason) {}
+
+                @Override
+                public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                    RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                    roundedBitmapDrawable.setCornerRadius(bitmap.getWidth()/2);
+                    roundedBitmapDrawable.setAntiAlias(true);
+                    ((ImageView)view).setImageDrawable(roundedBitmapDrawable);
+                }
+
+                @Override
+                public void onLoadingCancelled(String s, View view) {}
+            });
         }else {
-            imageLoader.displayImage(Constants.seller_img, addImage, options);
+            imageLoader.displayImage(Constants.seller_img, addImage, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String s, View view) {}
+
+                @Override
+                public void onLoadingFailed(String s, View view, FailReason failReason) {}
+
+                @Override
+                public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                    RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                    roundedBitmapDrawable.setCornerRadius(bitmap.getWidth()/2);
+                    roundedBitmapDrawable.setAntiAlias(true);
+                    ((ImageView)view).setImageDrawable(roundedBitmapDrawable);
+                }
+
+                @Override
+                public void onLoadingCancelled(String s, View view) {}
+            });
         }
     }
 
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
-
+//    public static int dip2px(Context context, float dpValue) {
+//        final float scale = context.getResources().getDisplayMetrics().density;
+//        return (int) (dpValue * scale + 0.5f);
+//    }
 }
