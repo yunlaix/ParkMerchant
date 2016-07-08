@@ -97,7 +97,7 @@ public class PublishActivity extends AppCompatActivity{
         editActivityImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog show = new AlertDialog.Builder(PublishActivity.this).setTitle("选择头像").setItems(new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(PublishActivity.this).setTitle("选择头像").setItems(methods, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
@@ -182,7 +182,7 @@ public class PublishActivity extends AppCompatActivity{
         Bundle bundle = data.getExtras();
         if(bundle!=null){
             Bitmap bitmap = data.getParcelableExtra("data");
-            addImage.setImageBitmap(bitmap);
+//            addImage.setImageBitmap(bitmap);
             saveBitMap(bitmap);
         }
     }
@@ -242,7 +242,7 @@ public class PublishActivity extends AppCompatActivity{
         ValueName[1] = editActivityStart.getText().toString().trim();
         ValueName[2] = editActivityEnd.getText().toString().trim();
         ValueName[3] = editActivityDetails.getText().toString().trim();
-        ValueName[4] = getImageUrl();
+//        ValueName[4] = getImageUrl();
 
         if("".equals(ValueName[0])||"".equals(ValueName[1])||"".equals(ValueName[2])||"".equals(ValueName[3])||"".equals(ValueName[4])){
             Toast.makeText(this,  "填写信息不能为空", Toast.LENGTH_LONG).show();
