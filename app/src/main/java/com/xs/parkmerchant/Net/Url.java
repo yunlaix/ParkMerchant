@@ -19,4 +19,6 @@ public class Url {
 
     public static String modify_11 = "http://139.129.24.127/parking_app/Seller/seller_modifyinfo.php";
 
+    public static String ticketDetail_8 = "http://139.129.24.127/parking_app/Seller/seller_get_ticket_of_activity.php";
+
 }

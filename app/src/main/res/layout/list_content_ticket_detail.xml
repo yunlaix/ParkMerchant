@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@mipmap/ticket_detail_orange">
+    <ImageView
+        android:id="@+id/user_img"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_margin="5dp"
+        android:src="@mipmap/ticket_2"/>
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:layout_toRightOf="@id/user_img"
+        android:layout_marginTop="10dp"
+        android:text="板儿棒"/>
+    <TextView
+        android:id="@+id/user_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/user_img"
+        android:layout_below="@id/user_name"
+        android:layout_marginTop="5dp"
+        android:text="2015-10-15 15:00"/>
+    <TextView
+        android:id="@+id/ticket_deadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:textColor="#fefefe"
+        android:text="使用期限：2016.7.1-2016.7.8"/>
+    <TextView
+        android:id="@+id/ticket_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
+        android:textColor="#fefefe"
+        android:text="使用状态：已使用"/>
+</RelativeLayout>

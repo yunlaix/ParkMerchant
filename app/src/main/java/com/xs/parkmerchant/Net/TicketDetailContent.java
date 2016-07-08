@@ -6,55 +6,48 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
-import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
+import com.xs.parkmerchant.Adapter.TicketDetailAdapter;
 import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
-import com.xs.parkmerchant.View.MySwipeRefreshLayout;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityContent {
+public class TicketDetailContent {
 
-    private List<ActivityItem> items = new ArrayList<ActivityItem>();
+    private List<TicketDetailItem> items = new ArrayList<TicketDetailItem>();
     private JSONObject jsonObject;
     private int count;
     private String address;
     private JSONArray jsonArray;
-    private ActivityListViewAdapter myListViewAdapter;
-    private MySwipeRefreshLayout swipeRefreshLayout;
+    private TicketDetailAdapter myListViewAdapter;
+    private SwipeRefreshLayout swipeRefreshLayoutTicket;
     private Context context;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
-                swipeRefreshLayout.setRefreshing(true);
+                swipeRefreshLayoutTicket.setRefreshing(true);
             }else if(msg.what == 2){
-                myListViewAdapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
+//                myListViewAdapter.notifyDataSetChanged();
+                swipeRefreshLayoutTicket.setRefreshing(false);
             }
         }
     };
 
-    public ActivityContent(Context c){
+    public TicketDetailContent(Context c){
         context = c;
     }
 
-    public void setAdapter(ActivityListViewAdapter mla){
+    public void setAdapter(TicketDetailAdapter mla){
         myListViewAdapter = mla;
     }
 
-    public void setSwipe(MySwipeRefreshLayout srl){
-        swipeRefreshLayout = srl;
-    }
-
-    public List<ActivityContent.ActivityItem> getITEMS(){
-        return items;
+    public void setSwipe(SwipeRefreshLayout srl){
+        swipeRefreshLayoutTicket = srl;
     }
 
     public void refresh(){
@@ -64,28 +57,26 @@ public class ActivityContent {
             public void run() {
                 try{
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("seller_id", Constants.seller_id));//
+                    params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                     params.add(new BasicNameValuePair("num", "0"));
-                    String result = NetCore.postResulttoNet(Url.activityList_5, params);
+                    String result = NetCore.postResulttoNet(Url.ticketList_7, params);
                     if(result != null && !result.equalsIgnoreCase("")){
                         try {
                             items.clear();
                             jsonObject = new JSONObject(result);
                             count = Integer.parseInt(jsonObject.getString("count"));
-//                            address = jsonObject.getString("seller_address");
+                            address = jsonObject.getString("seller_address");
                             jsonArray = jsonObject.getJSONArray("array");
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
-                                ActivityItem tmp = new ActivityItem(jo.getString("activity_id"), jo.getString("activity_name"), "address", jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"), jo.getString("activity_img"));
-                                Log.d("image", jo.getString("activity_img"));
-                                items.add(tmp);
+//                                TicketDetailItem tmp = new TicketDetailItem(jo.getString("activity_name"), address, jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"));
+//                                items.add(tmp);
                             }
                             handler.sendEmptyMessage(2);
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
                     }
-                    Log.d("result", result+"aaaaaa");
                 }catch (Exception e){
                     e.printStackTrace();
                     handler.sendEmptyMessage(1);
@@ -94,19 +85,21 @@ public class ActivityContent {
         }).start();
     }
 
-    public class ActivityItem {
-        public final String id;
-        public final String name;
-        public final String address;
-        public final String time;
-        public final String imgUrl;
+    public List<TicketDetailContent.TicketDetailItem> getITEMS(){
+        return items;
+    }
 
-        public ActivityItem(String id, String n, String a, String t, String i) {
-            this.id = id;
-            this.name = n;
-            this.address = a;
-            this.time = t;
-            this.imgUrl = i;
+    public class TicketDetailItem {
+        public final String ticket_id;
+        public final String user_name;
+        public final String deadline;
+        public final String state;
+
+        public TicketDetailItem(String t, String u, String d, String s) {
+            this.ticket_id = t;
+            this.user_name = u;
+            this.deadline = d;
+            this.state = s;
         }
     }
 }
