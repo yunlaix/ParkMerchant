@@ -36,6 +36,7 @@ public class TicketListViewAdapter extends BaseAdapter {
             holder.mActivityName = (TextView) view.findViewById(R.id.activity_name);
             holder.mActivityAddress = (TextView) view.findViewById(R.id.activity_address);
             holder.mActivityTime = (TextView) view.findViewById(R.id.activity_time);
+            holder.mActivityTcount = (TextView) view.findViewById(R.id.tcount);
             view.setTag(holder);
         }else{
             holder = (Holder) view.getTag();
@@ -43,6 +44,7 @@ public class TicketListViewAdapter extends BaseAdapter {
         holder.mActivityName.setText(mValues.get(i).name);
         holder.mActivityAddress.setText(mValues.get(i).address);
         holder.mActivityTime.setText(mValues.get(i).time);
+        holder.mActivityTcount.setText(mValues.get(i).tount);
         return view;
     }
 
@@ -63,5 +65,6 @@ public class TicketListViewAdapter extends BaseAdapter {
         private TextView mActivityName;
         private TextView mActivityAddress;
         private TextView mActivityTime;
+        private TextView mActivityTcount;
     }
 }

@@ -19,7 +19,6 @@ public class TicketContent {
     private List<TicketItem> items = new ArrayList<TicketItem>();
     private JSONObject jsonObject;
     private int count;
-    private String address;
     private JSONArray jsonArray;
     private TicketListViewAdapter myListViewAdapter;
     private SwipeRefreshLayout swipeRefreshLayoutTicket;
@@ -57,17 +56,17 @@ public class TicketContent {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                 params.add(new BasicNameValuePair("num", "0"));
-                String result = NetCore.postResulttoNet(Url.ticketList_7, params);
+                String result = NetCore.postResulttoNet(Url.ticketList_7, params);Log.d("aaaaaa", "A"+result);
                 if(result != null && !result.equalsIgnoreCase("")){
                     try {
                         items.clear();
                         jsonObject = new JSONObject(result);
                         count = Integer.parseInt(jsonObject.getString("count"));
-                        address = jsonObject.getString("seller_address");
                         jsonArray = jsonObject.getJSONArray("array");
                         for(int i=0; i<count; i++){
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            TicketItem tmp = new TicketItem(jo.getString("activity_id"), jo.getString("activity_name"), address, jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"));
+                            TicketItem tmp = new TicketItem(jo.getString("activity_id"), jo.getString("activity_name"), Constants.seller_address,
+                                    jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"), jo.getString("Tcount"));
                             items.add(tmp);
                         }
                         handler.sendEmptyMessage(2);
@@ -92,12 +91,14 @@ public class TicketContent {
         public final String name;
         public final String address;
         public final String time;
+        public final String tount;
 
-        public TicketItem(String i, String n, String a, String t) {
+        public TicketItem(String i, String n, String a, String t, String tc) {
             this.id = i;
             this.name = n;
             this.address = a;
             this.time = t;
+            this.tount = tc;
         }
     }
 }

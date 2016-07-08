@@ -1,6 +1,5 @@
 package com.xs.parkmerchant;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,13 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.xs.parkmerchant.Adapter.TicketDetailAdapter;
-import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
-import com.xs.parkmerchant.Net.TicketContent;
 import com.xs.parkmerchant.Net.TicketDetailContent;
 
 /**
@@ -26,6 +23,7 @@ public class TicketDetailActivity extends AppCompatActivity{
     private TicketDetailAdapter ticketDetailAdapter;
     private TicketDetailContent ticketDetailContent;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ImageView back;
     private int lastItem;
     private String id;
 
@@ -34,6 +32,13 @@ public class TicketDetailActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_detail);
         id = getIntent().getStringExtra("activity_id");
+        back = (ImageView) findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         View listView = findViewById(R.id.item_list);
         assert listView != null;
         setListView((ListView)listView);
@@ -56,13 +61,6 @@ public class TicketDetailActivity extends AppCompatActivity{
         ticketDetailAdapter = new TicketDetailAdapter(ticketDetailContent.getITEMS(), this);
         ticketDetailContent.setAdapter(ticketDetailAdapter);
         listView.setAdapter(ticketDetailAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(getApplicationContext(), TicketDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {

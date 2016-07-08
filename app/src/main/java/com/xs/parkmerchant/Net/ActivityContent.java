@@ -3,19 +3,14 @@ package com.xs.parkmerchant.Net;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-
 import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
-import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
 import com.xs.parkmerchant.View.MySwipeRefreshLayout;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,11 +67,10 @@ public class ActivityContent {
                             items.clear();
                             jsonObject = new JSONObject(result);
                             count = Integer.parseInt(jsonObject.getString("count"));
-//                            address = jsonObject.getString("seller_address");
                             jsonArray = jsonObject.getJSONArray("array");
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
-                                ActivityItem tmp = new ActivityItem(jo.getString("activity_id"), jo.getString("activity_name"), "address", jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"), jo.getString("activity_img"));
+                                ActivityItem tmp = new ActivityItem(jo.getString("activity_id"), jo.getString("activity_name"), Constants.seller_address, jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"), jo.getString("activity_img"));
                                 Log.d("image", jo.getString("activity_img"));
                                 items.add(tmp);
                             }

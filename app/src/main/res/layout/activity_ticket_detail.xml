@@ -8,7 +8,7 @@
         android:layout_height="@dimen/app_bar_height"
         android:background="@color/navigationBar">
         <ImageView
-            android:id="@+id/mine_back"
+            android:id="@+id/back"
             android:layout_width="@dimen/iconSize"
             android:layout_height="@dimen/iconSize"
             android:src="@mipmap/back"

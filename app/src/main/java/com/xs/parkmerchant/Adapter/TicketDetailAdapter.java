@@ -37,8 +37,8 @@ public class TicketDetailAdapter extends BaseAdapter {
             holder = (Holder) view.getTag();
         }
         holder.user_name.setText(mValues.get(i).user_name);
-        holder.ticket_deadline.setText(mValues.get(i).deadline);
-        holder.ticket_state.setText(mValues.get(i).state);
+        holder.ticket_deadline.setText("使用期限："+mValues.get(i).deadline);
+        holder.ticket_state.setText("使用状态："+(mValues.get(i).state.equals("1") ? "未使用" : "已使用"));
         return view;
     }
 
