@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -61,6 +62,7 @@ public class ActivityDetailActivity extends AppCompatActivity {
 
 
         downLoadDetails();
+        initView();
 
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.dark)
@@ -81,6 +83,7 @@ public class ActivityDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityDetailActivity.this, QRActivity.class);
                 intent.putExtra("activity_id", activity_id);
+                intent.putExtra("activity_name",activity_name);
                 startActivity(intent);
             }
         });
@@ -95,11 +98,14 @@ public class ActivityDetailActivity extends AppCompatActivity {
     }
 
     private void downLoadDetails(){
+        Log.v("downLoadDetails","downLoadDetails");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
                 param.add(new BasicNameValuePair("activity_id", activity_id));
+                Log.v("activity_id",activity_id);
+
                 try {
                     String data = NetCore.postResulttoNet(Url.activityDetail,param);
                     if(data!=null && !data.equals("")){
@@ -111,8 +117,14 @@ public class ActivityDetailActivity extends AppCompatActivity {
                         activity_detail = jb.getString(",activity_detail");
 
                         activity_time = activity_starttime + " 至 " + activity_endtime;
-                        int state = jb.getInt("state");
-                        if(state == 1) initView();
+                        String state = jb.getString("state");
+                        if(state.equals("1")){
+                            Toast.makeText(ActivityDetailActivity.this,"成功",Toast.LENGTH_LONG).show();
+
+                        }else {
+                            Toast.makeText(ActivityDetailActivity.this,"失败",Toast.LENGTH_LONG).show();
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -161,6 +173,7 @@ public class ActivityDetailActivity extends AppCompatActivity {
     }
 
     private void downloadImage(){
+        Log.v("down", "downloadImage");
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(ActivityDetailActivity.this));
         imageLoader.displayImage(activity_img, activityDetailImage, options);

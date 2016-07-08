@@ -41,7 +41,7 @@ public class QRActivity extends AppCompatActivity {
 
     private Bitmap logo;
 
-    private String context,ticket_id,activity_id,activity_time;
+    private String context,ticket_id,activity_id,activity_name,activity_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +52,10 @@ public class QRActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         activity_id = intent.getStringExtra("activity_id");
+        activity_name = intent.getStringExtra("activity_name");
         activity_time = getDate();
 
-        QR_name.setText(activity_id);
+        QR_name.setText(activity_name);
         QR_time.setText(activity_time);
 
         //传入活动名称+随机数

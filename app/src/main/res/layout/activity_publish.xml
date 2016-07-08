@@ -49,6 +49,7 @@
 
         <ImageView
             android:layout_marginTop="@dimen/listMargin"
+            android:id="@+id/edit_detail_image"
             android:layout_width="120dp"
             android:layout_height="80dp"
             android:background="@mipmap/dark"
