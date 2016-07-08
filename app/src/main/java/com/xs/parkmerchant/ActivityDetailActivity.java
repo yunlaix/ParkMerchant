@@ -15,6 +15,16 @@ import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.xs.parkmerchant.Net.Constants;
+import com.xs.parkmerchant.Net.NetCore;
+import com.xs.parkmerchant.Net.Url;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -37,6 +47,8 @@ public class ActivityDetailActivity extends AppCompatActivity {
     private String activity_img, activity_id, activity_name,activity_starttime, activity_endtime, seller_address,activity_detail,activity_time;
     private DisplayImageOptions options;
 
+    JSONObject jb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +58,9 @@ public class ActivityDetailActivity extends AppCompatActivity {
         activity_id = intent.getStringExtra("activity_id");
         activity_name = intent.getStringExtra("activity_name");
 
-        downLoadDetails(activity_id);
 
-        initView();
+
+        downLoadDetails();
 
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.dark)
@@ -69,7 +81,6 @@ public class ActivityDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityDetailActivity.this, QRActivity.class);
                 intent.putExtra("activity_id", activity_id);
-                intent.putExtra("activity_time",activity_time);
                 startActivity(intent);
             }
         });
@@ -77,16 +88,36 @@ public class ActivityDetailActivity extends AppCompatActivity {
         deleteActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ActivityDetailActivity.this, "删除活动", Toast.LENGTH_LONG).show();
+                deleteActivity();
             }
         });
 
     }
 
-    private void downLoadDetails(String activity_id){
+    private void downLoadDetails(){
         new Thread(new Runnable() {
             @Override
             public void run() {
+                List<NameValuePair> param = new ArrayList<NameValuePair>();
+                param.add(new BasicNameValuePair("activity_id", activity_id));
+                try {
+                    String data = NetCore.postResulttoNet(Url.activityDetail,param);
+                    if(data!=null && !data.equals("")){
+                        jb = new JSONObject(data);
+                        activity_img = jb.getString("activity_img");
+                        activity_starttime = jb.getString("activity_starttime");
+                        activity_endtime = jb.getString("activity_endtime");
+                        seller_address = jb.getString("seller_address");
+                        activity_detail = jb.getString(",activity_detail");
+
+                        activity_time = activity_starttime + " 至 " + activity_endtime;
+                        int state = jb.getInt("state");
+                        if(state == 1) initView();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
             }
@@ -96,6 +127,36 @@ public class ActivityDetailActivity extends AppCompatActivity {
     }
 
     private  void deleteActivity(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<NameValuePair> param = new ArrayList<NameValuePair>();
+                param.add(new BasicNameValuePair("activity_id", activity_id));
+                try {
+                    String data = NetCore.postResulttoNet(Url.activityDetail,param);
+                    if(data!=null && !data.equals("")){
+                        jb = new JSONObject(data);
+                        int state = jb.getInt("state");
+
+                        switch(state){
+                            case 0:
+                                Toast.makeText(ActivityDetailActivity.this, "删除活动成功", Toast.LENGTH_LONG).show();
+                                break;
+                            case 1:
+                                Toast.makeText(ActivityDetailActivity.this, "删除活动失败", Toast.LENGTH_LONG).show();
+                                break;
+                        }
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
 
     }
 

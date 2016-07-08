@@ -21,6 +21,6 @@ public class Url {
 
     public static String ticketDetail_8 = "http://139.129.24.127/parking_app/Seller/seller_get_ticket_of_activity.php";
 
-    private static String activityDetail = "http://139.129.24.127/parking_app/Seller/seller_getactivity.php";
+    public static String activityDetail = "http://139.129.24.127/parking_app/Seller/seller_getactivity.php";
 
 }
