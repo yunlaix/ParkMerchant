@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +21,23 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
 import com.xs.parkmerchant.Net.Constants;
+import com.xs.parkmerchant.Net.NetCore;
+import com.xs.parkmerchant.Net.Url;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Man on 2016/7/5.
@@ -37,16 +52,31 @@ public class MineActivity extends AppCompatActivity {
     private TextView bussTel;
     private DisplayImageOptions options;
     private File file;
+    private String filepath;
 
+    private boolean isUpload = false;
     private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     private final int REQUEST_CODE_CROP_IMAGE = 2;
     private final int REQUEST_CODE_TAKE_PHOTO = 3;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                Log.d("handler", "sssssssssssssssss");
+            }else if(msg.what==2){
+                if(file.exists()) file.delete();
+                Log.d("handler", "fffffffffffffffff");
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_me);
-        file = new File(Environment.getExternalStorageDirectory(), "seller_img.PNG");
+        filepath = Environment.getExternalStorageDirectory()+"/seller_img.PNG";
+        file = new File(filepath);//Environment.getExternalStorageDirectory(), "seller_img.PNG"
         initView();
 
         back.setOnClickListener(new OnClickListener() {
@@ -67,8 +97,8 @@ public class MineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MineActivity.this, "添加头像", Toast.LENGTH_LONG).show();
-//                getFromLocal();
-                getFromCamera();
+                getFromLocal();
+//                getFromCamera();
             }
         });
 
@@ -89,12 +119,12 @@ public class MineActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data!=null){
+        if(data!=null || requestCode == REQUEST_CODE_TAKE_PHOTO){
             switch (requestCode) {
                 // 将拍摄的照片进行裁剪(注意，这里需要传递的是照片的路径，而不是intent.getData(), 因为intent.getData()返回的是缩略图的数据)
                 case REQUEST_CODE_TAKE_PHOTO:
                     Uri uri_photo = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo.JPG"));
-                    startCropImage(data.getData());
+                    startCropImage(uri_photo);
                     break;
                 // 将选择的图片进行裁剪
                 case REQUEST_CODE_CHOOSE_IMAGE:
@@ -107,9 +137,7 @@ public class MineActivity extends AppCompatActivity {
                 case REQUEST_CODE_CROP_IMAGE:
                     // 上传图片操作
                     Log.d("mine","sssssssssssssssss"+data.getData());
-                    if(data!=null){
-                        setImageToHeadView(data);
-                    }
+                    if(data!=null) setImageToHeadView(data);
                     break;
                 default:
                     break;
@@ -123,22 +151,78 @@ public class MineActivity extends AppCompatActivity {
         if(bundle!=null){
             Bitmap bitmap = data.getParcelableExtra("data");
             addImage.setImageBitmap(bitmap);
-            saveBitMap(bitmap, "seller_img.PNG");
+            saveBitMap(bitmap);
         }
     }
 
-    private void saveBitMap(Bitmap bitmap, String name){
+    private void saveBitMap(Bitmap bitmap){
         if(file.exists()) file.delete();
         try{
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)){
                 fileOutputStream.flush();
                 fileOutputStream.close();
-                //upload
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                uploadImg(Url.upload_img, filepath, "seller_"+simpleDateFormat.format(new Date()));
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void uploadImg(final String token_url, final String data, final String key){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    String result = NetCore.postResulttoNet(token_url, params);
+                    JSONObject jsonObject = new JSONObject(result);
+                    String token = jsonObject.getString("uptoken");
+                    Log.d("upload", "result"+result);
+                    UploadManager uploadManager = new UploadManager();
+                    uploadManager.put(data, key, token, new UpCompletionHandler() {
+                        @Override
+                        public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
+                            Log.d("upload", "D"+s+"D"+responseInfo.isOK()+"D"+responseInfo+"D"+jsonObject);
+                            isUpload = responseInfo.isOK();
+                            if(isUpload) {
+                                //update database
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Constants.seller_img = Url.touxiang + key;
+                                            List<NameValuePair> paramsx = new ArrayList<NameValuePair>();
+                                            paramsx.clear();
+                                            paramsx.add(new BasicNameValuePair("seller_id", Constants.seller_id));
+                                            paramsx.add(new BasicNameValuePair("seller_img", Constants.seller_img));
+                                            paramsx.add(new BasicNameValuePair("seller_name", Constants.seller_name));
+                                            paramsx.add(new BasicNameValuePair("seller_address", Constants.seller_address));
+                                            paramsx.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
+                                            String resultx = NetCore.postResulttoNet(Url.modify_11, paramsx);
+                                            JSONObject jsonObjectx = new JSONObject(resultx);
+                                            if (jsonObjectx.getString("state").equals("0")) {
+                                                handler.sendEmptyMessage(1);
+                                            } else {
+                                                handler.sendEmptyMessage(2);
+                                            }
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+                            }else{
+                                handler.sendEmptyMessage(2);//
+                            }
+                        }
+                    }, null);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    handler.sendEmptyMessage(2);
+                }
+            }
+        }).start();
     }
 
     private void startCropImage(Uri uri) {
@@ -160,7 +244,7 @@ public class MineActivity extends AppCompatActivity {
 //        Uri cropImageUri = Uri.fromFile(cropFile);
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
         // 设置裁剪区域的形状，默认为矩形，也可设置为原形
-//        intent.putExtra("circleCrop", "true");
+        intent.putExtra("circleCrop", "true");
         // 设置图片的输出格式
 //        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
         // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败
