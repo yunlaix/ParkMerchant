@@ -50,9 +50,10 @@ public class QRActivity extends AppCompatActivity {
 
         initView();
 
-        Bundle bd = new Bundle();
-        activity_id = bd.getString("activity_id","活动id");
-        activity_time = bd.getString("activity_time",getDate());
+        Intent intent = getIntent();
+        activity_id = intent.getStringExtra("activity_id");
+        activity_time = intent.getStringExtra("activity_time");
+
         QR_name.setText(activity_id);
         QR_time.setText(activity_time);
 
