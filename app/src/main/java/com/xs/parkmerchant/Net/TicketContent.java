@@ -55,7 +55,7 @@ public class TicketContent {
             public void run() {
             try{
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("seller_id", "a"));
+                params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                 params.add(new BasicNameValuePair("num", "0"));
                 String result = NetCore.postResulttoNet(Url.ticketList_7, params);
                 if(result != null && !result.equalsIgnoreCase("")){
@@ -75,11 +75,9 @@ public class TicketContent {
                         e.printStackTrace();
                     }
                 }
-//                Log.d("result", result+"aaaaaa");
             }catch (Exception e){
                 e.printStackTrace();
                 handler.sendEmptyMessage(1);
-//                Log.d("aaaa", "ccccccccccccccccccc");
             }
             }
         }).start();

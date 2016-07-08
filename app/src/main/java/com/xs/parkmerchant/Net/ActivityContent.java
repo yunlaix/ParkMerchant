@@ -64,7 +64,7 @@ public class ActivityContent {
             public void run() {
                 try{
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
-                    params.add(new BasicNameValuePair("seller_id", "a"));//
+                    params.add(new BasicNameValuePair("seller_id", Constants.seller_id));//
                     params.add(new BasicNameValuePair("num", "0"));
                     String result = NetCore.postResulttoNet(Url.activityList_5, params);
                     if(result != null && !result.equalsIgnoreCase("")){

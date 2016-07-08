@@ -1,7 +1,10 @@
 package com.xs.parkmerchant;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -53,16 +57,22 @@ public class MineActivity extends AppCompatActivity {
     private DisplayImageOptions options;
     private File file;
     private String filepath;
+    private final String [] methods = {"从图库", "从拍照"};
 
     private boolean isUpload = false;
     private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     private final int REQUEST_CODE_CROP_IMAGE = 2;
     private final int REQUEST_CODE_TAKE_PHOTO = 3;
 
+    private SharedPreferences sharedPreferences;
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
+                sharedPreferences = getSharedPreferences("login_parkmerchant", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("seller_img", Constants.seller_img).commit();
                 Log.d("handler", "sssssssssssssssss");
             }else if(msg.what==2){
                 if(file.exists()) file.delete();
@@ -78,30 +88,56 @@ public class MineActivity extends AppCompatActivity {
         filepath = Environment.getExternalStorageDirectory()+"/seller_img.PNG";
         file = new File(filepath);//Environment.getExternalStorageDirectory(), "seller_img.PNG"
         initView();
-
         back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
         logout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MineActivity.this, "注销登陆", Toast.LENGTH_LONG).show();
+                logOut();
             }
         });
-
         addImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MineActivity.this, "添加头像", Toast.LENGTH_LONG).show();
-                getFromLocal();
-//                getFromCamera();
+                selectMethod();
             }
         });
+    }
 
+    private void logOut(){
+        sharedPreferences = getSharedPreferences("login_parkmerchant", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear().commit();
+        if(file.exists()) file.delete();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void selectMethod(){
+        new AlertDialog.Builder(MineActivity.this).setTitle("选择头像").setItems(methods, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i){
+                    case 0:
+                        getFromLocal();
+                        break;
+                    case 1:
+                        getFromCamera();
+                        break;
+                }
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
     }
 
     private void getFromCamera(){
