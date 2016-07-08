@@ -59,5 +59,6 @@ public class TicketDetailAdapter extends BaseAdapter {
         private TextView user_name;
         private TextView ticket_deadline;
         private TextView ticket_state;
+        //private
     }
 }

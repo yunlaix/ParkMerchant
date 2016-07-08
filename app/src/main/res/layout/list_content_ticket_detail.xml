@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="@mipmap/ticket_detail_orange">
+    android:layout_height="80dp">
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:src="@mipmap/ticket_detail_orange"/>
     <ImageView
         android:id="@+id/user_img"
         android:layout_width="55dp"
