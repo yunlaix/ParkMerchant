@@ -52,7 +52,7 @@ public class QRActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         activity_id = intent.getStringExtra("activity_id");
-        activity_time = intent.getStringExtra("activity_time");
+        activity_time = getDate();
 
         QR_name.setText(activity_id);
         QR_time.setText(activity_time);
