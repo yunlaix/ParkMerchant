@@ -62,6 +62,7 @@ public class TicketDetailContent {
                     params.add(new BasicNameValuePair("activity_id", activity_id));
                     params.add(new BasicNameValuePair("num", "0"));
                     String result = NetCore.postResulttoNet(Url.ticketDetail_8, params);
+                    Log.d("ticketdetail", "A"+result+"A"+activity_id);
                     if(result != null && !result.equalsIgnoreCase("")){
                         try {
                             items.clear();
@@ -70,7 +71,7 @@ public class TicketDetailContent {
                             jsonArray = jsonObject.getJSONArray("array");
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
-                                TicketDetailItem tmp = new TicketDetailItem(jo.getString("ticket_id"), jo.getString("user_name"), jo.getString("ticket_deadline"), jo.getString("ticket_state"));
+                                TicketDetailItem tmp = new TicketDetailItem(jo.getString("ticket_id"), jo.getString("user_name"), jo.getString("ticket_deadLine"), jo.getString("ticket_state"));
                                 items.add(tmp);
                             }
                             handler.sendEmptyMessage(2);
