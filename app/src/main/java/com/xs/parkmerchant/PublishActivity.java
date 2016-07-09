@@ -3,6 +3,7 @@ package com.xs.parkmerchant;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -60,23 +61,29 @@ public class PublishActivity extends AppCompatActivity{
     private EditText editActivityDetails;
 
 
-    private File file;
-    private String filepath;
     private final String [] methods = {"从图库", "从拍照"};
 
-    private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
-    private final int REQUEST_CODE_CROP_IMAGE = 3;
-    private final int REQUEST_CODE_TAKE_PHOTO = 2;
+    private static final String IMAGE_FILE_NAME = "faceImage.jpg";
+
+    /* 请求码*/
+    private static final int IMAGE_REQUEST_CODE = 0;
+    private static final int CAMERA_REQUEST_CODE = 1;
+    private static final int RESIZE_REQUEST_CODE = 2;
+
+
 
     String[] ValueName = {"activity_name", "activity_start", "activity_end", "activity_details", "activity_imageurl"};
+
+    String key,img_url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
 
-        filepath = Environment.getExternalStorageState() + "/MyActivity.jpg";
-        file = new File(filepath);
+        SimpleDateFormat nowTime = new SimpleDateFormat();
+        key = "activity_" + nowTime.format(new Date());
+
 
         initView();
 //        getInfo();
@@ -101,35 +108,45 @@ public class PublishActivity extends AppCompatActivity{
         editActivityImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(PublishActivity.this).setTitle("选择活动图片").setItems(methods, new DialogInterface.OnClickListener() {
+                //为Dialog加监听，setItems给items加监听，setNavigation给导航键，如“取消”加监听
+                new AlertDialog.Builder(PublishActivity.this).setTitle("上传头像").setItems(methods, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i) {
+                        switch(i){
                             case 0:
-                                Intent gallery = new Intent(Intent.ACTION_GET_CONTENT);
-                                gallery.addCategory(Intent.CATEGORY_OPENABLE);
-                                gallery.setType("image/*");
-                                startActivityForResult(gallery, REQUEST_CODE_CHOOSE_IMAGE);
+                                //新建一个intent，用来获取相册中的内容，种类是image，然后startActivityForResult传入intent，和打开图像请求
+                                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                                galleryIntent.setType("image/*");//图片
+                                startActivityForResult(galleryIntent, IMAGE_REQUEST_CODE);
                                 break;
+
                             case 1:
-                                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-                                    Intent camera = new Intent("android.media.action.IMAGE_CAPTURE");
-                                    camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "activity.jpg")));
-                                    camera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-                                    startActivityForResult(camera, REQUEST_CODE_TAKE_PHOTO);
-                                }else{
-                                        Toast.makeText(PublishActivity.this, "SD卡获取不到", Toast.LENGTH_LONG).show();
+
+                                //先检查SD卡是否能用，能用则new一个intent用来传入
+                                if (isSdcardExisting()) {
+                                    Intent cameraIntent = new Intent(
+                                            "android.media.action.IMAGE_CAPTURE");//拍照
+                                    //获取存储中image的存储路径getImageUri
+                                    cameraIntent.putExtra
+                                            (MediaStore.EXTRA_OUTPUT, getImageUri());
+                                    cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+                                    //请求打开相机，这一句是为了给intent请求编号，cameraIntent才是处理打开相机请求的
+                                    startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+                                } else {
+                                    Toast.makeText(PublishActivity.this, "请插入sd卡", Toast.LENGTH_LONG)
+                                            .show();
                                 }
                                 break;
                         }
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 }).show();
-//                uploadImage();
+                uploadImage();
             }
         });
 
@@ -167,70 +184,59 @@ public class PublishActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        setToast("requestCode", Integer.toString(requestCode));
-        setToast("resultCode", Integer.toString(resultCode));
-        if(resultCode != RESULT_OK){
+        if (resultCode != RESULT_OK) {
             return;
-        }else{
+        } else {
             switch (requestCode) {
-                // 将拍摄的照片进行裁剪(注意，这里需要传递的是照片的路径，而不是intent.getData(), 因为intent.getData()返回的是缩略图的数据)
-                case REQUEST_CODE_TAKE_PHOTO:
-                    Uri uri_photo = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "activity.jpg"));
-                    setToast("take photo",uri_photo.toString());
-                    startCropImage(uri_photo);
-                    setToast("startCropImage","success");
+                case IMAGE_REQUEST_CODE:
+                    Uri originalUri=data.getData();//获取图片uri
+                    //编辑图片大小，裁切
+                    resizeImage(originalUri);
+                    //下面方法将获取的uri转为String类型哦！
+                    String []imgs1={MediaStore.Images.Media.DATA};//将图片URI转换成存储路径
+                    //Cursor光标，用来获取图片名称
+                    Cursor cursor=this.managedQuery(originalUri, imgs1, null, null, null);
+                    int index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    img_url =cursor.getString(index);
+//                    upload(img_url);
                     break;
-                // 将选择的图片进行裁剪
-                case REQUEST_CODE_CHOOSE_IMAGE:
+                case CAMERA_REQUEST_CODE:
+                    if (isSdcardExisting()) {
+                        resizeImage(getImageUri());
+                        String []imgs={MediaStore.Images.Media.DATA};//将图片URI转换成存储路径
+                        Cursor cursor1=this.managedQuery(getImageUri(), imgs, null, null, null);
+                        int index1=cursor1.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        cursor1.moveToFirst();
+                        img_url=cursor1.getString(index1);
+////                        upload(img_url1);
+//                        //showToast(img_url1);
+                    } else {
+                        Toast.makeText(PublishActivity.this, "未找到存储卡，无法存储照片！",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    break;
 
-                    if (data.getData() != null) {
-                        Uri iconUri = data.getData();
-                        startCropImage(iconUri);
+                case RESIZE_REQUEST_CODE:
+                    if (data != null) {
+                        showResizeImage(data);
                     }
-                    break;
-                // 将裁剪后的图片进行上传
-                case REQUEST_CODE_CROP_IMAGE:
-                    // 上传图片操作
-                    setToast("mine","sssssssssssssssss"+data.getData());
-                    if(resultCode == RESULT_OK){
-//                        Toast.makeText(PublishActivity.this, "裁剪失败", Toast.LENGTH_LONG).show();
-//                    }else{
-                        setImageToHeadView(data);
-                    }
-                    break;
-                default:
                     break;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void setImageToHeadView(Intent data){
-        setToast("setImageToHeadView",data.getStringExtra("uri"));
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
-            Drawable drawable = new BitmapDrawable(photo);
-            editDetailImage.setImageDrawable(drawable);
-            saveBitMap(photo);
+    private boolean isSdcardExisting() {//判断SD卡是否存在
+        final String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
-    private void saveBitMap(Bitmap bitmap){
-        if(file.exists()) file.delete();
-        try{
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)){
-                fileOutputStream.flush();
-                fileOutputStream.close();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public void startCropImage(Uri uri) {//重塑图片大小
-        setToast("startCropImage", uri.toString()+"is running");
+    public void resizeImage(Uri uri) {//重塑图片大小
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");//可以裁剪
@@ -239,42 +245,22 @@ public class PublishActivity extends AppCompatActivity{
         intent.putExtra("outputX", 150);
         intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
-        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
-        setToast("startCropImage","over");
-
+        startActivityForResult(intent, RESIZE_REQUEST_CODE);
     }
 
-//    private void startCropImage(Uri uri) {
-//        setToast("startCropImage","is running");
-//        Intent intent = new Intent("com.android.camera.action.CROP");
-//        intent.setDataAndType(uri, "image/*");
-//        // 使图片处于可裁剪状态
-//        intent.putExtra("crop", "true");
-//        // 裁剪框的比例（根据需要显示的图片比例进行设置）
-//        intent.putExtra("aspectX", 1);
-//        intent.putExtra("aspectY", 1);
-//        // 让裁剪框支持缩放
-//        intent.putExtra("scale", true);
-//        // 裁剪后图片的大小（注意和上面的裁剪比例保持一致）
-//        intent.putExtra("outputX", dip2px(this, 80));
-//        intent.putExtra("outputY", dip2px(this, 80));
-//        // 传递原图路径
-//
-////        File cropFile = new File(Environment.getExternalStorageDirectory() + "photo.JPG");
-////        Uri cropImageUri = Uri.fromFile(cropFile);
-////        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
-//        // 设置裁剪区域的形状，默认为矩形，也可设置为原形
-//        intent.putExtra("circleCrop", "true");
-//        // 设置图片的输出格式
-////        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-//        // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败
-//
-//        intent.putExtra("return-data", true);//true
-////        intent.putExtra("noFaceDetection", true);
-//        setToast();
-//        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
-//
-//    }
+    private void showResizeImage(Intent data) {//显示图片
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            Bitmap photo = extras.getParcelable("data");
+            Drawable drawable = new BitmapDrawable(photo);
+            editDetailImage.setImageDrawable(drawable);
+        }
+    }
+
+    private Uri getImageUri() {//获取路径
+        return Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
+                IMAGE_FILE_NAME));
+    }
 
     /**
      * 获取editText传入的内容
@@ -330,13 +316,6 @@ public class PublishActivity extends AppCompatActivity{
 
     }
 
-
-
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
-
     public void uploadImage(){
         new Thread(new Runnable() {
             @Override
@@ -347,14 +326,11 @@ public class PublishActivity extends AppCompatActivity{
                     JSONObject jb = new JSONObject(date);
                     String token = jb.getString("uptoken");
                     String state = jb.getString("state");
-                    Log.v("token + state", token + " " + state);
+                    setToast("token + state", token + " " + state);
 
                     if(!"1".equals(state)) {
                         UploadManager imageLoader = new UploadManager();
-                        SimpleDateFormat nowTime = new SimpleDateFormat();
-                        final String key = "activity_" + nowTime.format(new Date());
-
-                        imageLoader.put(filepath, key, token, new UpCompletionHandler() {
+                        imageLoader.put(img_url, key, token, new UpCompletionHandler() {
                             @Override
                             public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
                                 if (responseInfo.isOK()) {
@@ -372,4 +348,3 @@ public class PublishActivity extends AppCompatActivity{
         }).start();
     }
 }
-;
