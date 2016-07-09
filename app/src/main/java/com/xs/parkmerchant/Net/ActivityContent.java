@@ -11,7 +11,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ActivityContent {
@@ -70,7 +73,7 @@ public class ActivityContent {
                             jsonArray = jsonObject.getJSONArray("array");
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
-                                ActivityItem tmp = new ActivityItem(jo.getString("activity_id"), jo.getString("activity_name"), Constants.seller_address, jo.getString("activity_starttime")+"-"+jo.getString("activity_endtime"), jo.getString("activity_img"));
+                                ActivityItem tmp = new ActivityItem(jo.getString("activity_id"), jo.getString("activity_name"), Constants.seller_address, getFormatDate(jo.getString("activity_starttime"))+"-"+getFormatDate(jo.getString("activity_endtime")), jo.getString("activity_img"));
                                 Log.d("image", jo.getString("activity_img"));
                                 items.add(tmp);
                             }
@@ -86,6 +89,10 @@ public class ActivityContent {
                 }
             }
         }).start();
+    }
+
+    private String getFormatDate(String date){
+        return date.substring(0, 4)+"."+date.substring(5, 7)+"."+date.substring(8, 10);
     }
 
     public class ActivityItem {

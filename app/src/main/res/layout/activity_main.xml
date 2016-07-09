@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#f8f8f8">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height">
+        android:layout_height="@dimen/app_bar_height"
+        android:background="#ffffff">
         <ImageView
             android:id="@+id/me"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
+            android:padding="14dp"
             android:src="@mipmap/me"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
+            android:textColor="#444466"
+            android:textSize="22sp"
             android:text="@string/title11"/>
         <ImageView
             android:id="@+id/publish"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:padding="14dp"
             android:src="@mipmap/publish"/>
     </RelativeLayout>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#3ebdc6"/>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -39,11 +49,10 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1.0"
-            android:background="#aaaaaa"
             android:gravity="center"
             android:text="@string/tab1"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textColor="#1b1b1b"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/text2"
@@ -52,19 +61,27 @@
             android:layout_weight="1.0"
             android:gravity="center"
             android:text="@string/tab2"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textColor="#1b1b1b"
+            android:textSize="18sp" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/cursor"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="matrix"
-        android:src="@mipmap/line" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:orientation="vertical"
+        android:background="#ffffff">
+        <ImageView
+            android:id="@+id/cursor"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:scaleType="matrix"
+            android:background="#ffffff"
+            android:src="@mipmap/line" />
+    </LinearLayout>
 
     <com.xs.parkmerchant.View.MyViewPager
         android:id="@+id/vPager"
+        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"

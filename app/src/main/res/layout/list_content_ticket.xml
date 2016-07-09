@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:orientation="horizontal">
+    android:layout_height="105dp"
+    android:orientation="horizontal"
+    android:background="#ffffff">
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="17.5dp"
         android:src="@mipmap/ticket_2"/>
     <TextView
         android:id="@+id/activity_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="#1b1b1b"
+        android:textSize="18sp"
         android:layout_toRightOf="@id/img"
-        android:text="activity name"/>
+        android:layout_alignTop="@id/img"
+        android:text="活动名称"/>
 
     <TextView
         android:id="@+id/activity_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@id/img"
-        android:layout_below="@id/activity_name"
-        android:text="address"/>
+        android:textColor="#fc7e00"
+        android:textSize="17sp"
+        android:text="地址"/>
 
     <TextView
         android:id="@+id/activity_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/img"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
+        android:layout_alignBottom="@id/img"
+        android:textSize="17sp"
+        android:textColor="#5e5e5e"
         android:text="使用期限" />
     <TextView
         android:id="@+id/tcount"

@@ -57,8 +57,8 @@ public class ActivityListViewAdapter extends BaseAdapter {
             holder = (Holder) view.getTag();
         }
         holder.name.setText(mValues.get(i).name);
-        holder.address.setText(mValues.get(i).address);
-        holder.time.setText(mValues.get(i).time);
+        holder.address.setText("地址:"+mValues.get(i).address);
+        holder.time.setText("时间:"+mValues.get(i).time);
 
         final int pos = i;
         holder.delete.setOnClickListener(new View.OnClickListener() {

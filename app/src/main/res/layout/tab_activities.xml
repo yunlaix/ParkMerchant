@@ -3,12 +3,13 @@
     android:id="@+id/swipeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f8f8f8"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.xs.parkmerchant.View.ActivityListView
         android:id="@+id/item_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"/>
+        android:divider="#d1d9df"
+        android:background="#f8f8f8"/>
 </com.xs.parkmerchant.View.MySwipeRefreshLayout>

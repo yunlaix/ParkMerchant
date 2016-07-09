@@ -43,7 +43,7 @@ public class TicketListViewAdapter extends BaseAdapter {
         }
         holder.mActivityName.setText(mValues.get(i).name);
         holder.mActivityAddress.setText(mValues.get(i).address);
-        holder.mActivityTime.setText(mValues.get(i).time);
+        holder.mActivityTime.setText("使用期限:"+mValues.get(i).time);
         holder.mActivityTcount.setText(mValues.get(i).tount);
         return view;
     }
