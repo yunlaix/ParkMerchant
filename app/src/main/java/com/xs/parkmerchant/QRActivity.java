@@ -15,12 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.utils.L;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.View.QRCoderView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,14 +64,8 @@ public class QRActivity extends AppCompatActivity {
         int random = (int)(Math.random() *5);
         ticket_id = Integer.toString(random);
         context = QR_name.getText().toString() + ticket_id;
-        Log.v("context", context);
+        Log.v("context_ticket_id", context);
         createQR(context);
-
-        List<NameValuePair> param=new ArrayList<NameValuePair>();
-        param.add(new BasicNameValuePair("ticket_id", ticket_id));
-        param.add(new BasicNameValuePair("activity_id", activity_id));
-        param.add(new BasicNameValuePair("ticket_deadline", activity_time));
-        upload(param);
 
         close_QR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,25 +85,41 @@ public class QRActivity extends AppCompatActivity {
 
     }
 
-    public void upload(List<NameValuePair> param){
-        NetCore string=new NetCore();
-        try {
-            String data=string.postResulttoNet("http://139.129.24.127/parking_app/Seller/seller_produce_ticket.php", param);
-            data = data.substring(0, 1);
-            int result = Integer.parseInt(data);
-            switch (result){
-                case 0:
-                    Looper.prepare();
-                    Toast.makeText(getApplication(),  "生成成功", Toast.LENGTH_LONG).show();
-                    Looper.loop();
-                    break;
-                case 1:
-                    Toast.makeText(getApplication(),  "生成失败", Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void upload(){
+        Log.d("upload","uploadQR");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                List<NameValuePair> param = new ArrayList<NameValuePair>();
+                param.add(new BasicNameValuePair("ticket_id", ticket_id));
+                param.add(new BasicNameValuePair("activity_id", activity_id));
+                param.add(new BasicNameValuePair("ticket_deadline", activity_time));
+
+
+                try {
+                    String data = NetCore.postResulttoNet("http://139.129.24.127/parking_app/Seller/seller_produce_ticket.php", param);
+                    JSONObject jb = new JSONObject(data);
+
+
+                    int result = Integer.parseInt(jb.getString("state"));
+                    Log.d("result = ", Integer.toString(result));
+
+                    switch (result) {
+                        case 0:
+                            Looper.prepare();
+                            Toast.makeText(getApplication(), "生成成功", Toast.LENGTH_LONG).show();
+                            Looper.loop();
+                            break;
+                        case 1:
+                            Toast.makeText(getApplication(), "生成失败", Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                } catch (Exception e) {
+                    Log.d("fail shengchheng:", "ku");
+                    e.printStackTrace();
+                }
+            }}).start();
     }
 
 

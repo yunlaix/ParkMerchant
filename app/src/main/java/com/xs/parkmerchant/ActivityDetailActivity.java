@@ -2,10 +2,9 @@ package com.xs.parkmerchant;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,24 +13,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.common.collect.Iterators;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.utils.L;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import android.os.Handler;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -51,8 +51,37 @@ public class ActivityDetailActivity extends AppCompatActivity {
     private Button createQR;
     private Button deleteActivity;
 
-    private String activity_img, activity_id, activity_name,activity_starttime, activity_endtime, seller_address,activity_detail,activity_time;
+    private String activity_img, activity_id, activity_name,activity_addr,activity_starttime, activity_endtime, seller_address,activity_detail,activity_time;
     private DisplayImageOptions options;
+
+    private final int MSG_SUCCESS = 1;
+    private final int MSG_GET = 2;
+    private HashMap<String,String> map;
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage (Message msg) {//此方法在ui线程运行
+            switch(msg.what) {
+                case MSG_SUCCESS:
+                    activityDetailImage.setImageBitmap((Bitmap) msg.obj);//imageview显示从网络获取到的logo
+//                    Toast.makeText(getApplication(), "下载图片成功", Toast.LENGTH_LONG).show();
+                    break;
+                case MSG_GET:
+                    activity_time = map.get("activity_time");
+                    activity_addr = map.get("activity_addr");
+                    activity_detail = map.get("activity_detail");
+                    activity_img = map.get("activity_img");
+                    Log.d("MSG_GET:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
+
+                    activityName.setText(activity_name);
+                    detailActivityTime.setText(activity_time);
+                    detailActivityLocation.setText(Constants.seller_address);
+                    detailActivityDescri.setText(activity_addr);
+                    downloadImage(activity_img);
+                    break;
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +96,13 @@ public class ActivityDetailActivity extends AppCompatActivity {
 
         initView();
         downLoadDetails();
-        downloadImage();
+
+        activityName.setText(activity_name);
+        Log.d("details:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
+
+
+//        downloadImage(Constants.activity_img);
+
 
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.dark)
@@ -107,11 +142,13 @@ public class ActivityDetailActivity extends AppCompatActivity {
     }
 
     private void downLoadDetails(){
-//        showToast("downLoadDetails","downLoadDetails");
-        new Thread(new Runnable() {
+        Log.d("downLoadDetails","downLoadDetails");
+//        map = new HashMap<String, String>();
+       Thread dowmLoadDetails =  new Thread(new Runnable() {
             @Override
             public void run() {
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
+//                param.clear();
                 param.add(new BasicNameValuePair("activity_id", activity_id));
                 Log.d("downLoadDetails",activity_id);
 
@@ -120,75 +157,152 @@ public class ActivityDetailActivity extends AppCompatActivity {
                     Log.d("NetCoredata", data);
                     if(data != null){
 
-                        JSONObject jb = new JSONObject(data);
+                        final JSONObject jb = new JSONObject(data);
                         int state = jb.getInt("state");
-                        activity_img = jb.getString("activity_img");
-                        activityName.setText(activity_name);
-                        detailActivityTime.setText(jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime"));
-                        detailActivityLocation.setText(jb.getString("seller_address"));
-                        detailActivityDescri.setText(jb.getString("activity_detail"));
+                        Constants.activity_img = jb.getString("activity_img");
+//                        Log.d("activity_img", activity_img);
+                        //错误：不显示
+//                        Constants.activity_time = jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime");
+//                        Constants.activity_addr = jb.getString("seller_address");
+//                        Constants.activity_detail = jb.getString("activity_detail");
+
+
+                        //报错：不能再子线程操作UI
+//                        detailActivityTime.setText(jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime"));
+//                        detailActivityLocation.setText(Constants.seller_address);
+//                        detailActivityDescri.setText(jb.getString("activity_detail"));
+
+
+//                        activity_time = jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime");
+//                        activity_addr = jb.getString("activity_addr");
+//                        activity_detail = jb.getString("activity_detail");
+//                        activity_img = jb.getString("activity_img");
+//
+//                        Log.d("DOWNLOAD:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
+//                        //错误：不显示
+//                        map.put("activity_time", jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime"));
+//                        map.put("activity_addr", jb.getString("activity_addr"));
+//                        map.put("activity_detail",jb.getString("activity_detail"));
+//                        map.put("activity_img",jb.getString("activity_img"));
+//                         //错误：不显示
+//                        mHandler.obtainMessage(MSG_GET,map).sendToTarget();
+
+                        Log.d("MAP:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
+
+//                        activityName.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                activityName.setText(activity_name);
+//                            }
+//                        });
+//
+                        detailActivityTime.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    detailActivityTime.setText(jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                        detailActivityLocation.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                detailActivityLocation.setText(Constants.seller_address);
+                            }
+                        });
+
+                        detailActivityDescri.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    detailActivityDescri.setText(jb.getString("activity_detail"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                        downloadImage(jb.getString("activity_img"));
 
                         Log.d("activity_state", Integer.toString(state));
-                        if(state == state){
-                            Toast.makeText(ActivityDetailActivity.this,"成功",Toast.LENGTH_LONG).show();
-
+                        if(state == 0){
+//                            Looper.prepare();
+//                            Toast.makeText(ActivityDetailActivity.this,"成功",Toast.LENGTH_LONG).show();
+//                            Looper.loop();
                         }else if(state == 1){
-                            Toast.makeText(ActivityDetailActivity.this,"失败",Toast.LENGTH_LONG).show();
+//                            Looper.prepare();
+//                            Toast.makeText(ActivityDetailActivity.this,"失败",Toast.LENGTH_LONG).show();
+//                            Looper.loop();
                         }
                     }
                 } catch (Exception e) {
+                    Log.d("downLoadDetails","wrong downLoadDetails");
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        dowmLoadDetails.start();
     }
 
+    //删除活动，已完成
     private  void deleteActivity(){
 
-        new Thread(new Runnable() {
+        Thread deleteActivity = new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.d("deleteActivity",":in Thread");
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
+                param.clear();
                 param.add(new BasicNameValuePair("activity_id", activity_id));
                 try {
-                    String data = NetCore.postResulttoNet(Url.activityDetail,param);
-                    if(data!=null && !data.equals("")) {
+                    String data = NetCore.postResulttoNet(Url.deleteActivity_9,param);
+                    Log.d("delete_activity", data);
+                    if(data!=null) {
                         JSONObject jb = new JSONObject(data);
                         String state = jb.getString("state");
                         if ("0".equals(state)){
+                            Looper.prepare();
                             Toast.makeText(ActivityDetailActivity.this, "删除活动成功", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(ActivityDetailActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            Looper.loop();
                         }else{
+                            Looper.prepare();
                             Toast.makeText(ActivityDetailActivity.this, "删除活动失败", Toast.LENGTH_LONG).show();
+                            Looper.loop();
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        deleteActivity.start();
     }
 
-    private void downloadImage() {
+    private void downloadImage(String str) {
         Log.d("activity_down", "downloadImage");
         ImageLoader imageLoader = ImageLoader.getInstance();
         Log.d("imageLoader", "getInstance");
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
-        Log.d("imageLoader", "init");
-        imageLoader.displayImage(activity_img, activityDetailImage, new ImageLoadingListener() {
+//        Log.d("imageLoader", str);
+        imageLoader.displayImage(str, activityDetailImage, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
-
             }
 
             @Override
             public void onLoadingFailed(String s, View view, FailReason failReason) {
-
             }
 
             @Override
             public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                 Log.d("onLoadingComplete","String = "+s+",Bitmap="+bitmap);
-                ((ImageView)view).setImageBitmap(bitmap);
+                mHandler.obtainMessage(MSG_SUCCESS,bitmap).sendToTarget();//获取图片成功，向ui线程发送MSG_SUCCESS标识和bitmap对象
+//                ((ImageView)view).setImageBitmap(bitmap);
             }
 
             @Override
@@ -212,4 +326,12 @@ public class ActivityDetailActivity extends AppCompatActivity {
         deleteActivity = (Button) findViewById(R.id.delete_activity);
 
     }
+
+    public void showView(){
+        activityName.setText(activity_name);
+        detailActivityTime.setText(activity_time);
+        detailActivityLocation.setText(activity_addr);
+        detailActivityDescri.setText(activity_detail);
+    }
+
 }
