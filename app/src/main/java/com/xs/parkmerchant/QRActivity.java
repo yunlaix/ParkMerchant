@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.utils.L;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
+import com.xs.parkmerchant.Net.Url;
 import com.xs.parkmerchant.View.QRCoderView;
 
 import org.apache.http.NameValuePair;
@@ -63,9 +64,12 @@ public class QRActivity extends AppCompatActivity {
         //传入活动名称+随机数
         int random = (int)(Math.random() *5);
         ticket_id = Integer.toString(random);
+        //context用来产生二维码
         context = QR_name.getText().toString() + ticket_id;
         Log.v("context_ticket_id", context);
         createQR(context);
+
+        upload();
 
         close_QR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,27 +96,28 @@ public class QRActivity extends AppCompatActivity {
             public void run() {
 
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
+                param.clear();
                 param.add(new BasicNameValuePair("ticket_id", ticket_id));
                 param.add(new BasicNameValuePair("activity_id", activity_id));
                 param.add(new BasicNameValuePair("ticket_deadline", activity_time));
-
+                Log.d("upload","uploadQR param");
 
                 try {
-                    String data = NetCore.postResulttoNet("http://139.129.24.127/parking_app/Seller/seller_produce_ticket.php", param);
+                    String data = NetCore.postResulttoNet(Url.produceTicket, param);
                     JSONObject jb = new JSONObject(data);
 
 
                     int result = Integer.parseInt(jb.getString("state"));
-                    Log.d("result = ", Integer.toString(result));
+                    Log.d("updateQRresult = ", Integer.toString(result));
 
                     switch (result) {
                         case 0:
                             Looper.prepare();
-                            Toast.makeText(getApplication(), "生成成功", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplication(), "停车券生成成功", Toast.LENGTH_LONG).show();
                             Looper.loop();
                             break;
                         case 1:
-                            Toast.makeText(getApplication(), "生成失败", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplication(), "停车券生成失败", Toast.LENGTH_LONG).show();
                             break;
                     }
                 } catch (Exception e) {

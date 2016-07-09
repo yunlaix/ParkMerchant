@@ -27,4 +27,6 @@ public class Url {
 
     public static String deleteActivity_9 = "http://139.129.24.127/parking_app/Seller/seller_deleteactivity.php";
 
+    public static String produceTicket = "http://139.129.24.127/parking_app/Seller/seller_produce_ticket.php";
+
 }
