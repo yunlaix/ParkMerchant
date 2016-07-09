@@ -2,19 +2,33 @@ package com.xs.parkmerchant.Adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.xs.parkmerchant.Net.Constants;
+import com.xs.parkmerchant.Net.NetCore;
+import com.xs.parkmerchant.Net.Url;
 import com.xs.parkmerchant.R;
 import com.xs.parkmerchant.View.ActivityListView;
 import com.xs.parkmerchant.Net.ActivityContent;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,12 +36,31 @@ import java.util.List;
  */
 public class ActivityListViewAdapter extends BaseAdapter {
 
+    private int p;
+    private boolean sync = false;
     private List<ActivityContent.ActivityItem> mValues;
     private Holder holder;
     private LayoutInflater mInflater;
     private ActivityListView myListView;
     private Context context;
     private DisplayImageOptions options;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){//success
+                mValues.remove(p);
+                notifyDataSetChanged();
+                myListView.turnToNormal();
+                Toast.makeText(context, "删除成功！", Toast.LENGTH_SHORT).show();
+                Log.d("delete", "ssssssssssssssssss");
+            }else if(msg.what==2){//fail
+                Toast.makeText(context, "删除失败！", Toast.LENGTH_SHORT).show();
+                myListView.turnToNormal();
+                Log.d("delete", "ffffffffffffffffff");
+            }
+            sync = false;
+        }
+    };
 
     public ActivityListViewAdapter(List<ActivityContent.ActivityItem> items, Context c, ActivityListView my) {
         mValues = items;
@@ -60,13 +93,29 @@ public class ActivityListViewAdapter extends BaseAdapter {
         holder.address.setText("地址:"+mValues.get(i).address);
         holder.time.setText("时间:"+mValues.get(i).time);
 
-        final int pos = i;
+        final int pos = i; p =i;
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mValues.remove(pos);
-                notifyDataSetChanged();
-                myListView.turnToNormal();
+                if(sync) Toast.makeText(context, "请等待当前删除完成！", Toast.LENGTH_SHORT).show();
+                sync = true;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("activity_id", mValues.get(pos).id));
+                            String result = NetCore.postResulttoNet(Url.deleteActivity_9, params);
+                            Log.d("delete", result+"A");
+                            JSONObject jsonObject = new JSONObject(result);
+                            if(jsonObject.getString("state").equals("0")) handler.sendEmptyMessage(1);
+                            else handler.sendEmptyMessage(2);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            handler.sendEmptyMessage(2);
+                        }
+                    }
+                }).start();
             }
         });
 

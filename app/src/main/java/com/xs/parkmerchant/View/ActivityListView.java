@@ -36,7 +36,7 @@ public class ActivityListView extends ListView{
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(isDeleteShown) return true;
+//        if(isDeleteShown) return true;?????????????????
         return super.onInterceptTouchEvent(ev);//true;//
     }
 
