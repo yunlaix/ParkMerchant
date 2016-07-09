@@ -129,7 +129,7 @@ public class QRActivity extends AppCompatActivity {
 
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-        int w = outMetrics.widthPixels * 8 / 11;//设置宽度
+        int w = outMetrics.widthPixels * 6 / 11;//设置宽度
         ViewGroup.LayoutParams layoutParams = QR_image.getLayoutParams();
         layoutParams.height = layoutParams.width = w;//设置高度
         QR_image.setLayoutParams(layoutParams);
