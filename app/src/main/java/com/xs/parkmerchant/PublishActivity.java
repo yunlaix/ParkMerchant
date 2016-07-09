@@ -59,8 +59,6 @@ public class PublishActivity extends AppCompatActivity{
     private EditText editActivityEnd;
     private EditText editActivityDetails;
     private final String [] methods = {"从图库", "从拍照"};
-    private static final String IMAGE_FILE_NAME = "faceImage.JPG";
-    /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
     private static final int CAMERA_REQUEST_CODE = 1;
     private static final int RESIZE_REQUEST_CODE = 2;
@@ -103,16 +101,9 @@ public class PublishActivity extends AppCompatActivity{
                                 startActivityForResult(intent, IMAGE_REQUEST_CODE);
                                 break;
                             case 1:
-                                //先检查SD卡是否能用，能用则new一个intent用来传入
-                                if (isSdcardExisting()) {
-                                    Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");//拍照
-                                    //获取存储中image的存储路径getImageUri
-                                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
-                                    cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-                                    startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-                                } else {
-                                    Toast.makeText(PublishActivity.this, "请插入sd卡", Toast.LENGTH_LONG).show();
-                                }
+                                Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                intent1.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo1.JPG")));
+                                startActivityForResult(intent1, CAMERA_REQUEST_CODE);
                                 break;
                         }
                     }
@@ -122,7 +113,7 @@ public class PublishActivity extends AppCompatActivity{
                         dialog.dismiss();
                     }
                 }).show();
-                uploadImage();
+//                uploadImage();
             }
         });
 
@@ -134,19 +125,14 @@ public class PublishActivity extends AppCompatActivity{
         });
     }
 
-    public void initView(){
-
+    private void initView(){
         editBack = (ImageView) findViewById(R.id.edit_back);
         editPublish = (Button) findViewById(R.id.edit_publish);
-
         editActivityImage = (LinearLayout) findViewById(R.id.edit_activity_image);
-        editDetailImage = (ImageView)findViewById(R.id.activity_detail_image);
-
+        editDetailImage = (ImageView)findViewById(R.id.detail_image);
         editActivityName = (EditText) findViewById(R.id.edit_activity_name);
-
         editActivityLocation = (TextView) findViewById(R.id.edit_activity_location);
         editActivityLocation.setText(Constants.seller_address);
-
         editActivityStart = (EditText) findViewById(R.id.edit_activity_starttime);
         editActivityEnd = (EditText) findViewById(R.id.edit_activity_endtime);
         editActivityDetails = (EditText) findViewById(R.id.edit_activity_details);
@@ -160,9 +146,8 @@ public class PublishActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
-            return;
-        } else {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data!=null || requestCode == CAMERA_REQUEST_CODE) {
             switch (requestCode) {
                 case IMAGE_REQUEST_CODE:
                     if (data.getData() != null) {
@@ -171,27 +156,15 @@ public class PublishActivity extends AppCompatActivity{
                     }
                     break;
                 case CAMERA_REQUEST_CODE:
-                    if (isSdcardExisting()) {
-                        resizeImage(getImageUri());
-                        String []imgs={MediaStore.Images.Media.DATA};//将图片URI转换成存储路径
-                        Cursor cursor1=this.managedQuery(getImageUri(), imgs, null, null, null);
-                        int index1=cursor1.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        cursor1.moveToFirst();
-                        img_url=cursor1.getString(index1);
-////                        upload(img_url1);
-//                        //showToast(img_url1);
-                    } else {
-                        Toast.makeText(PublishActivity.this, "未找到存储卡，无法存储照片！",
-                                Toast.LENGTH_LONG).show();
-                    }
+                    Uri uri_photo = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo1.JPG"));
+                    resizeImage(uri_photo);
                     break;
-
                 case RESIZE_REQUEST_CODE:
                     if (data != null) showResizeImage(data);
                     break;
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     private boolean isSdcardExisting() {//判断SD卡是否存在
@@ -207,10 +180,10 @@ public class PublishActivity extends AppCompatActivity{
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");//可以裁剪
-        intent.putExtra("aspectX", 2);
-        intent.putExtra("aspectY", 1);
+        intent.putExtra("aspectX", 15);
+        intent.putExtra("aspectY", 10);
         intent.putExtra("scale", true);
-        intent.putExtra("outputX", 300);
+        intent.putExtra("outputX", 225);
         intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, RESIZE_REQUEST_CODE);
@@ -222,11 +195,6 @@ public class PublishActivity extends AppCompatActivity{
             Bitmap photo = data.getParcelableExtra("data");
             editDetailImage.setImageBitmap(photo);
         }
-    }
-
-    private Uri getImageUri() {//获取路径
-        return Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                IMAGE_FILE_NAME));
     }
 
     /**
@@ -295,18 +263,17 @@ public class PublishActivity extends AppCompatActivity{
                     String state = jb.getString("state");
                     setToast("token + state", token + " " + state);
 
-                    if(!"1".equals(state)) {
+//                    if(!"1".equals(state)) {
                         UploadManager imageLoader = new UploadManager();
                         imageLoader.put(img_url, key, token, new UpCompletionHandler() {
                             @Override
                             public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
                                 if (responseInfo.isOK()) {
                                     ValueName[4] = Url.touxiang + key;
-
                                 }
                             }
                         }, null);
-                    }
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
