@@ -277,7 +277,7 @@ public class MineActivity extends AppCompatActivity {
 //        Uri cropImageUri = Uri.fromFile(cropFile);
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
         // 设置裁剪区域的形状，默认为矩形，也可设置为原形
-        intent.putExtra("circleCrop", "true");
+//        intent.putExtra("circleCrop", "true");
         // 设置图片的输出格式
 //        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
         // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败

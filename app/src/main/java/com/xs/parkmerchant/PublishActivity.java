@@ -51,7 +51,6 @@ import java.util.List;
 public class PublishActivity extends AppCompatActivity{
     private ImageView editBack;
     private Button editPublish;
-
     private LinearLayout editActivityImage;
     private ImageView editDetailImage;
     private EditText editActivityName;
@@ -59,49 +58,34 @@ public class PublishActivity extends AppCompatActivity{
     private EditText editActivityStart;
     private EditText editActivityEnd;
     private EditText editActivityDetails;
-
-
     private final String [] methods = {"从图库", "从拍照"};
-
-    private static final String IMAGE_FILE_NAME = "faceImage.jpg";
-
+    private static final String IMAGE_FILE_NAME = "faceImage.JPG";
     /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
     private static final int CAMERA_REQUEST_CODE = 1;
     private static final int RESIZE_REQUEST_CODE = 2;
-
-
-
     String[] ValueName = {"activity_name", "activity_start", "activity_end", "activity_details", "activity_imageurl"};
-
     String key,img_url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
-
         SimpleDateFormat nowTime = new SimpleDateFormat();
         key = "activity_" + nowTime.format(new Date());
-
-
         initView();
-//        getInfo();
-
         editBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
         editPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getInfo();
             }
         });
-
         /**
          * 上传图片
          * */
@@ -114,28 +98,20 @@ public class PublishActivity extends AppCompatActivity{
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch(i){
                             case 0:
-                                //新建一个intent，用来获取相册中的内容，种类是image，然后startActivityForResult传入intent，和打开图像请求
-                                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                                galleryIntent.setType("image/*");//图片
-                                startActivityForResult(galleryIntent, IMAGE_REQUEST_CODE);
+                                Intent intent = new Intent(Intent.ACTION_PICK, null);
+                                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                                startActivityForResult(intent, IMAGE_REQUEST_CODE);
                                 break;
-
                             case 1:
-
                                 //先检查SD卡是否能用，能用则new一个intent用来传入
                                 if (isSdcardExisting()) {
-                                    Intent cameraIntent = new Intent(
-                                            "android.media.action.IMAGE_CAPTURE");//拍照
+                                    Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");//拍照
                                     //获取存储中image的存储路径getImageUri
-                                    cameraIntent.putExtra
-                                            (MediaStore.EXTRA_OUTPUT, getImageUri());
+                                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
                                     cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-                                    //请求打开相机，这一句是为了给intent请求编号，cameraIntent才是处理打开相机请求的
                                     startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
                                 } else {
-                                    Toast.makeText(PublishActivity.this, "请插入sd卡", Toast.LENGTH_LONG)
-                                            .show();
+                                    Toast.makeText(PublishActivity.this, "请插入sd卡", Toast.LENGTH_LONG).show();
                                 }
                                 break;
                         }
@@ -189,17 +165,10 @@ public class PublishActivity extends AppCompatActivity{
         } else {
             switch (requestCode) {
                 case IMAGE_REQUEST_CODE:
-                    Uri originalUri=data.getData();//获取图片uri
-                    //编辑图片大小，裁切
-                    resizeImage(originalUri);
-                    //下面方法将获取的uri转为String类型哦！
-                    String []imgs1={MediaStore.Images.Media.DATA};//将图片URI转换成存储路径
-                    //Cursor光标，用来获取图片名称
-                    Cursor cursor=this.managedQuery(originalUri, imgs1, null, null, null);
-                    int index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    img_url =cursor.getString(index);
-//                    upload(img_url);
+                    if (data.getData() != null) {
+                        Uri iconUri = data.getData();
+                        resizeImage(iconUri);
+                    }
                     break;
                 case CAMERA_REQUEST_CODE:
                     if (isSdcardExisting()) {
@@ -218,9 +187,7 @@ public class PublishActivity extends AppCompatActivity{
                     break;
 
                 case RESIZE_REQUEST_CODE:
-                    if (data != null) {
-                        showResizeImage(data);
-                    }
+                    if (data != null) showResizeImage(data);
                     break;
             }
         }
@@ -240,9 +207,10 @@ public class PublishActivity extends AppCompatActivity{
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");//可以裁剪
-        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectX", 2);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 150);
+        intent.putExtra("scale", true);
+        intent.putExtra("outputX", 300);
         intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, RESIZE_REQUEST_CODE);
@@ -251,9 +219,8 @@ public class PublishActivity extends AppCompatActivity{
     private void showResizeImage(Intent data) {//显示图片
         Bundle extras = data.getExtras();
         if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
-            Drawable drawable = new BitmapDrawable(photo);
-            editDetailImage.setImageDrawable(drawable);
+            Bitmap photo = data.getParcelableExtra("data");
+            editDetailImage.setImageBitmap(photo);
         }
     }
 

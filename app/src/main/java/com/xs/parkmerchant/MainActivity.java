@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 if(listView.canClick() && !ActivityListView.isOn){
                     Intent intent = new Intent(getApplicationContext(), ActivityDetailActivity.class);
                     intent.putExtra("activity_id", activityContent.getITEMS().get(i).id);
+                    intent.putExtra("activity_name", activityContent.getITEMS().get(i).name);
                     startActivity(intent);
                 }
                 if(listView.canClick()) ActivityListView.isOn = false;
