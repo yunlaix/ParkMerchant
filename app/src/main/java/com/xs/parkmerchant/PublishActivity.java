@@ -61,10 +61,12 @@ public class PublishActivity extends AppCompatActivity{
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
+                isUping = false;
                 Log.d("publish_result", "fffffffffffffff");
             }
         }
     };
+    private boolean isUping = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -213,14 +215,16 @@ public class PublishActivity extends AppCompatActivity{
                     Log.v("上传成功","上传成功，state = "+ result +" activity_id = "+ activity_id);
                     Looper.prepare();
                     if("1".equals(result)){
-                        Toast.makeText(getApplicationContext(),  "上传失败", Toast.LENGTH_LONG).show();
+                        handler.sendEmptyMessage(1);
                     }else if("0".equals(result)) {
                         Toast.makeText(getApplicationContext(),  "上传成功!", Toast.LENGTH_LONG).show();
                         Constants.isPublished = true;
+                        isUping = false;
                         finish();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    handler.sendEmptyMessage(1);
                 }
             }
         }).start();
@@ -228,6 +232,11 @@ public class PublishActivity extends AppCompatActivity{
     }
 
     public void uploadImage(){
+        if(isUping){
+            Toast.makeText(getApplicationContext(), "正在上传...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        isUping = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
