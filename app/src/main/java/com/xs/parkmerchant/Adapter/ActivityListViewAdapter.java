@@ -97,7 +97,10 @@ public class ActivityListViewAdapter extends BaseAdapter {
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(sync) Toast.makeText(context, "请等待当前删除完成！", Toast.LENGTH_SHORT).show();
+                if(sync) {
+                    Toast.makeText(context, "请等待当前删除完成！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 sync = true;
                 new Thread(new Runnable() {
                     @Override

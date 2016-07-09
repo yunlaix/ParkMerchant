@@ -72,6 +72,7 @@ public class TicketDetailActivity extends AppCompatActivity{
                     isLoadingMore = true;
                     //onLoadMore
                     Toast.makeText(getApplicationContext(), "加载更多...", Toast.LENGTH_LONG).show();
+                    ticketDetailContent.loadMore();
                 }
             }
 

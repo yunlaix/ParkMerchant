@@ -45,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView iv_me, iv_publish;
 
-    private boolean isLoadingMore = false;
+    public static boolean isLoadingMore = false;
     private ActivityListViewAdapter adapter;
     private ActivityContent activityContent;
     private MySwipeRefreshLayout mySwipeRefreshLayout;
     int lastItem;
 
-    private boolean isLoadingMoreTicket = false;
+    public static boolean isLoadingMoreTicket = false;
     private TicketListViewAdapter adapterTicket;
     private TicketContent ticketContent;
     private SwipeRefreshLayout swipeRefreshLayoutTicket;
@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
                     isLoadingMore = true;
                     //onLoadMore
                     Toast.makeText(getApplicationContext(), "加载更多...", Toast.LENGTH_LONG).show();
+                    activityContent.loadMore();
                 }
             }
 
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
                     isLoadingMoreTicket = true;
                     //onLoadMore
                     Toast.makeText(getApplicationContext(), "加载更多...", Toast.LENGTH_LONG).show();
+                    ticketContent.loadMore();
                 }
             }
 
