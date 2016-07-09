@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xs.parkmerchant.Adapter.TicketDetailAdapter;
@@ -24,6 +25,7 @@ public class TicketDetailActivity extends AppCompatActivity{
     private TicketDetailContent ticketDetailContent;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView back;
+    private TextView activity_name;
     private int lastItem;
     private String id;
 
@@ -39,6 +41,8 @@ public class TicketDetailActivity extends AppCompatActivity{
                 finish();
             }
         });
+        activity_name = (TextView)findViewById(R.id.activity_name);
+        activity_name.setText(getIntent().getStringExtra("activity_name"));
         View listView = findViewById(R.id.item_list);
         assert listView != null;
         setListView((ListView)listView);

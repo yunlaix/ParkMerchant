@@ -49,13 +49,13 @@
     </LinearLayout>
     <TextView
         android:id="@+id/delete"
-        android:layout_width="65dp"
+        android:layout_width="70dp"
         android:layout_height="match_parent"
         android:background="#3ebdc6"
         android:gravity="center"
         android:paddingLeft="20dp"
         android:textColor="#fefefe"
         android:paddingRight="20dp"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:text="取消活动"/>
 </LinearLayout>
