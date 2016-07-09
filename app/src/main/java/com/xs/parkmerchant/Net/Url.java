@@ -23,4 +23,6 @@ public class Url {
 
     public static String activityDetail = "http://139.129.24.127/parking_app/Seller/seller_getactivity.php";
 
+    public static  String publishActivity = "http://139.129.24.127/parking_app/Seller/seller_add_activity.php";
+
 }
