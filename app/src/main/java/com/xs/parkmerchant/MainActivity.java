@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.xs.parkmerchant.Adapter.MyViewPagerAdapter;
 import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
 import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
+import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.TicketContent;
 import com.xs.parkmerchant.View.ActivityListView;
 import com.xs.parkmerchant.View.MySwipeRefreshLayout;
@@ -107,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mySwipeRefreshLayout.setRefreshing(false);
                 //onRefresh
+                activityContent.refresh();
             }
         });
 
@@ -266,4 +267,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(Constants.isPublished){
+            activityContent.refresh();
+            ticketContent.refresh();
+            Constants.isPublished = false;
+        }
+    }
 }

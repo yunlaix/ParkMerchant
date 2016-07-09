@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -210,11 +211,12 @@ public class PublishActivity extends AppCompatActivity{
                     String result = jb.getString("state");
                     int activity_id = jb.getInt("activity_id");
                     Log.v("上传成功","上传成功，state = "+ result +" activity_id = "+ activity_id);
-
+                    Looper.prepare();
                     if("1".equals(result)){
-                        Toast.makeText(getApplication(),  "上传失败", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),  "上传失败", Toast.LENGTH_LONG).show();
                     }else if("0".equals(result)) {
-                        Toast.makeText(getApplication(),  "上传成功", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),  "上传成功!", Toast.LENGTH_LONG).show();
+                        Constants.isPublished = true;
                         finish();
                     }
                 } catch (Exception e) {

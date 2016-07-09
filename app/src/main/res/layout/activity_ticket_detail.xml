@@ -45,8 +45,10 @@
             android:id="@+id/item_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:dividerHeight="5dp"
-            android:divider="#f8f8f8"
+            android:dividerHeight="2dp"
+            android:divider="#d1d9df"
+            android:headerDividersEnabled="true"
+            android:footerDividersEnabled="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="#f8f8f8"/>

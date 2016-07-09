@@ -11,5 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#d1d9df"
+        android:dividerHeight="2dp"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
         android:background="#f8f8f8"/>
 </com.xs.parkmerchant.View.MySwipeRefreshLayout>

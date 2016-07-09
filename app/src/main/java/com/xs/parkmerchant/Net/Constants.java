@@ -12,4 +12,6 @@ public class Constants {
     public static String seller_contact="";
     public static String seller_img="";
 
+    public static boolean isPublished = false;
+
 }
