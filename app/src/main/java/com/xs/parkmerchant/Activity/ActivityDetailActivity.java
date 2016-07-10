@@ -1,4 +1,4 @@
-package com.xs.parkmerchant;
+package com.xs.parkmerchant.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.collect.Iterators;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -22,10 +21,10 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
+import com.xs.parkmerchant.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.xs.parkmerchant;
+package com.xs.parkmerchant.Activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.xs.parkmerchant.Adapter.TicketDetailAdapter;
 import com.xs.parkmerchant.Net.TicketDetailContent;
+import com.xs.parkmerchant.R;
 
 /**
  * Created by Man on 2016/7/6.

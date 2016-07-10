@@ -1,4 +1,4 @@
-package com.xs.parkmerchant;
+package com.xs.parkmerchant.Activity;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -26,6 +26,7 @@ import com.xs.parkmerchant.Adapter.ActivityListViewAdapter;
 import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.TicketContent;
+import com.xs.parkmerchant.R;
 import com.xs.parkmerchant.View.ActivityListView;
 import com.xs.parkmerchant.View.MySwipeRefreshLayout;
 import com.xs.parkmerchant.View.MyViewPager;

@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
-import com.xs.parkmerchant.MainActivity;
+import com.xs.parkmerchant.Activity.MainActivity;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -16,9 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TicketContent {

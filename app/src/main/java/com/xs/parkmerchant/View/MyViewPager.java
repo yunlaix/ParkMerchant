@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import com.xs.parkmerchant.MainActivity;
+import com.xs.parkmerchant.Activity.MainActivity;
 
 /**
  * Created by Man on 2016/7/4.

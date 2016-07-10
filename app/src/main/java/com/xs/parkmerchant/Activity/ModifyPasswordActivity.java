@@ -1,4 +1,4 @@
-package com.xs.parkmerchant;
+package com.xs.parkmerchant.Activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
+import com.xs.parkmerchant.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;

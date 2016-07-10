@@ -1,4 +1,4 @@
-package com.xs.parkmerchant;
+package com.xs.parkmerchant.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +33,8 @@ import com.qiniu.android.storage.UploadManager;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
+import com.xs.parkmerchant.R;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;

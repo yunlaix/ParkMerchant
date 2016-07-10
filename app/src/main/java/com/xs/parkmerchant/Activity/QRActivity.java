@@ -1,4 +1,4 @@
-package com.xs.parkmerchant;
+package com.xs.parkmerchant.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.utils.L;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
+import com.xs.parkmerchant.R;
 import com.xs.parkmerchant.View.QRCoderView;
 
 import org.apache.http.NameValuePair;
