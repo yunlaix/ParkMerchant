@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
@@ -50,15 +51,17 @@ public class MineActivity extends AppCompatActivity {
     private ImageView back;
     private ImageView logout;
     private ImageView addImage;
-    private TextView bussName;
-    private TextView bussAddr;
-    private TextView bussTel;
+    private EditText bussName;
+    private EditText bussAddr;
+    private EditText bussTel;
+    private TextView modify_info, modify_password;
     private DisplayImageOptions options;
     private File file;
     private String filepath;
     private final String [] methods = {"从图库", "从拍照"};
+    private String name, address, contact;
 
-    private boolean isUpload = false;
+    private boolean isUpload = false, isModifyOn = false;
     private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     private final int REQUEST_CODE_CROP_IMAGE = 2;
     private final int REQUEST_CODE_TAKE_PHOTO = 3;
@@ -73,6 +76,10 @@ public class MineActivity extends AppCompatActivity {
                 editor.putString("seller_img", Constants.seller_img).commit();
             }else if(msg.what==2){
                 if(file.exists()) file.delete();
+            }else if(msg.what==3){//modify success
+
+            }else if(msg.what==4){//modify fail
+
             }
         }
     };
@@ -153,26 +160,19 @@ public class MineActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(data!=null || requestCode == REQUEST_CODE_TAKE_PHOTO){
             switch (requestCode) {
-                // 将拍摄的照片进行裁剪(注意，这里需要传递的是照片的路径，而不是intent.getData(), 因为intent.getData()返回的是缩略图的数据)
                 case REQUEST_CODE_TAKE_PHOTO:
                     Uri uri_photo = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo.JPG"));
-                    startCropImage(uri_photo);
+                    startCropImage(uri_photo);//not intent.getData()
                     break;
-                // 将选择的图片进行裁剪
                 case REQUEST_CODE_CHOOSE_IMAGE:
                     if (data.getData() != null) {
                         Uri iconUri = data.getData();
                         startCropImage(iconUri);
                     }
                     break;
-                // 将裁剪后的图片进行上传
                 case REQUEST_CODE_CROP_IMAGE:
-                    // 上传图片操作
                     if(data!=null) setImageToHeadView(data);
                     break;
-                default:
-                    break;
-
             }
         }
     }
@@ -196,7 +196,7 @@ public class MineActivity extends AppCompatActivity {
             if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)){
                 fileOutputStream.flush();
                 fileOutputStream.close();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");//to be modified
                 uploadImg(Url.upload_img, filepath, "seller_"+simpleDateFormat.format(new Date()));
             }
         }catch (Exception e){
@@ -262,27 +262,15 @@ public class MineActivity extends AppCompatActivity {
     private void startCropImage(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
-        // 使图片处于可裁剪状态
         intent.putExtra("crop", "true");
-        // 裁剪框的比例（根据需要显示的图片比例进行设置）
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        // 让裁剪框支持缩放
         intent.putExtra("scale", true);
-        // 裁剪后图片的大小（注意和上面的裁剪比例保持一致）
         intent.putExtra("outputX", 100);
         intent.putExtra("outputY", 100);
-        // 传递原图路径
-//        File cropFile = new File(Environment.getExternalStorageDirectory() + "photo.JPG");
-//        Uri cropImageUri = Uri.fromFile(cropFile);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
-        // 设置裁剪区域的形状，默认为矩形，也可设置为原形
 //        intent.putExtra("circleCrop", "true");
-        // 设置图片的输出格式
-//        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
         // return-data=true传递的为缩略图，小米手机默认传递大图，所以会导致onActivityResult调用失败
         intent.putExtra("return-data", true);
-//        intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
 
@@ -290,9 +278,35 @@ public class MineActivity extends AppCompatActivity {
         back = (ImageView)findViewById(R.id.mine_back);
         logout = (ImageView)findViewById(R.id.logout);
         addImage = (ImageView) findViewById(R.id.add_image);
-        bussName = (TextView) findViewById(R.id.mine_buss_name);
-        bussAddr = (TextView) findViewById(R.id.mine_buss_addr);
-        bussTel = (TextView) findViewById(R.id.mine_buss_tel);
+        bussName = (EditText) findViewById(R.id.mine_buss_name);
+        bussAddr = (EditText) findViewById(R.id.mine_buss_addr);
+        bussTel = (EditText) findViewById(R.id.mine_buss_tel);
+        modify_info = (TextView) findViewById(R.id.modify_info);
+        modify_info.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(modify_info.getText().equals("修改信息")){//editable
+                    bussName.setEnabled(true);
+                    bussAddr.setEnabled(true);
+                    bussTel.setEnabled(true);
+                    modify_info.setText("确认修改");
+                }else{//confirm and update
+                    if(isModifyOn) {
+                        Toast.makeText(getApplicationContext(), "请等待当前操作完成！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    isModifyOn = true;
+                    modifyInfo();
+                }
+            }
+        });
+        modify_password = (TextView) findViewById(R.id.modify_password);
+        modify_password.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+            }
+        });
         bussName.setText(Constants.seller_name);
         bussAddr.setText(Constants.seller_address);
         bussTel.setText(Constants.seller_contact);
@@ -345,8 +359,27 @@ public class MineActivity extends AppCompatActivity {
         }
     }
 
-//    public static int dip2px(Context context, float dpValue) {
-//        final float scale = context.getResources().getDisplayMetrics().density;
-//        return (int) (dpValue * scale + 0.5f);
-//    }
+    private void modifyInfo(){
+        name = bussName.getText().toString().trim();
+        address = bussAddr.getText().toString().trim();
+        contact = bussTel.getText().toString().trim();
+        if(name.equals("")||address.equals("")||contact.equals("")){
+            isModifyOn = false;
+            Toast.makeText(getApplicationContext(), "请完善信息！", Toast.LENGTH_SHORT).show();
+        }else{
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+//                        params
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        handler.sendEmptyMessage(4);
+                    }
+                }
+            }).start();
+        }
+    }
+
 }

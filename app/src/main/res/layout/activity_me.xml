@@ -46,95 +46,125 @@
         android:layout_height="1dp"
         android:background="@color/lineGreen"/>
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="50dp"
-        android:id="@+id/add_image"
-        android:layout_gravity="center_horizontal"
-        android:src="@mipmap/add_image"/>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:orientation="horizontal"
-        android:background="@color/white">
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/add_image"
+            android:layout_marginTop="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:src="@mipmap/add_image"/>
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/listSize"
+            android:orientation="horizontal"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="商家名称"
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGreen"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMargin"/>
+            <EditText
+                android:id="@+id/mine_buss_name"
+                android:enabled="false"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="商家名称..."
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGray"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMarginText"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/aa"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/listSize"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/listMargin"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="商家地点"
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGreen"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMargin"/>
+            <EditText
+                android:id="@+id/mine_buss_addr"
+                android:enabled="false"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="商家地点..."
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGray"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMarginText"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@id/aa"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/listSize"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/listMargin"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="联系方式"
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGreen"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMargin"/>
+            <EditText
+                android:id="@+id/mine_buss_tel"
+                android:enabled="false"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="商家联系方式..."
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGray"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMarginText"/>
 
+        </LinearLayout>
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="商家名称"
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGreen"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMargin"/>
-
+            android:id="@+id/modify_info"
+            android:layout_marginBottom="110dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#09bdc5"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="修改信息"/>
         <TextView
-            android:id="@+id/mine_buss_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="商家名称..."
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGray"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMarginText"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/listMargin"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="商家地点"
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGreen"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMargin"/>
-
-        <TextView
-            android:id="@+id/mine_buss_addr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="商家地点..."
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGray"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMarginText"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/listMargin"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="联系方式"
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGreen"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMargin"/>
-
-        <TextView
-            android:id="@+id/mine_buss_tel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="商家联系方式..."
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGray"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMarginText"/>
-
-    </LinearLayout>
-
+            android:id="@+id/modify_password"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="#09bdc5"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="修改密码"/>
+    </RelativeLayout>
 </LinearLayout>

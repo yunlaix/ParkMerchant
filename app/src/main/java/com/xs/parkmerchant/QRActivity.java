@@ -99,8 +99,8 @@ public class QRActivity extends AppCompatActivity {
                 param.clear();
                 param.add(new BasicNameValuePair("ticket_id", ticket_id));
                 param.add(new BasicNameValuePair("activity_id", activity_id));
-                param.add(new BasicNameValuePair("ticket_deadline", activity_time));
-                Log.d("upload","uploadQR param");
+                param.add(new BasicNameValuePair("ticket_deadline", Constants.activity_endttime));
+                Log.d("upload","uploadQR param"+ticket_id+" "+activity_id+" "+activity_time);
 
                 try {
                     String data = NetCore.postResulttoNet(Url.produceTicket, param);
