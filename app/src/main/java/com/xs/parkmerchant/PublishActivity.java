@@ -41,12 +41,14 @@ import java.util.List;
  * Created by Man on 2016/7/5.
  */
 public class PublishActivity extends AppCompatActivity{
+
+    private boolean isFromMain = true, isImageChanged = false;
     private ImageView editBack;
     private Button editPublish;
     private LinearLayout editActivityImage;
     private ImageView editDetailImage;
     private EditText editActivityName;
-    private TextView editActivityLocation;
+    private TextView editActivityLocation, tv_publish;
     private EditText editActivityStart;
     private EditText editActivityEnd;
     private EditText editActivityDetails;
@@ -72,6 +74,7 @@ public class PublishActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
+        if(getIntent().getStringExtra("source").equals("ActivityDetailActivity")) isFromMain = false;
         initView();
         editBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,9 +88,6 @@ public class PublishActivity extends AppCompatActivity{
                 uploadImage();
             }
         });
-        /**
-         * 上传图片
-         * */
         editActivityImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +135,17 @@ public class PublishActivity extends AppCompatActivity{
         editActivityStart = (EditText) findViewById(R.id.edit_activity_starttime);
         editActivityEnd = (EditText) findViewById(R.id.edit_activity_endtime);
         editActivityDetails = (EditText) findViewById(R.id.edit_activity_details);
+        tv_publish = (TextView)findViewById(R.id.tv_publish);
+        if(!isFromMain) {
+            tv_publish.setText("修改活动");
+            editPublish.setText("确认修改");
+            ValueName[4] = Constants.activity_img;
+            editDetailImage.setImageBitmap(Constants.activity_bitmap);
+            editActivityDetails.setText(Constants.activity_detail);
+            editActivityStart.setText(Constants.activity_starttime);
+            editActivityEnd.setText(Constants.activity_endttime);
+            editActivityName.setText(Constants.activity_name);
+        }
     }
 
 
@@ -179,6 +190,7 @@ public class PublishActivity extends AppCompatActivity{
         if (extras != null) {
             bitmap_photo = data.getParcelableExtra("data");
             editDetailImage.setImageBitmap(bitmap_photo);
+            isImageChanged = true;
         }
     }
 
@@ -193,7 +205,7 @@ public class PublishActivity extends AppCompatActivity{
         }
         else {
             List<NameValuePair> param=new ArrayList<NameValuePair>();
-            param.add(new BasicNameValuePair("seller_id", Constants.seller_id));
+            param.add(new BasicNameValuePair(isFromMain?"seller_id":"activity_id", isFromMain?Constants.seller_id:Constants.activity_id));
             param.add(new BasicNameValuePair("activity_name", ValueName[0]));
             param.add(new BasicNameValuePair("activity_starttime", ValueName[1]));
             param.add(new BasicNameValuePair("activity_endtime", ValueName[2]));
@@ -208,11 +220,9 @@ public class PublishActivity extends AppCompatActivity{
             @Override
             public void run() {
                 try {
-                    String data=NetCore.postResulttoNet(Url.publishActivity, param);
+                    String data=NetCore.postResulttoNet(isFromMain?Url.publishActivity:Url.modifyActivity_10, param);
                     JSONObject jb = new JSONObject(data);
                     String result = jb.getString("state");
-                    int activity_id = jb.getInt("activity_id");
-                    Log.v("上传成功","上传成功，state = "+ result +" activity_id = "+ activity_id);
                     Looper.prepare();
                     if("1".equals(result)){
                         handler.sendEmptyMessage(1);
@@ -242,6 +252,7 @@ public class PublishActivity extends AppCompatActivity{
             public void run() {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 try {
+                    if(isImageChanged){
                     String date = NetCore.postResulttoNet(Url.upload_img,params);
                     JSONObject jb = new JSONObject(date);
                     String token = jb.getString("uptoken");
@@ -261,6 +272,7 @@ public class PublishActivity extends AppCompatActivity{
                             }
                         }
                     }, null);
+                    }else getInfo();
                 } catch (Exception e) {
                     e.printStackTrace();
                     handler.sendEmptyMessage(1);
