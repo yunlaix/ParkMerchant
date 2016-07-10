@@ -65,7 +65,8 @@ public class QRActivity extends AppCompatActivity {
         int random = (int)(Math.random() *5);
         ticket_id = Integer.toString(random);
         //context用来产生二维码
-        context = QR_name.getText().toString() + ticket_id;
+        ticket_id = QR_name.getText().toString() + ticket_id;
+        context = ticket_id;
         Log.v("context_ticket_id", context);
         createQR(context);
 
