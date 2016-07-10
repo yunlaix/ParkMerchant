@@ -47,6 +47,7 @@ public class ActivityDetailActivity extends AppCompatActivity {
     private TextView detailActivityTime;
     private TextView detailActivityLocation;
     private TextView detailActivityDescri;
+    private TextView modify;
 
     private Button createQR;
     private Button deleteActivity;
@@ -321,6 +322,15 @@ public class ActivityDetailActivity extends AppCompatActivity {
         detailActivityTime = (TextView) findViewById(R.id.activity_detail_time);
         detailActivityLocation = (TextView) findViewById(R.id.activity_detail_location);
         detailActivityDescri = (TextView) findViewById(R.id.activity_detail_descri);
+        modify = (TextView) findViewById(R.id.modify);
+        modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PublishActivity.class);
+                intent.putExtra("source", "ActivityDetailActivity");
+                startActivity(intent);
+            }
+        });
 
         createQR = (Button) findViewById(R.id.createQR);
         deleteActivity = (Button) findViewById(R.id.delete_activity);

@@ -29,7 +29,16 @@
             android:textSize="@dimen/titleSize"
             android:textColor="@color/textTitle"
             android:text="活动名称"/>
-
+        <TextView
+            android:id="@+id/modify"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:textColor="@color/textGreen"
+            android:textSize="18sp"
+            android:text="修改"/>
     </RelativeLayout>
 
     <View
@@ -38,11 +47,11 @@
         android:background="@color/lineGreen"/>
 
     <ImageView
-            android:layout_width="420dp"
+            android:layout_width="match_parent"
             android:layout_height="164dp"
             android:id="@+id/activity_detail_image"
             android:layout_gravity="center"
-            android:background="@mipmap/dark_big"/>
+            android:src="@mipmap/dark_big"/>
 
 
     <LinearLayout
