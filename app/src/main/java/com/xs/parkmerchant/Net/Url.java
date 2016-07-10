@@ -31,4 +31,6 @@ public class Url {
 
     public static String modifyActivity_10 = "http://139.129.24.127/parking_app/Seller/seller_modifyactivity.php";
 
+    public static String modifyPassword_12 = "http://139.129.24.127/parking_app/Seller/seller_modifypassword.php";
+
 }

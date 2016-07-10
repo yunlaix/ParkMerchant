@@ -314,7 +314,8 @@ public class MineActivity extends AppCompatActivity {
         modify_password.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
+                Intent intent = new Intent(getApplicationContext(), ModifyPasswordActivity.class);
+                startActivity(intent);
             }
         });
         bussName.setText(Constants.seller_name);
