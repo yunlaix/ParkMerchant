@@ -59,7 +59,9 @@
             android:layout_alignParentTop="true"
             android:src="@mipmap/add_image"/>
         <LinearLayout
-            android:layout_centerInParent="true"
+            android:id="@+id/nn"
+            android:layout_below="@id/add_image"
+            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/listSize"
             android:orientation="horizontal"
@@ -87,7 +89,7 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/aa"
-            android:layout_centerInParent="true"
+            android:layout_below="@id/nn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/listSize"
             android:orientation="horizontal"

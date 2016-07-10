@@ -74,13 +74,23 @@ public class MineActivity extends AppCompatActivity {
                 sharedPreferences = getSharedPreferences("login_parkmerchant", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("seller_img", Constants.seller_img).commit();
+                isUpload = false;
             }else if(msg.what==2){
                 if(file.exists()) file.delete();
+                isUpload = false;
             }else if(msg.what==3){//modify success
-
+                bussName.setEnabled(false);
+                bussAddr.setEnabled(false);
+                bussTel.setEnabled(false);
+                modify_info.setText("修改信息");
+                Toast.makeText(getApplicationContext(), "修改成功！", Toast.LENGTH_SHORT).show();
+                isModifyOn = false;
             }else if(msg.what==4){//modify fail
-
+                Toast.makeText(getApplicationContext(), "修改失败！", Toast.LENGTH_SHORT).show();
+                isModifyOn = false;
             }
+
+
         }
     };
 
@@ -372,7 +382,21 @@ public class MineActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
-//                        params
+                        params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
+                        params.add(new BasicNameValuePair("seller_img", Constants.seller_img));
+                        params.add(new BasicNameValuePair("seller_name", name));
+                        params.add(new BasicNameValuePair("seller_address", address));
+                        params.add(new BasicNameValuePair("seller_contact", contact));
+                        String result = NetCore.postResulttoNet(Url.modify_11, params);
+                        JSONObject jsonObject = new JSONObject(result);
+                        if(jsonObject.getString("state").equals("0")){
+                            Constants.seller_name = name;
+                            Constants.seller_address = address;
+                            Constants.seller_contact = contact;
+                            handler.sendEmptyMessage(3);
+                        }else{
+                            handler.sendEmptyMessage(4);
+                        }
                     }catch (Exception e){
                         e.printStackTrace();
                         handler.sendEmptyMessage(4);

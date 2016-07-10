@@ -43,7 +43,9 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name="QRActivity"
+        <activity android:name=".QRActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ModifyPasswordActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
