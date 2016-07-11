@@ -155,6 +155,8 @@ public class QRActivity extends AppCompatActivity {
 
         try {
             Bitmap bitmap = QRCoderView.encodeToQR(content,logo, w);//要生成二维码的内容，我这就是一个网址
+//            Bitmap bitmap = EncodingUtils.createQRCode(this,content, w, w, logo);//要生成二维码的内容，我这就是一个网址
+
             Log.d("qractivity", "A"+content+"A");
             QR_image.setImageBitmap(bitmap);
         }

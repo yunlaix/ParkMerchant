@@ -10,6 +10,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -32,9 +34,23 @@ public class QRCoderView {
         BarcodeFormat format = BarcodeFormat.QR_CODE;
         Map hints = new EnumMap(EncodeHintType.class);
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        BitMatrix result = new MultiFormatWriter().encode(contentsToEncode, format, dimension, dimension, hints);
+
+        //容错级别
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+
+//        BitMatrix result = new MultiFormatWriter().encode(contentsToEncode, format, dimension, dimension, hints);
+        BitMatrix result = new QRCodeWriter().encode(contentsToEncode, format, dimension, dimension, hints);
         int width = result.getWidth();
         int height = result.getHeight();
+
+        int halfW = width / 2;
+        int halfH = height / 2;
+        int logoWidth = logo.getWidth();
+        int logoHeight = logo.getHeight();
+        float scaleFactor = width * 1.0f / 5 / logoWidth;
+        Bitmap bitmaplogo = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
             int offset = y * width;
