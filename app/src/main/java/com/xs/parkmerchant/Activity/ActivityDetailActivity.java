@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -22,13 +20,10 @@ import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
 import com.xs.parkmerchant.R;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import android.os.Handler;
 
@@ -49,11 +44,8 @@ public class ActivityDetailActivity extends AppCompatActivity {
     private TextView modify;
     private Button createQR;
     private Button deleteActivity;
-    private String activity_img, activity_id, activity_name,activity_addr,activity_starttime, activity_endtime, seller_address,activity_detail,activity_time;
-    private DisplayImageOptions options;
+    private String activity_img;
     private final int MSG_SUCCESS = 1;
-    private final int MSG_GET = 2;
-    private HashMap<String,String> map;
 
     private Handler mHandler = new Handler() {
         public void handleMessage (Message msg) {//此方法在ui线程运行
@@ -74,21 +66,11 @@ public class ActivityDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activity_detail);
         Intent intent =  getIntent();
-        activity_id = intent.getStringExtra("activity_id");
-        activity_name = intent.getStringExtra("activity_name");
+        Constants.activity_id = intent.getStringExtra("activity_id");
+        Constants.activity_name = intent.getStringExtra("activity_name");
         initView();
         downLoadDetails();
-
-
-
-        activityName.setText(activity_name);
-        Log.d("details:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.dark)
-                .showImageForEmptyUri(R.mipmap.dark)
-                .showImageOnFail(R.mipmap.dark)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565).build();
+        activityName.setText(Constants.activity_name);
         detailBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,8 +81,8 @@ public class ActivityDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityDetailActivity.this, QRActivity.class);
-                intent.putExtra("activity_id", activity_id);
-                intent.putExtra("activity_name",activity_name);
+                intent.putExtra("activity_id", Constants.activity_id);
+                intent.putExtra("activity_name",Constants.activity_name);
                 startActivity(intent);
             }
         });
@@ -118,7 +100,7 @@ public class ActivityDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
-                param.add(new BasicNameValuePair("activity_id", activity_id));
+                param.add(new BasicNameValuePair("activity_id", Constants.activity_id));
 //                Log.d("downLoadDetails",activity_id);
 
                 try {
@@ -126,14 +108,11 @@ public class ActivityDetailActivity extends AppCompatActivity {
 //                    Log.d("NetCoredata", data);
                     if(data != null) {
                         JSONObject jb = new JSONObject(data);
-                        Constants.activity_id = activity_id;
-                        Constants.activity_name = activity_name;
-                        Constants.activity_img = jb.getString("activity_img");
+                        activity_img = Constants.activity_img = jb.getString("activity_img");
                         Constants.activity_starttime = jb.getString("activity_starttime").substring(0,10);
                         Constants.activity_endttime = jb.getString("activity_endtime").substring(0,10);
                         Constants.activity_detail = jb.getString("activity_detail");
                         mHandler.sendEmptyMessage(MSG_SUCCESS);
-
                     }
                 } catch (Exception e) {
                     Log.d("downLoadDetails","wrong downLoadDetails");
@@ -152,7 +131,7 @@ public class ActivityDetailActivity extends AppCompatActivity {
                 Log.d("deleteActivity",":in Thread");
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
                 param.clear();
-                param.add(new BasicNameValuePair("activity_id", activity_id));
+                param.add(new BasicNameValuePair("activity_id", Constants.activity_id));
                 try {
                     String data = NetCore.postResulttoNet(Url.deleteActivity_9,param);
                     Log.d("delete_activity", data);
@@ -192,7 +171,6 @@ public class ActivityDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
-//        showToast("initView", "initView");
         activityName = (TextView) findViewById(R.id.activity_detail_name);
         detailBack = (ImageView) findViewById(R.id.activity_detail_back);
         activityDetailImage = (ImageView)findViewById(R.id.activity_detail_image);
@@ -214,11 +192,18 @@ public class ActivityDetailActivity extends AppCompatActivity {
 
     }
 
-//    public void showView(){
-//        activityName.setText(activity_name);
-//        detailActivityTime.setText(activity_time);
-//        detailActivityLocation.setText(activity_addr);
-//        detailActivityDescri.setText(activity_detail);
-//    }
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(Constants.isPublished){
+            activityName.setText(Constants.activity_name);
+            detailActivityTime.setText(Constants.activity_starttime+" 至 " +Constants.activity_endttime);
+            detailActivityLocation.setText(Constants.seller_address);
+            detailActivityDescri.setText(Constants.activity_detail);
+            if(!activity_img.equals(Constants.activity_img)){
+                activityDetailImage.setImageBitmap(Constants.activity_bitmap);
+                activity_img = Constants.activity_img;
+            }
+        }
+    }
 }

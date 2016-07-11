@@ -192,6 +192,7 @@ public class PublishActivity extends AppCompatActivity{
         if (extras != null) {
             bitmap_photo = data.getParcelableExtra("data");
             editDetailImage.setImageBitmap(bitmap_photo);
+            Constants.activity_bitmap = bitmap_photo;
             isImageChanged = true;
         }
     }
@@ -229,6 +230,11 @@ public class PublishActivity extends AppCompatActivity{
                     if("1".equals(result)){
                         handler.sendEmptyMessage(1);
                     }else if("0".equals(result)) {
+                        Constants.activity_name = ValueName[0];
+                        Constants.activity_starttime = ValueName[1];
+                        Constants.activity_endttime = ValueName[2];
+                        Constants.activity_detail = ValueName[3];
+                        Constants.activity_img = ValueName[4];
                         Toast.makeText(getApplicationContext(),  "上传成功!", Toast.LENGTH_LONG).show();
                         Constants.isPublished = true;
                         isUping = false;
