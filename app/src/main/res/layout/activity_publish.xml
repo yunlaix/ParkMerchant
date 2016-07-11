@@ -209,12 +209,14 @@
 
                 <EditText
                     android:id="@+id/edit_activity_starttime"
+                    android:editable="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/textMarginText"
                     android:hint="请填写开始时间"
                     android:background="@null"
+                    android:inputType="none"
                     android:textSize="@dimen/secondSize"
                     android:textColor="@color/textGray"/>
 
@@ -243,12 +245,14 @@
 
                 <EditText
                     android:id="@+id/edit_activity_endtime"
+                    android:editable="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/textMarginText"
                     android:hint="请填写结束时间"
                     android:background="@null"
+                    android:inputType="none"
                     android:textSize="@dimen/secondSize"
                     android:textColor="@color/textGray"/>
 

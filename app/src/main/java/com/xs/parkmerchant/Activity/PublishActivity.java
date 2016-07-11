@@ -1,5 +1,6 @@
 package com.xs.parkmerchant.Activity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -135,7 +138,59 @@ public class PublishActivity extends AppCompatActivity{
         editActivityLocation = (TextView) findViewById(R.id.edit_activity_location);
         editActivityLocation.setText(Constants.seller_address);
         editActivityStart = (EditText) findViewById(R.id.edit_activity_starttime);
+        editActivityStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c = Calendar.getInstance();
+                new DatePickerDialog(PublishActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        editActivityStart.setText(""+year+"-"+((monthOfYear+1)<10?("0"+(monthOfYear+1)):(monthOfYear+1))+"-"+(dayOfMonth<10?("0"+dayOfMonth):dayOfMonth));
+                        }
+                    }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        editActivityStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    Calendar c = Calendar.getInstance();
+                    new DatePickerDialog(PublishActivity.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            editActivityStart.setText(""+year+"-"+((monthOfYear+1)<10?("0"+(monthOfYear+1)):(monthOfYear+1))+"-"+(dayOfMonth<10?("0"+dayOfMonth):dayOfMonth));
+                        }
+                    }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            }
+        });
         editActivityEnd = (EditText) findViewById(R.id.edit_activity_endtime);
+        editActivityEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c = Calendar.getInstance();
+                new DatePickerDialog(PublishActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        editActivityEnd.setText(""+year+"-"+((monthOfYear+1)<10?("0"+(monthOfYear+1)):(monthOfYear+1))+"-"+(dayOfMonth<10?("0"+dayOfMonth):dayOfMonth));
+                    }
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        editActivityEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    Calendar c = Calendar.getInstance();
+                    new DatePickerDialog(PublishActivity.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            editActivityEnd.setText(""+year+"-"+((monthOfYear+1)<10?("0"+(monthOfYear+1)):(monthOfYear+1))+"-"+(dayOfMonth<10?("0"+dayOfMonth):dayOfMonth));
+                        }
+                    }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            }
+        });
         editActivityDetails = (EditText) findViewById(R.id.edit_activity_details);
         tv_publish = (TextView)findViewById(R.id.tv_publish);
         if(!isFromMain) {
