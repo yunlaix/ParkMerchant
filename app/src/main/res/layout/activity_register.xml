@@ -100,7 +100,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:src="@mipmap/seller_name"/>
+            android:src="@mipmap/seller"/>
         <EditText
             android:id="@+id/seller_name"
             android:background="@null"
@@ -158,7 +158,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:src="@mipmap/seller_name"/>
+            android:src="@mipmap/tel"/>
         <EditText
             android:id="@+id/seller_contact"
             android:background="@null"
