@@ -39,17 +39,9 @@ public class QRCoderView {
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 
 //        BitMatrix result = new MultiFormatWriter().encode(contentsToEncode, format, dimension, dimension, hints);
-        BitMatrix result = new QRCodeWriter().encode(contentsToEncode, format, dimension, dimension, hints);
+        BitMatrix result = new QRCodeWriter2().encode(contentsToEncode,format, dimension, dimension, hints);
         int width = result.getWidth();
         int height = result.getHeight();
-
-        int halfW = width / 2;
-        int halfH = height / 2;
-        int logoWidth = logo.getWidth();
-        int logoHeight = logo.getHeight();
-        float scaleFactor = width * 1.0f / 5 / logoWidth;
-        Bitmap bitmaplogo = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
 
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
@@ -69,6 +61,9 @@ public class QRCoderView {
 
         return bitmap;
     }
+
+
+
 
 //    public static Bitmap encodeToQRWidth(String contentsToEncode, Bitmap logo, int dimension) throws Exception{
 //        if(TextUtils.isEmpty(contentsToEncode))
