@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.xs.parkmerchant.Net.Constants;
@@ -43,6 +44,12 @@ public class RegisterActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         //init
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         seller_id = (EditText) findViewById(R.id.seller_id);
         seller_password = (EditText) findViewById(R.id.seller_password);
         seller_name = (EditText) findViewById(R.id.seller_name);
