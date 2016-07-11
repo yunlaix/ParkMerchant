@@ -351,6 +351,7 @@ public class MineActivity extends AppCompatActivity {
                 public void onLoadingCancelled(String s, View view) {}
             });
         }else {
+            if(Constants.seller_img.equals("")) return;
             imageLoader.displayImage(Constants.seller_img, addImage, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String s, View view) {}
@@ -360,6 +361,7 @@ public class MineActivity extends AppCompatActivity {
 
                 @Override
                 public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                    Log.d("mine", "#"+Constants.seller_img+" "+bitmap);
                     RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
                     roundedBitmapDrawable.setCornerRadius(bitmap.getWidth()/2);
                     roundedBitmapDrawable.setAntiAlias(true);

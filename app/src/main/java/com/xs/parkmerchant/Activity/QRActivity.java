@@ -62,11 +62,9 @@ public class QRActivity extends AppCompatActivity {
         QR_name.setText(activity_name);
         QR_time.setText(activity_time);
 
-        //传入活动名称+随机数
-        int random = (int)(Math.random() *5);
-        ticket_id = Integer.toString(random);
         //context用来产生二维码
-        ticket_id = QR_name.getText().toString() + ticket_id;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        ticket_id = Constants.seller_id + sdf.format(new Date());
         context = ticket_id;
         Log.v("context_ticket_id", context);
         createQR(context);
@@ -136,7 +134,7 @@ public class QRActivity extends AppCompatActivity {
         int month = ca.get(Calendar.MONTH);
         int date = ca.get(Calendar.DATE);
 
-        String str = Integer.toString(year)+" 年 "+ Integer.toString(month)+ " 月 " + Integer.toString(date) + " 日";
+        String str = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(date);
 
         return str;
     }
