@@ -17,8 +17,10 @@
         android:id="@+id/activity_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="#1b1b1b"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_toRightOf="@id/img"
         android:layout_alignTop="@id/img"
         android:text="活动名称"/>
@@ -29,8 +31,11 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/img"
+        android:paddingTop="8dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="#fc7e00"
-        android:textSize="17sp"
+        android:textSize="14.5sp"
         android:text="地址"/>
 
     <TextView
@@ -39,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/img"
         android:layout_alignBottom="@id/img"
-        android:textSize="17sp"
+        android:textSize="14.5sp"
         android:textColor="#5e5e5e"
         android:text="使用期限" />
     <TextView
