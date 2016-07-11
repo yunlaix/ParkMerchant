@@ -22,10 +22,12 @@
 
     <!-- text的大小用px做单位 -->
     <!--顶部导航栏的字体大小-->
-    <dimen name="titleSize">40px</dimen>
+    <dimen name="titleSize">20sp</dimen>
     <!--list中的字体大小，仅次于顶部导航栏种字体的大小，一般在参数中标注为18-->
-    <dimen name="secondSize">32px</dimen>
+    <dimen name="secondSize">18sp</dimen>
     <!--最小的字体的大小-->
-    <dimen name="thirdSize">22.5px</dimen>
+    <dimen name="thirdSize">17sp</dimen>
+
+    <dimen name="forthSize">13sp</dimen>
 
 </resources>

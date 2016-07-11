@@ -34,7 +34,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="@dimen/iconMargin"
             android:layout_centerVertical="true"
             android:textColor="@color/textGreen"
             android:textSize="18sp"
@@ -54,114 +54,127 @@
             android:src="@mipmap/dark_big"/>
 
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="活动时间"
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGreen"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMargin"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/activity_detail_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="活动时间..."
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textBlack"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMarginText"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/listSize"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@color/white">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动时间"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textGreen"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMargin"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/listMargin"
-        android:background="@color/white">
+                <TextView
+                    android:id="@+id/activity_detail_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动时间..."
+                    android:textSize="@dimen/forthSize"
+                    android:textColor="@color/textBlack"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMarginText"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="活动地点"
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGreen"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMargin"/>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/activity_detail_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="活动地点..."
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textBlack"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMarginText"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/listSize"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/listMargin"
+                android:background="@color/white">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动地点"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textGreen"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMargin"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/listMargin"
-        android:background="@color/white">
+                <TextView
+                    android:id="@+id/activity_detail_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动地点..."
+                    android:textSize="@dimen/forthSize"
+                    android:textColor="@color/textBlack"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMarginText"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="活动详情"
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textGreen"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMargin"/>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/activity_detail_descri"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="活动详情..."
-            android:textSize="@dimen/secondSize"
-            android:textColor="@color/textBlack"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/textMarginText"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/listMargin"
+                android:paddingTop="10dp"
+                android:paddingBottom="15dp"
+                android:background="@color/white">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动详情"
+                    android:textSize="@dimen/secondSize"
+                    android:textColor="@color/textGreen"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMargin"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:id="@+id/createQR"
-        android:text="生成停车券"
-        android:textColor="@color/textWhite"
-        android:textSize="@dimen/secondSize"
-        android:background="@mipmap/bule_button"
-        android:layout_marginTop="@dimen/textMarginText"
-        android:layout_marginLeft="@dimen/textMargin"
-        android:layout_marginRight="@dimen/textMargin"/>
+                <TextView
+                    android:id="@+id/activity_detail_descri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动详情..."
+                    android:textSize="@dimen/forthSize"
+                    android:textColor="@color/textBlack"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/textMarginText"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/listSize"
-        android:id="@+id/delete_activity"
-        android:text="删除该活动"
-        android:layout_gravity="bottom"
-        android:textColor="@color/textWhite"
-        android:textSize="@dimen/secondSize"
-        android:background="@mipmap/red_button"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="@dimen/textMargin"
-        android:layout_marginRight="@dimen/textMargin"/>
+            </LinearLayout>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/listSize"
+                android:id="@+id/createQR"
+                android:text="生成停车券"
+                android:textColor="@color/textWhite"
+                android:textSize="@dimen/secondSize"
+                android:background="@mipmap/bule_button"
+                android:layout_marginTop="@dimen/textMarginText"
+                android:layout_marginLeft="@dimen/textMargin"
+                android:layout_marginRight="@dimen/textMargin"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/listSize"
+                android:id="@+id/delete_activity"
+                android:text="删除该活动"
+                android:layout_gravity="bottom"
+                android:textColor="@color/textWhite"
+                android:textSize="@dimen/secondSize"
+                android:background="@mipmap/red_button"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="@dimen/textMargin"
+                android:layout_marginRight="@dimen/textMargin"/>
+
+            </LinearLayout>
+    </ScrollView>
 </LinearLayout>

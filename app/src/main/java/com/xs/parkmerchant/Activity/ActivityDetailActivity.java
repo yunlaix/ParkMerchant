@@ -63,21 +63,6 @@ public class ActivityDetailActivity extends AppCompatActivity {
                     detailActivityLocation.setText(Constants.seller_address);
                     detailActivityDescri.setText(Constants.activity_detail);
                     downloadImage(Constants.activity_img);
-//                    activityDetailImage.setImageBitmap((Bitmap) msg.obj);//imageview显示从网络获取到的logo
-//                    Toast.makeText(getApplication(), "下载图片成功", Toast.LENGTH_LONG).show();
-                    break;
-                case MSG_GET:
-//                    activity_time = map.get("activity_time");
-//                    activity_addr = map.get("activity_addr");
-//                    activity_detail = map.get("activity_detail");
-//                    activity_img = map.get("activity_img");
-//                    Log.d("MSG_GET:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
-//
-//                    activityName.setText(activity_name);
-//                    detailActivityTime.setText(activity_time);
-//                    detailActivityLocation.setText(Constants.seller_address);
-//                    detailActivityDescri.setText(activity_addr);
-//                    downloadImage(activity_img);
                     break;
             }
         }
@@ -93,6 +78,9 @@ public class ActivityDetailActivity extends AppCompatActivity {
         activity_name = intent.getStringExtra("activity_name");
         initView();
         downLoadDetails();
+
+
+
         activityName.setText(activity_name);
         Log.d("details:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
         options = new DisplayImageOptions.Builder()
@@ -124,110 +112,28 @@ public class ActivityDetailActivity extends AppCompatActivity {
         });
     }
 
-    public void showToast(String a,String b){
-        Toast.makeText(ActivityDetailActivity.this, a + " : " + b, Toast.LENGTH_SHORT).show();
-    }
-
     private void downLoadDetails(){
-        Log.d("downLoadDetails","downLoadDetails");
-//        map = new HashMap<String, String>();
+//        Log.d("downLoadDetails","downLoadDetails");
        new Thread(new Runnable() {
             @Override
             public void run() {
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
-//                param.clear();
                 param.add(new BasicNameValuePair("activity_id", activity_id));
-                Log.d("downLoadDetails",activity_id);
+//                Log.d("downLoadDetails",activity_id);
 
                 try {
                     String data = NetCore.postResulttoNet(Url.activityDetail,param);
-                    Log.d("NetCoredata", data);
-                    if(data != null){
+//                    Log.d("NetCoredata", data);
+                    if(data != null) {
                         JSONObject jb = new JSONObject(data);
-                        int state = jb.getInt("state");
                         Constants.activity_id = activity_id;
                         Constants.activity_name = activity_name;
                         Constants.activity_img = jb.getString("activity_img");
-                        Constants.activity_starttime = jb.getString("activity_starttime");
-                        Constants.activity_endttime = jb.getString("activity_endtime");
+                        Constants.activity_starttime = jb.getString("activity_starttime").substring(0,10);
+                        Constants.activity_endttime = jb.getString("activity_endtime").substring(0,10);
                         Constants.activity_detail = jb.getString("activity_detail");
                         mHandler.sendEmptyMessage(MSG_SUCCESS);
-//                        Log.d("activity_img", activity_img);
-                        //错误：不显示
-//                        Constants.activity_time = jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime");
-//                        Constants.activity_addr = jb.getString("seller_address");
-//                        Constants.activity_detail = jb.getString("activity_detail");
 
-
-                        //报错：不能再子线程操作UI
-//                        detailActivityTime.setText(jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime"));
-//                        detailActivityLocation.setText(Constants.seller_address);
-//                        detailActivityDescri.setText(jb.getString("activity_detail"));
-
-
-//                        activity_time = jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime");
-//                        activity_addr = jb.getString("activity_addr");
-//                        activity_detail = jb.getString("activity_detail");
-//                        activity_img = jb.getString("activity_img");
-//
-//                        Log.d("DOWNLOAD:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
-//                        //错误：不显示
-//                        map.put("activity_time", jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime"));
-//                        map.put("activity_addr", jb.getString("activity_addr"));
-//                        map.put("activity_detail",jb.getString("activity_detail"));
-//                        map.put("activity_img",jb.getString("activity_img"));
-//                         //错误：不显示
-//                        mHandler.obtainMessage(MSG_GET,map).sendToTarget();
-
-                        Log.d("MAP:","--activity_time:"+activity_time+"-activity_addr:"+activity_addr+"-activity_detail:"+activity_detail+"-activity_img:"+activity_img);
-
-//                        activityName.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                activityName.setText(activity_name);
-//                            }
-//                        });
-//
-//                        detailActivityTime.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                try {
-//                                    detailActivityTime.setText(jb.getString("activity_starttime")+" 至 " +jb.getString("activity_endtime"));
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-//
-//                        detailActivityLocation.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                detailActivityLocation.setText(Constants.seller_address);
-//                            }
-//                        });
-//
-//                        detailActivityDescri.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                try {
-//                                    detailActivityDescri.setText(jb.getString("activity_detail"));
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-
-
-                        Log.d("activity_state", Integer.toString(state));
-                        if(state == 0){
-//                            Looper.prepare();
-//                            Toast.makeText(ActivityDetailActivity.this,"成功",Toast.LENGTH_LONG).show();
-//                            Looper.loop();
-                        }else if(state == 1){
-//                            Looper.prepare();
-//                            Toast.makeText(ActivityDetailActivity.this,"失败",Toast.LENGTH_LONG).show();
-//                            Looper.loop();
-                        }
                     }
                 } catch (Exception e) {
                     Log.d("downLoadDetails","wrong downLoadDetails");
@@ -279,7 +185,6 @@ public class ActivityDetailActivity extends AppCompatActivity {
             public void onLoadingStarted(String s, View view) {}
             public void onLoadingFailed(String s, View view, FailReason failReason) {}
             public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-//                mHandler.obtainMessage(MSG_SUCCESS,bitmap).sendToTarget();//获取图片成功，向ui线程发送MSG_SUCCESS标识和bitmap对象
                 Constants.activity_bitmap = bitmap;
             }
             public void onLoadingCancelled(String s, View view) {}
