@@ -86,6 +86,7 @@ public class TicketDetailContent {
                             jsonArray = jsonObject.getJSONArray("array");
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
+                                if(jo.getString("ticket_state").equals("1")) continue;
                                 TicketDetailItem tmp = new TicketDetailItem(jo.getString("ticket_id"), jo.getString("user_name"),
                                         jo.getString("ticket_deadLine"), jo.getString("ticket_usetime"),jo.getString("ticket_state"));
                                 items.add(tmp);

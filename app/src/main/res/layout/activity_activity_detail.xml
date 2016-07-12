@@ -48,10 +48,10 @@
 
     <ImageView
             android:layout_width="match_parent"
-            android:layout_height="164dp"
+            android:layout_height="180dp"
             android:id="@+id/activity_detail_image"
             android:layout_gravity="center"
-            android:src="@mipmap/dark_big"/>
+            android:background="@mipmap/dark_big"/>
 
 
     <ScrollView

@@ -1,17 +1,23 @@
 package com.xs.parkmerchant.Activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -61,6 +67,7 @@ public class PublishActivity extends AppCompatActivity{
     private static final int IMAGE_REQUEST_CODE = 0;
     private static final int CAMERA_REQUEST_CODE = 1;
     private static final int RESIZE_REQUEST_CODE = 2;
+    private static final int REQUEST_CAMERA = 3;
     private String[] ValueName = {"activity_name", "activity_start", "activity_end", "activity_details", "activity_imageurl"};
     private String key;
     private Bitmap bitmap_photo;
@@ -107,9 +114,7 @@ public class PublishActivity extends AppCompatActivity{
                                 startActivityForResult(intent, IMAGE_REQUEST_CODE);
                                 break;
                             case 1:
-                                Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                intent1.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo1.JPG")));
-                                startActivityForResult(intent1, CAMERA_REQUEST_CODE);
+                                getAppVersionAndTakePermission();
                                 break;
                         }
                     }
@@ -127,6 +132,37 @@ public class PublishActivity extends AppCompatActivity{
                 Toast.makeText(PublishActivity.this, "活动地址即为商家地址，不可更改！", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void getAppVersionAndTakePermission(){
+        int currentapiVersion = Build.VERSION.SDK_INT;
+        if(currentapiVersion >= 23){
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+            }else{
+                getFromCamera();
+            }
+        }else {
+            getFromCamera();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==REQUEST_CAMERA){
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                getFromCamera();
+            }else {
+                Toast.makeText(getApplicationContext(), "摄像头权限拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void getFromCamera(){
+        Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent1.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "photo1.JPG")));
+        startActivityForResult(intent1, CAMERA_REQUEST_CODE);
     }
 
     private void initView(){

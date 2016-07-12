@@ -2,6 +2,7 @@ package com.xs.parkmerchant.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
@@ -55,6 +56,9 @@ public class ActivityDetailActivity extends AppCompatActivity {
                     detailActivityLocation.setText(Constants.seller_address);
                     detailActivityDescri.setText(Constants.activity_detail);
                     downloadImage(Constants.activity_img);
+                    break;
+                case 2:
+                    activityDetailImage.setBackground(new BitmapDrawable(Constants.activity_bitmap));
                     break;
             }
         }
@@ -160,10 +164,11 @@ public class ActivityDetailActivity extends AppCompatActivity {
     private void downloadImage(String str) {
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
-        imageLoader.displayImage(str, activityDetailImage, new ImageLoadingListener() {
+        imageLoader.displayImage(str, new ImageView(getApplicationContext()), new ImageLoadingListener() {
             public void onLoadingStarted(String s, View view) {}
             public void onLoadingFailed(String s, View view, FailReason failReason) {}
             public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                mHandler.sendEmptyMessage(2);
                 Constants.activity_bitmap = bitmap;
             }
             public void onLoadingCancelled(String s, View view) {}

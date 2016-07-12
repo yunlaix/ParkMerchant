@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView1, textView2;
     private List<View> views;
     private int offset = 0;
-    public static int currIndex = 0;
+    public static int currIndex = 1;
     private int bmpW;
     private View view1, view2;
 
@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
         views.add(view1);
         views.add(view2);
         viewPager.setAdapter(new MyViewPagerAdapter(views));
-        viewPager.setCurrentItem(0);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.setCurrentItem(1);
+        ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
             int one = offset * 2 + bmpW;
             int two = one * 2;
 
@@ -162,7 +162,9 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        };
+        viewPager.setOnPageChangeListener(onPageChangeListener);
+        onPageChangeListener.onPageSelected(1);
     }
 
     private void initTextView(){

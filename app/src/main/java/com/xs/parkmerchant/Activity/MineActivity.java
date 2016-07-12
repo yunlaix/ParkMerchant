@@ -1,16 +1,22 @@
 package com.xs.parkmerchant.Activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
@@ -67,6 +73,7 @@ public class MineActivity extends AppCompatActivity {
     private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     private final int REQUEST_CODE_CROP_IMAGE = 2;
     private final int REQUEST_CODE_TAKE_PHOTO = 3;
+    private final int REQUEST_CAMERA = 4;
     private SharedPreferences sharedPreferences;
 
     private Handler handler = new Handler(){
@@ -143,7 +150,7 @@ public class MineActivity extends AppCompatActivity {
                         getFromLocal();
                         break;
                     case 1:
-                        getFromCamera();
+                        getAppVersionAndTakePermission();
                         break;
                 }
             }
@@ -153,6 +160,31 @@ public class MineActivity extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
         }).show();
+    }
+
+    private void getAppVersionAndTakePermission(){
+        int currentapiVersion = Build.VERSION.SDK_INT;
+        if(currentapiVersion >= 23){
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+            }else{
+                getFromCamera();
+            }
+        }else {
+            getFromCamera();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==REQUEST_CAMERA){
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                getFromCamera();
+            }else {
+                Toast.makeText(getApplicationContext(), "摄像头权限拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void getFromCamera(){
