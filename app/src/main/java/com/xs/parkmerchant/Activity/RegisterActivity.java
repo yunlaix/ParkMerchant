@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.xs.parkmerchant.Net.BDMapLocation;
 import com.xs.parkmerchant.Net.Constants;
 import com.xs.parkmerchant.Net.NetCore;
 import com.xs.parkmerchant.Net.Url;
@@ -51,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
         //init
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +106,9 @@ public class RegisterActivity extends AppCompatActivity{
                 }
             }
         });
+        BDMapLocation bdMapLocation = new BDMapLocation(getApplicationContext());
+        bdMapLocation.startLocation();
+        Log.d("baidu", "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     private void setSharePreference(){
