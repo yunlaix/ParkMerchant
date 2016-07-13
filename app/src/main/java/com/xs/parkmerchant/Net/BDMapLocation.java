@@ -27,12 +27,20 @@ public class BDMapLocation {
     private Handler handler;
 
     public BDMapLocation(Context context, Handler handler){
+        error_code = -1;
+        addr = "address";
         this.handler = handler;
         this.context = context;Log.d("baidu", "aaaaaaaaaaaaaaaaa");
         mLocationClient = new LocationClient(this.context);     //声明LocationClient类
         mLocationClient.registerLocationListener( myListener );    //注册监听函数
         initLocation();
     }
+
+    public double getLatitude(){ return latitude;}
+
+    public double getLontitude(){ return lontitude;}
+
+    public String getAddr(){ return addr;}
 
     public void startLocation(){
         mLocationClient.start();

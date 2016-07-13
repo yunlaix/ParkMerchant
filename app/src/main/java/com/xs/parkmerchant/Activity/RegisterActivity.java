@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity{
     private EditText seller_id, seller_password, seller_name, seller_address, seller_contact;
     private TextView register;
     private SharedPreferences sharedPreferences;
+    private BDMapLocation bdMapLocation;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -44,6 +45,16 @@ public class RegisterActivity extends AppCompatActivity{
                     break;
                 case 3:
                     Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
+                    break;
+                case 4:
+                    if(!bdMapLocation.getAddr().equals("addr")){
+                        seller_address.setText(bdMapLocation.getAddr());
+                        Constants.seller_address = bdMapLocation.getAddr();
+                        Constants.addr_lan = bdMapLocation.getLatitude();
+                        Constants.addr_lon = bdMapLocation.getLontitude();
+                    }else{
+                        seller_address.setText("定位失败...");
+                    }
                     break;
             }
         }
@@ -82,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity{
                                 params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                                 params.add(new BasicNameValuePair("seller_password", Constants.seller_password));
                                 params.add(new BasicNameValuePair("seller_name", Constants.seller_name));
-                                params.add(new BasicNameValuePair("seller_address", Constants.seller_address));
+                                params.add(new BasicNameValuePair("seller_address", Constants.seller_address));///
                                 params.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
                                 params.add(new BasicNameValuePair("seller_img", Constants.seller_img));
                                 String result = NetCore.postResulttoNet(Url.register_2, params);
@@ -106,9 +117,8 @@ public class RegisterActivity extends AppCompatActivity{
                 }
             }
         });
-        BDMapLocation bdMapLocation = new BDMapLocation(getApplicationContext(), handler);
+        bdMapLocation = new BDMapLocation(getApplicationContext(), handler);
         bdMapLocation.startLocation();
-        Log.d("baidu", "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     private void setSharePreference(){

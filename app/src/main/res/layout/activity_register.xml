@@ -132,6 +132,7 @@
             android:src="@mipmap/location"/>
         <EditText
             android:id="@+id/seller_address"
+            android:enabled="false"
             android:background="@null"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -139,7 +140,7 @@
             android:layout_marginLeft="15dp"
             android:textColor="#1b1b1b"
             android:textSize="18sp"
-            android:hint="商家地址"/>
+            android:hint="开始定位..."/>
     </LinearLayout>
     <TextView
         android:layout_marginLeft="15dp"
