@@ -1,6 +1,7 @@
 package com.xs.parkmerchant.Net;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.baidu.location.BDLocation;
@@ -23,8 +24,10 @@ public class BDMapLocation {
     private int error_code;
     private double latitude, lontitude;
     private String locationdescribe, addr;
+    private Handler handler;
 
-    public BDMapLocation(Context context){
+    public BDMapLocation(Context context, Handler handler){
+        this.handler = handler;
         this.context = context;Log.d("baidu", "aaaaaaaaaaaaaaaaa");
         mLocationClient = new LocationClient(this.context);     //声明LocationClient类
         mLocationClient.registerLocationListener( myListener );    //注册监听函数
@@ -72,6 +75,7 @@ public class BDMapLocation {
             sb.append(addr);
             sb.append("\ndescrible : ");
             sb.append(locationdescribe);
+            handler.sendEmptyMessage(4);
 //            if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
 //                sb.append("\nspeed : ");
 //                sb.append(location.getSpeed());// 单位：公里每小时

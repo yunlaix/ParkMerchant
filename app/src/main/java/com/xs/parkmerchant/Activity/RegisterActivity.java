@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity{
                 }
             }
         });
-        BDMapLocation bdMapLocation = new BDMapLocation(getApplicationContext());
+        BDMapLocation bdMapLocation = new BDMapLocation(getApplicationContext(), handler);
         bdMapLocation.startLocation();
         Log.d("baidu", "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
