@@ -1,9 +1,13 @@
 package com.xs.parkmerchant.Net;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 /**
  * Created by Man on 2016/7/7.
+ * 静态数据和静态方法
  */
 public class Constants {
 
@@ -22,7 +26,15 @@ public class Constants {
     public static String activity_detail="";
     public static Bitmap activity_bitmap;
 
-
     public static boolean isPublished = false;
+
+    public static boolean isNetWorkConnected(Context context){
+        if(context!=null){
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo= connectivityManager.getActiveNetworkInfo();
+            if(networkInfo!=null) return networkInfo.isAvailable();
+        }
+        return false;
+    }
 
 }

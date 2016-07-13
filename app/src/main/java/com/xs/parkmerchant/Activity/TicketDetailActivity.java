@@ -18,6 +18,7 @@ import com.xs.parkmerchant.R;
 
 /**
  * Created by Man on 2016/7/6.
+ * 停车券详细状态列表
  */
 public class TicketDetailActivity extends AppCompatActivity{
 

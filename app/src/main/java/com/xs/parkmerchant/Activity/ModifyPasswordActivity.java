@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * Created by xu on 2016/7/10.
+ * 修改密码
  */
 public class ModifyPasswordActivity extends AppCompatActivity{
 
@@ -47,6 +48,7 @@ public class ModifyPasswordActivity extends AppCompatActivity{
             }else if(msg.what==2){
                 Toast.makeText(getApplicationContext(), "修改失败！", Toast.LENGTH_SHORT).show();
             }
+            if(!Constants.isNetWorkConnected(getApplicationContext()))Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
         }
     };
 

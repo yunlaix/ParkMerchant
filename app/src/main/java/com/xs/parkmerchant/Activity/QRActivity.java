@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -35,6 +37,7 @@ import java.util.List;
 
 /**
  * Created by ml on 2016/7/7.
+ * 二维码生成
  */
 public class QRActivity extends AppCompatActivity {
 
@@ -42,16 +45,27 @@ public class QRActivity extends AppCompatActivity {
     private TextView QR_time;
     private ImageView QR_image;
     private Button close_QR;
-
     private Bitmap logo;
-
     private String context,ticket_id,activity_id,activity_name,activity_time;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+                case 1:
+                    Toast.makeText(getApplication(), "停车券生成成功", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    Toast.makeText(getApplication(), "停车券生成失败", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            if(!Constants.isNetWorkConnected(getApplicationContext()))Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr);
-
         initView();
 
         Intent intent = getIntent();
@@ -68,25 +82,20 @@ public class QRActivity extends AppCompatActivity {
         context = ticket_id;
         Log.v("context_ticket_id", context);
         createQR(context);
-
         upload();
-
         close_QR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
     }
 
     private void initView() {
-
         QR_name = (TextView) findViewById(R.id.qr_name);
         QR_time = (TextView)findViewById(R.id.qr_time);
         QR_image = (ImageView)findViewById(R.id.qr_image);
         close_QR = (Button)findViewById(R.id.qr_close);
-
     }
 
     public void upload(){
@@ -94,75 +103,51 @@ public class QRActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
                 param.clear();
                 param.add(new BasicNameValuePair("ticket_id", ticket_id));
                 param.add(new BasicNameValuePair("activity_id", activity_id));
                 param.add(new BasicNameValuePair("ticket_deadline", Constants.activity_endttime));
                 Log.d("upload","uploadQR param"+ticket_id+" "+activity_id+" "+activity_time);
-
                 try {
                     String data = NetCore.postResulttoNet(Url.produceTicket, param);
                     JSONObject jb = new JSONObject(data);
-
-
-                    int result = Integer.parseInt(jb.getString("state"));
-                    Log.d("updateQRresult = ", Integer.toString(result));
-
-                    switch (result) {
-                        case 0:
-                            Looper.prepare();
-                            Toast.makeText(getApplication(), "停车券生成成功", Toast.LENGTH_LONG).show();
-                            Looper.loop();
-                            break;
-                        case 1:
-                            Toast.makeText(getApplication(), "停车券生成失败", Toast.LENGTH_LONG).show();
-                            break;
-                    }
+                    if(jb.getString("state").equals("0")) handler.sendEmptyMessage(1);
+                    else handler.sendEmptyMessage(2);
                 } catch (Exception e) {
-                    Log.d("fail shengchheng:", "ku");
                     e.printStackTrace();
+                    handler.sendEmptyMessage(2);
                 }
             }}).start();
     }
-
 
     public String getDate(){
         Calendar ca = Calendar.getInstance();
         int year = ca.get(Calendar.YEAR);
         int month = ca.get(Calendar.MONTH);
         int date = ca.get(Calendar.DATE);
-
         String str = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(date);
-
         return str;
     }
 
     /**产生二维码*/
     private void createQR(String content) {
-
         logo= BitmapFactory.decodeResource(super.getResources(),R.mipmap.logo_qr);
-
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
         int w = outMetrics.widthPixels * 6 / 11;//设置宽度
         ViewGroup.LayoutParams layoutParams = QR_image.getLayoutParams();
         layoutParams.height = layoutParams.width = w;//设置高度
         QR_image.setLayoutParams(layoutParams);
-
         try {
             Bitmap bitmap = QRCoderView.encodeToQR(content,logo, w);//要生成二维码的内容，我这就是一个网址
 //            Bitmap bitmap = EncodingUtils.createQRCode(this,content, w, w, logo);//要生成二维码的内容，我这就是一个网址
-
             Log.d("qractivity", "A"+content+"A");
             QR_image.setImageBitmap(bitmap);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "生成二维码失败", Toast.LENGTH_SHORT);
         }
-
     }
 
 }

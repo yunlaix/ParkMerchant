@@ -76,8 +76,9 @@ public class PublishActivity extends AppCompatActivity{
         public void handleMessage(Message msg) {
             if(msg.what==1){
                 isUping = false;
-                Log.d("publish_result", "fffffffffffffff");
+                Toast.makeText(getApplicationContext(), "发布失败！", Toast.LENGTH_SHORT).show();
             }
+            if(!Constants.isNetWorkConnected(getApplicationContext()))Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
         }
     };
     private boolean isUping = false;
@@ -103,7 +104,6 @@ public class PublishActivity extends AppCompatActivity{
         editActivityImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //为Dialog加监听，setItems给items加监听，setNavigation给导航键，如“取消”加监听
                 new AlertDialog.Builder(PublishActivity.this).setTitle("上传头像").setItems(methods, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -229,6 +229,8 @@ public class PublishActivity extends AppCompatActivity{
         });
         editActivityDetails = (EditText) findViewById(R.id.edit_activity_details);
         tv_publish = (TextView)findViewById(R.id.tv_publish);
+
+        //作为修改界面
         if(!isFromMain) {
             tv_publish.setText("修改活动");
             editPublish.setText("确认修改");
@@ -240,7 +242,6 @@ public class PublishActivity extends AppCompatActivity{
             editActivityName.setText(Constants.activity_name);
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -296,8 +297,7 @@ public class PublishActivity extends AppCompatActivity{
 
         if("".equals(ValueName[0])||"".equals(ValueName[1])||"".equals(ValueName[2])||"".equals(ValueName[3])||"".equals(ValueName[4])){
             Toast.makeText(this,  "填写信息不能为空", Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             List<NameValuePair> param=new ArrayList<NameValuePair>();
             param.add(new BasicNameValuePair(isFromMain?"seller_id":"activity_id", isFromMain?Constants.seller_id:Constants.activity_id));
             param.add(new BasicNameValuePair("activity_name", ValueName[0]));
@@ -376,7 +376,6 @@ public class PublishActivity extends AppCompatActivity{
                     e.printStackTrace();
                     handler.sendEmptyMessage(1);
                 }
-
             }
         }).start();
     }

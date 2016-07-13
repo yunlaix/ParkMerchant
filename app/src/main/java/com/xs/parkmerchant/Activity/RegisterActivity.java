@@ -33,8 +33,16 @@ public class RegisterActivity extends AppCompatActivity{
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what==1){
-                Toast.makeText(getApplicationContext(), "账号重复！", Toast.LENGTH_SHORT).show();
+            switch (msg.what){
+                case 1:
+                    Toast.makeText(getApplicationContext(), "账号重复！", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
     };
@@ -81,15 +89,14 @@ public class RegisterActivity extends AppCompatActivity{
                                     String state = jsonObject.getString("state");
                                     if(state.equals("0")){
                                         setSharePreference();
-                                        finish();
-                                        Log.d("login", "ssssssssssssssssss");
+                                        handler.sendEmptyMessage(2);
                                     }else{
                                         handler.sendEmptyMessage(1);
-                                        Log.d("login", "fffffffffffffffff");
                                     }
                                 }
                             }catch (Exception e){
                                 e.printStackTrace();
+                                if(!Constants.isNetWorkConnected(getApplicationContext())) handler.sendEmptyMessage(3);
                             }
                         }
                     }).start();

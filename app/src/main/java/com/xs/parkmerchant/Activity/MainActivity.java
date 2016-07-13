@@ -35,12 +35,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ActivityDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * 主页面
+ * 展示停车券按照活动分类的部分列表
+ * 展示部分活动列表
+ * 提供个人中心入口
+ * 提供发布活动入口
+ * 提供删除活动入口
+ * 提供刷新和加载更多
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         //listView
         View listView = view2.findViewById(R.id.item_list);
         assert listView != null;
-        setupRecyclerView((ActivityListView) listView);
+        setupActivityList((ActivityListView) listView);
 
         View listViewTicket = view1.findViewById(R.id.item_list);
         assert listViewTicket != null;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 ticketContent.refresh();
             }
         });
+
         ticketContent.setSwipe(swipeRefreshLayoutTicket);
         activityContent.setSwipe(mySwipeRefreshLayout);
         ticketContent.refresh();
@@ -196,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         imageView.setImageMatrix(matrix);
     }
 
-    private void setupRecyclerView(@NonNull final ActivityListView listView) {
+    private void setupActivityList(@NonNull final ActivityListView listView) {
         activityContent = new ActivityContent(this);
         adapter = new ActivityListViewAdapter(activityContent.getITEMS(), this, listView);
         activityContent.setAdapter(adapter);
@@ -263,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //返回桌面
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
@@ -273,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    //自动刷新
     @Override
     protected void onStart() {
         super.onStart();

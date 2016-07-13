@@ -29,10 +29,7 @@ import java.util.List;
 import android.os.Handler;
 
 /**
- * An activity representing a single Item detail screen. This
- * activity is only used narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link MainActivity}.
+ * 展示某个特定活动的详细信息，提供修改信息、生成停车券和删除活动的入口
  */
 public class ActivityDetailActivity extends AppCompatActivity {
 
@@ -47,23 +44,39 @@ public class ActivityDetailActivity extends AppCompatActivity {
     private Button deleteActivity;
     private String activity_img;
     private final int MSG_SUCCESS = 1;
+    private final int IMG_SUCCESS = 2;
+    private final int NET_FAIL = 3;
+    private final int DELETE_SUCCESS = 4;
+    private final int DELETE_FAIL = 5;
 
     private Handler mHandler = new Handler() {
         public void handleMessage (Message msg) {//此方法在ui线程运行
             switch(msg.what) {
+                //文字信息获取成功
                 case MSG_SUCCESS:
                     detailActivityTime.setText(Constants.activity_starttime+" 至 " +Constants.activity_endttime);
                     detailActivityLocation.setText(Constants.seller_address);
                     detailActivityDescri.setText(Constants.activity_detail);
                     downloadImage(Constants.activity_img);
                     break;
-                case 2:
+                //图片信息获取成功
+                case IMG_SUCCESS:
                     activityDetailImage.setBackground(new BitmapDrawable(Constants.activity_bitmap));
+                    break;
+                //网络无连接
+                case NET_FAIL:
+                    Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
+                    break;
+                case DELETE_FAIL:
+                    Toast.makeText(getApplicationContext(), "删除活动失败", Toast.LENGTH_SHORT).show();
+                    break;
+                case DELETE_SUCCESS:
+                    Toast.makeText(getApplicationContext(), "删除活动成功", Toast.LENGTH_LONG).show();
+                    finish();
                     break;
             }
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +88,25 @@ public class ActivityDetailActivity extends AppCompatActivity {
         initView();
         downLoadDetails();
         activityName.setText(Constants.activity_name);
+
         detailBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+
+        //修改信息入口
+        modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PublishActivity.class);
+                intent.putExtra("source", "ActivityDetailActivity");
+                startActivity(intent);
+            }
+        });
+
+        //生成停车券入口
         createQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +116,8 @@ public class ActivityDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //删除活动入口
         deleteActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,15 +126,13 @@ public class ActivityDetailActivity extends AppCompatActivity {
         });
     }
 
+    //获取文字信息
     private void downLoadDetails(){
-//        Log.d("downLoadDetails","downLoadDetails");
-       new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 List<NameValuePair> param = new ArrayList<NameValuePair>();
                 param.add(new BasicNameValuePair("activity_id", Constants.activity_id));
-//                Log.d("downLoadDetails",activity_id);
-
                 try {
                     String data = NetCore.postResulttoNet(Url.activityDetail,param);
 //                    Log.d("NetCoredata", data);
@@ -119,48 +145,14 @@ public class ActivityDetailActivity extends AppCompatActivity {
                         mHandler.sendEmptyMessage(MSG_SUCCESS);
                     }
                 } catch (Exception e) {
-                    Log.d("downLoadDetails","wrong downLoadDetails");
                     e.printStackTrace();
+                    if(!Constants.isNetWorkConnected(getApplicationContext())) mHandler.sendEmptyMessage(NET_FAIL);
                 }
             }
         }).start();
     }
 
-    //删除活动，已完成
-    private  void deleteActivity(){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("deleteActivity",":in Thread");
-                List<NameValuePair> param = new ArrayList<NameValuePair>();
-                param.clear();
-                param.add(new BasicNameValuePair("activity_id", Constants.activity_id));
-                try {
-                    String data = NetCore.postResulttoNet(Url.deleteActivity_9,param);
-                    Log.d("delete_activity", data);
-                    if(data!=null) {
-                        JSONObject jb = new JSONObject(data);
-                        String state = jb.getString("state");
-                        if ("0".equals(state)){
-                            Looper.prepare();
-                            Toast.makeText(ActivityDetailActivity.this, "删除活动成功", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(ActivityDetailActivity.this,MainActivity.class);
-                            startActivity(intent);
-                            Looper.loop();
-                        }else{
-                            Looper.prepare();
-                            Toast.makeText(ActivityDetailActivity.this, "删除活动失败", Toast.LENGTH_LONG).show();
-                            Looper.loop();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
+    //获取图片
     private void downloadImage(String str) {
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -168,11 +160,34 @@ public class ActivityDetailActivity extends AppCompatActivity {
             public void onLoadingStarted(String s, View view) {}
             public void onLoadingFailed(String s, View view, FailReason failReason) {}
             public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                mHandler.sendEmptyMessage(2);
+                mHandler.sendEmptyMessage(IMG_SUCCESS);
                 Constants.activity_bitmap = bitmap;
             }
             public void onLoadingCancelled(String s, View view) {}
         });
+    }
+
+    //删除活动
+    private void deleteActivity(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<NameValuePair> param = new ArrayList<NameValuePair>();
+                param.add(new BasicNameValuePair("activity_id", Constants.activity_id));
+                try {
+                    String data = NetCore.postResulttoNet(Url.deleteActivity_9,param);
+                    Log.d("delete_activity", data);
+                    if(data!=null) {
+                        JSONObject jb = new JSONObject(data);
+                        if ("0".equals(jb.getString("state"))) mHandler.sendEmptyMessage(DELETE_SUCCESS);
+                        else mHandler.sendEmptyMessage(DELETE_FAIL);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if(!Constants.isNetWorkConnected(getApplicationContext())) mHandler.sendEmptyMessage(NET_FAIL);
+                }
+            }
+        }).start();
     }
 
     private void initView() {
@@ -183,20 +198,13 @@ public class ActivityDetailActivity extends AppCompatActivity {
         detailActivityLocation = (TextView) findViewById(R.id.activity_detail_location);
         detailActivityDescri = (TextView) findViewById(R.id.activity_detail_descri);
         modify = (TextView) findViewById(R.id.modify);
-        modify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PublishActivity.class);
-                intent.putExtra("source", "ActivityDetailActivity");
-                startActivity(intent);
-            }
-        });
-
         createQR = (Button) findViewById(R.id.createQR);
         deleteActivity = (Button) findViewById(R.id.delete_activity);
-
     }
 
+    /*
+    * 当从修改信息的页面回来时，如果信息有所修改，及时更新信息
+    * */
     @Override
     protected void onStart() {
         super.onStart();
@@ -211,4 +219,5 @@ public class ActivityDetailActivity extends AppCompatActivity {
             }
         }
     }
+
 }

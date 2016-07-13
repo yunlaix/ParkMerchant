@@ -53,6 +53,8 @@ import java.util.List;
 
 /**
  * Created by Man on 2016/7/5.
+ * 个人信息维护
+ * 包括修改头像、地址、名称、联系方式和密码
  */
 public class MineActivity extends AppCompatActivity {
 
@@ -98,8 +100,7 @@ public class MineActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "修改失败！", Toast.LENGTH_SHORT).show();
                 isModifyOn = false;
             }
-
-
+            if(!Constants.isNetWorkConnected(getApplicationContext()))Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -118,10 +119,7 @@ public class MineActivity extends AppCompatActivity {
         });
         logout.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(MineActivity.this, "注销登陆", Toast.LENGTH_LONG).show();
-                logOut();
-            }
+            public void onClick(View view) {logOut();}
         });
         addImage.setOnClickListener(new OnClickListener() {
             @Override
