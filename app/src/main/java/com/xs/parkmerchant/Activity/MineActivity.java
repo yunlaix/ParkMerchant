@@ -239,7 +239,7 @@ public class MineActivity extends AppCompatActivity {
             if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)){
                 fileOutputStream.flush();
                 fileOutputStream.close();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");//to be modified
+//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");//to be modified
                 uploadImg(Url.refresh_img, filepath, "seller");
             }
         }catch (Exception e){
@@ -280,7 +280,7 @@ public class MineActivity extends AppCompatActivity {
                                             paramsx.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
                                             paramsx.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
                                             paramsx.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
-                                            String resultx = NetCore.postResulttoNet(Url.modify_11, paramsx);
+                                            String resultx = NetCore.postResulttoNet(Url.modify_11, paramsx);Log.d("mine", resultx);
                                             JSONObject jsonObjectx = new JSONObject(resultx);
                                             if (jsonObjectx.getString("state").equals("0")) {
                                                 handler.sendEmptyMessage(1);
@@ -409,6 +409,15 @@ public class MineActivity extends AppCompatActivity {
                     roundedBitmapDrawable.setCornerRadius(bitmap.getWidth()/2);
                     roundedBitmapDrawable.setAntiAlias(true);
                     ((ImageView)view).setImageDrawable(roundedBitmapDrawable);
+                    try{
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream)){
+                            fileOutputStream.flush();
+                            fileOutputStream.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
