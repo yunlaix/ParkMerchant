@@ -29,6 +29,8 @@ public class Constants {
 
     public static boolean isPublished = false;
 
+    public static boolean isPicked = false;
+
     public static boolean isNetWorkConnected(Context context){
         if(context!=null){
             ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

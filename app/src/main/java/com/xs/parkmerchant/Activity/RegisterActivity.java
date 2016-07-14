@@ -1,5 +1,6 @@
 package com.xs.parkmerchant.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -76,6 +77,13 @@ public class RegisterActivity extends AppCompatActivity{
         seller_password = (EditText) findViewById(R.id.seller_password);
         seller_name = (EditText) findViewById(R.id.seller_name);
         seller_address = (EditText) findViewById(R.id.seller_address);
+        seller_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PickAddressActivity.class);
+                startActivity(intent);
+            }
+        });
         seller_contact = (EditText) findViewById(R.id.seller_contact);
         register = (TextView) findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
