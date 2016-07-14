@@ -14,9 +14,9 @@ public class Constants {
     public static String seller_id="";
     public static String seller_name="";
     public static String seller_password="";
-    public static String seller_address="";
+    public static String seller_address="", tmp_address;
     public static String seller_address_detail="";
-    public static float addr_lan, addr_lon;
+    public static float addr_lan, tmp_lan, addr_lon, tmp_lon;
     public static String seller_contact="";
     public static String seller_img="";
 
@@ -31,6 +31,8 @@ public class Constants {
     public static boolean isPublished = false;
 
     public static boolean isPicked = false;
+
+    public static boolean isFromMine = true;
 
     public static boolean isNetWorkConnected(Context context){
         if(context!=null){

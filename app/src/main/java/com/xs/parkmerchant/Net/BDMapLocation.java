@@ -28,9 +28,9 @@ public class BDMapLocation {
 
     public BDMapLocation(Context context, Handler handler){
         error_code = -1;
-        addr = "address";
+        addr = "addr";
         this.handler = handler;
-        this.context = context;Log.d("baidu", "aaaaaaaaaaaaaaaaa");
+        this.context = context;
         mLocationClient = new LocationClient(this.context);     //声明LocationClient类
         mLocationClient.registerLocationListener( myListener );    //注册监听函数
         initLocation();
@@ -71,8 +71,8 @@ public class BDMapLocation {
             error_code = location.getLocType();
             latitude = location.getLatitude();
             lontitude = location.getLongitude();
-            addr = location.getAddrStr();
             locationdescribe = location.getLocationDescribe();
+            addr = location.getAddrStr()+"("+locationdescribe+")";
             sb.append("\nerror code : ");
             sb.append(error_code);
             sb.append("\nlatitude : ");

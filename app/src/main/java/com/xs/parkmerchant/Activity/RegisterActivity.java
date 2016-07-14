@@ -81,8 +81,19 @@ public class RegisterActivity extends AppCompatActivity{
         seller_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.isFromMine = false;
                 Intent intent = new Intent(getApplicationContext(), PickAddressActivity.class);
                 startActivity(intent);
+            }
+        });
+        seller_address.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    Constants.isFromMine = false;
+                    Intent intent = new Intent(getApplicationContext(), PickAddressActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         seller_address_detail = (EditText) findViewById(R.id.seller_address_detail);
@@ -153,7 +164,6 @@ public class RegisterActivity extends AppCompatActivity{
         Constants.seller_id = seller_id.getText().toString().trim();
         Constants.seller_password = seller_password.getText().toString().trim();
         Constants.seller_name = seller_name.getText().toString().trim();
-        Constants.seller_address = seller_address.getText().toString().trim();
         Constants.seller_contact = seller_contact.getText().toString().trim();
         Constants.seller_address_detail = seller_address_detail.getText().toString().trim();
     }

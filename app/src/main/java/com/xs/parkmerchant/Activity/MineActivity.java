@@ -46,10 +46,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Man on 2016/7/5.
@@ -70,7 +69,7 @@ public class MineActivity extends AppCompatActivity {
     private File file;
     private String filepath;
     private final String [] methods = {"从图库", "从拍照"};
-    private String name, address, contact;
+    private String name, address_detail, contact;
 
     private boolean isUpload = false, isModifyOn = false;
     private final int REQUEST_CODE_CHOOSE_IMAGE = 1;
@@ -93,10 +92,12 @@ public class MineActivity extends AppCompatActivity {
             }else if(msg.what==3){//modify success
                 bussName.setEnabled(false);
                 bussAddr.setEnabled(false);
+                bussAddrDetail.setEnabled(false);
                 bussTel.setEnabled(false);
                 modify_info.setText("修改信息");
                 Toast.makeText(getApplicationContext(), "修改成功！", Toast.LENGTH_SHORT).show();
                 isModifyOn = false;
+                setSharePreference();
             }else if(msg.what==4){//modify fail
                 Toast.makeText(getApplicationContext(), "修改失败！", Toast.LENGTH_SHORT).show();
                 isModifyOn = false;
@@ -240,7 +241,7 @@ public class MineActivity extends AppCompatActivity {
                 fileOutputStream.flush();
                 fileOutputStream.close();
 //                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");//to be modified
-                uploadImg(Url.refresh_img, filepath, "seller");
+                uploadImg(Url.refresh_img, filepath, Constants.seller_id);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -264,37 +265,37 @@ public class MineActivity extends AppCompatActivity {
                         public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
                             Log.d("upload", "D"+s+"D"+responseInfo.isOK()+"D"+responseInfo+"D"+jsonObject);
                             isUpload = responseInfo.isOK();
-                            if(isUpload) {
-                                //update database
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            Constants.seller_img = Url.touxiang + key;
-                                            List<NameValuePair> paramsx = new ArrayList<NameValuePair>();
-                                            paramsx.clear();
-                                            paramsx.add(new BasicNameValuePair("seller_id", Constants.seller_id));
-                                            paramsx.add(new BasicNameValuePair("seller_img", Constants.seller_img));
-                                            paramsx.add(new BasicNameValuePair("seller_name", Constants.seller_name));
-                                            paramsx.add(new BasicNameValuePair("seller_address", Constants.seller_address+"%"+Constants.seller_address_detail));
-                                            paramsx.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
-                                            paramsx.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
-                                            paramsx.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
-                                            String resultx = NetCore.postResulttoNet(Url.modify_11, paramsx);Log.d("mine", resultx);
-                                            JSONObject jsonObjectx = new JSONObject(resultx);
-                                            if (jsonObjectx.getString("state").equals("0")) {
-                                                handler.sendEmptyMessage(1);
-                                            } else {
-                                                handler.sendEmptyMessage(2);
-                                            }
-                                        }catch (Exception e){
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }).start();
-                            }else{
-                                handler.sendEmptyMessage(2);//
-                            }
+//                            if(isUpload) {
+//                                //update database
+//                                new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        try {
+//                                            Constants.seller_img =  + key;
+//                                            List<NameValuePair> paramsx = new ArrayList<NameValuePair>();
+//                                            paramsx.clear();
+//                                            paramsx.add(new BasicNameValuePair("seller_id", Constants.seller_id));
+//                                            paramsx.add(new BasicNameValuePair("seller_img", Constants.seller_img));
+//                                            paramsx.add(new BasicNameValuePair("seller_name", Constants.seller_name));
+//                                            paramsx.add(new BasicNameValuePair("seller_address", Constants.seller_address+"%"+Constants.seller_address_detail));
+//                                            paramsx.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
+//                                            paramsx.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
+//                                            paramsx.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
+//                                            String resultx = NetCore.postResulttoNet(Url.modify_11, paramsx);Log.d("mine", resultx);
+//                                            JSONObject jsonObjectx = new JSONObject(resultx);
+//                                            if (jsonObjectx.getString("state").equals("0")) {
+//                                                handler.sendEmptyMessage(1);
+//                                            } else {
+//                                                handler.sendEmptyMessage(2);
+//                                            }
+//                                        }catch (Exception e){
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                }).start();
+//                            }else{
+//                                handler.sendEmptyMessage(2);//
+//                            }
                         }
                     }, null);
                 }catch (Exception e){
@@ -330,8 +331,19 @@ public class MineActivity extends AppCompatActivity {
         bussAddr.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.isFromMine = true;
                 Intent intent = new Intent(getApplicationContext(), PickAddressActivity.class);
                 startActivity(intent);
+            }
+        });
+        bussAddr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    Constants.isFromMine = true;
+                    Intent intent = new Intent(getApplicationContext(), PickAddressActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         bussTel = (EditText) findViewById(R.id.mine_buss_tel);
@@ -342,6 +354,7 @@ public class MineActivity extends AppCompatActivity {
                 if(modify_info.getText().equals("修改信息")){//editable
                     bussName.setEnabled(true);
                     bussAddr.setEnabled(true);
+                    bussAddrDetail.setEnabled(true);
                     bussTel.setEnabled(true);
                     modify_info.setText("确认修改");
                 }else{//confirm and update
@@ -394,8 +407,7 @@ public class MineActivity extends AppCompatActivity {
                 public void onLoadingCancelled(String s, View view) {}
             });
         }else {
-            if(Constants.seller_img.equals("")) return;
-            imageLoader.displayImage(Constants.seller_img, addImage, new ImageLoadingListener() {
+            imageLoader.displayImage(Url.touxiang+Constants.seller_id+"?v="+new Random().nextInt(100), addImage, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String s, View view) {}
 
@@ -404,7 +416,7 @@ public class MineActivity extends AppCompatActivity {
 
                 @Override
                 public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                    Log.d("mine", "#"+Constants.seller_img+" "+bitmap);
+                    if(bitmap==null) return;
                     RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
                     roundedBitmapDrawable.setCornerRadius(bitmap.getWidth()/2);
                     roundedBitmapDrawable.setAntiAlias(true);
@@ -428,9 +440,9 @@ public class MineActivity extends AppCompatActivity {
 
     private void modifyInfo(){
         name = bussName.getText().toString().trim();
-        address = bussAddr.getText().toString().trim();
+        address_detail = bussAddrDetail.getText().toString().trim();
         contact = bussTel.getText().toString().trim();
-        if(name.equals("")||address.equals("")||contact.equals("")){
+        if(name.equals("")||address_detail.equals("")||contact.equals("")){
             isModifyOn = false;
             Toast.makeText(getApplicationContext(), "请完善信息！", Toast.LENGTH_SHORT).show();
         }else{
@@ -442,16 +454,19 @@ public class MineActivity extends AppCompatActivity {
                         params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                         params.add(new BasicNameValuePair("seller_img", Constants.seller_img));
                         params.add(new BasicNameValuePair("seller_name", name));
-                        params.add(new BasicNameValuePair("seller_address", Constants.seller_address+"%"+Constants.seller_address_detail));
-                        params.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
-                        params.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
-                        params.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
+                        params.add(new BasicNameValuePair("seller_address", Constants.tmp_address+"%"+address_detail));
+                        params.add(new BasicNameValuePair("seller_contact", contact));
+                        params.add(new BasicNameValuePair("seller_location_j", ""+Constants.tmp_lan));
+                        params.add(new BasicNameValuePair("seller_location_w", ""+Constants.tmp_lon));
                         String result = NetCore.postResulttoNet(Url.modify_11, params);
                         JSONObject jsonObject = new JSONObject(result);
                         if(jsonObject.getString("state").equals("0")){
                             Constants.seller_name = name;
-                            Constants.seller_address = address;
+                            Constants.seller_address = Constants.tmp_address;
+                            Constants.seller_address_detail = address_detail;
                             Constants.seller_contact = contact;
+                            Constants.addr_lan = Constants.tmp_lan;
+                            Constants.addr_lon = Constants.tmp_lon;
                             handler.sendEmptyMessage(3);
                         }else{
                             handler.sendEmptyMessage(4);
@@ -465,12 +480,26 @@ public class MineActivity extends AppCompatActivity {
         }
     }
 
+    private void setSharePreference(){
+        sharedPreferences = getSharedPreferences("login_parkmerchant", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("seller_name", Constants.seller_name);
+        editor.putString("seller_address", Constants.seller_address);
+        editor.putString("seller_address_detail", Constants.seller_address_detail);
+        editor.putFloat("addr_lan", Constants.addr_lan);
+        editor.putFloat("addr_lon", Constants.addr_lon);
+        editor.putString("seller_contact", Constants.seller_contact);
+        editor.putString("seller_img", Constants.seller_img);
+        editor.commit();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         if(Constants.isPicked){
             Constants.isPicked = false;
-            bussAddr.setText(Constants.seller_address);
+            bussAddr.setText(Constants.tmp_address);
+            Log.d("mine", "address:"+Constants.tmp_lan+Constants.tmp_address+Constants.tmp_lon);
         }
     }
 

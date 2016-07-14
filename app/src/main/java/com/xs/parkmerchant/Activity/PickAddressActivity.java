@@ -50,16 +50,32 @@ public class PickAddressActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 //        SDKInitializer.initialize(getApplicationContext());//
         setContentView(R.layout.activity_pick_address);
+        lan = Constants.addr_lan;
+        lon = Constants.addr_lon;
+        addr = Constants.seller_address;
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         address = (TextView) findViewById(R.id.address);
         pick = (TextView) findViewById(R.id.pick);
         pick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!addr.equals("")){
-                    Constants.isPicked = true;
-                    Constants.seller_address = addr;
-                    Constants.addr_lon = (float)lon;
-                    Constants.addr_lan = (float)lan;
+                    if(Constants.isFromMine){
+                        Constants.isPicked = true;
+                        Constants.tmp_address = addr;
+                        Constants.tmp_lan = (float) lan;
+                        Constants.tmp_lon = (float) lon;
+                    }else {
+                        Constants.isPicked = true;
+                        Constants.seller_address = addr;
+                        Constants.addr_lon = (float) lon;
+                        Constants.addr_lan = (float) lan;
+                    }
                 }
                 finish();
             }
@@ -108,10 +124,15 @@ public class PickAddressActivity extends AppCompatActivity{
                     // 没有检测到结果
                     Toast.makeText(PickAddressActivity.this, "抱歉，未能找到结果",Toast.LENGTH_LONG).show();
                 }else {
-                    address.setText(result.getAddress());
-                    addr = result.getAddress();
+                    if(result.getBusinessCircle().equals("")){
+                        address.setText(result.getAddress());
+                        addr = result.getAddress();
+                    }else {
+                        address.setText(result.getAddress() + "(" + result.getBusinessCircle() + ")");
+                        addr = result.getAddress() + "(" + result.getBusinessCircle() + ")";
+                    }
                 }
-                Log.d("pick", "位置：" + result.getAddress());
+                Log.d("pick", "位置：" + result.getAddress()+"#"+result.getBusinessCircle()+"#"+result.getAddressDetail().district);
             }
         });
     }

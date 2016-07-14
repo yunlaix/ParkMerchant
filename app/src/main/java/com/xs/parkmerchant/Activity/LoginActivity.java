@@ -152,6 +152,9 @@ public class LoginActivity extends AppCompatActivity{
             Constants.addr_lon = sharedPreferences.getFloat("addr_lon", 0f);
             Constants.seller_contact = sharedPreferences.getString("seller_contact", "");
             Constants.seller_img = sharedPreferences.getString("seller_img", "");
+            Constants.tmp_address = Constants.seller_address;
+            Constants.tmp_lon = Constants.addr_lon;
+            Constants.tmp_lan = Constants.addr_lan;
             Log.d("login", "auto-login"+Constants.seller_id+Constants.seller_password);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
