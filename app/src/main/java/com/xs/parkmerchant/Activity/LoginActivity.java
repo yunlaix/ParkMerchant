@@ -89,7 +89,14 @@ public class LoginActivity extends AppCompatActivity{
                                 JSONObject jsonObject = new JSONObject(result);
                                 if(jsonObject.getString("state").equals("0")){
                                     Constants.seller_name = jsonObject.getString("seller_name");
-                                    Constants.seller_address = jsonObject.getString("seller_address");
+                                    String s = jsonObject.getString("seller_address");
+                                    Log.d("login", result);
+                                    String [] tmp = s.split("%");
+                                    Constants.seller_address = tmp[0];
+                                    Constants.seller_address_detail = tmp[1];
+                                    Log.d("login", tmp[0] + tmp[1].substring(0, tmp[1].length()));
+                                    Constants.addr_lan = Float.parseFloat(jsonObject.getString("seller_location_j"));
+                                    Constants.addr_lon = Float.parseFloat(jsonObject.getString("seller_location_w"));
                                     Constants.seller_contact = jsonObject.getString("seller_contact");
                                     Constants.seller_img = jsonObject.getString("seller_img");
                                     setSharePreference();
@@ -122,6 +129,9 @@ public class LoginActivity extends AppCompatActivity{
         editor.putString("seller_password", Constants.seller_password);
         editor.putString("seller_name", Constants.seller_name);
         editor.putString("seller_address", Constants.seller_address);
+        editor.putString("seller_address_detail", Constants.seller_address_detail);
+        editor.putFloat("addr_lan", Constants.addr_lan);
+        editor.putFloat("addr_lon", Constants.addr_lon);
         editor.putString("seller_contact", Constants.seller_contact);
         editor.putString("seller_img", Constants.seller_img);
         editor.commit();
@@ -137,6 +147,9 @@ public class LoginActivity extends AppCompatActivity{
         if(!Constants.seller_id.equals("") && !Constants.seller_password.equals("")){
             Constants.seller_name = sharedPreferences.getString("seller_name", "");
             Constants.seller_address = sharedPreferences.getString("seller_address", "");
+            Constants.seller_address_detail = sharedPreferences.getString("seller_address_detail", "");
+            Constants.addr_lan = sharedPreferences.getFloat("addr_lan", 0f);
+            Constants.addr_lon = sharedPreferences.getFloat("addr_lon", 0f);
             Constants.seller_contact = sharedPreferences.getString("seller_contact", "");
             Constants.seller_img = sharedPreferences.getString("seller_img", "");
             Log.d("login", "auto-login"+Constants.seller_id+Constants.seller_password);

@@ -63,6 +63,7 @@ public class MineActivity extends AppCompatActivity {
     private ImageView addImage;
     private EditText bussName;
     private EditText bussAddr;
+    private EditText bussAddrDetail;
     private EditText bussTel;
     private TextView modify_info, modify_password;
     private DisplayImageOptions options;
@@ -239,7 +240,7 @@ public class MineActivity extends AppCompatActivity {
                 fileOutputStream.flush();
                 fileOutputStream.close();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");//to be modified
-                uploadImg(Url.upload_img, filepath, "seller_"+simpleDateFormat.format(new Date()));
+                uploadImg(Url.refresh_img, filepath, "seller");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -252,6 +253,7 @@ public class MineActivity extends AppCompatActivity {
             public void run() {
                 try {
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    params.add(new BasicNameValuePair("key", key));
                     String result = NetCore.postResulttoNet(token_url, params);
                     JSONObject jsonObject = new JSONObject(result);
                     String token = jsonObject.getString("uptoken");
@@ -274,8 +276,10 @@ public class MineActivity extends AppCompatActivity {
                                             paramsx.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                                             paramsx.add(new BasicNameValuePair("seller_img", Constants.seller_img));
                                             paramsx.add(new BasicNameValuePair("seller_name", Constants.seller_name));
-                                            paramsx.add(new BasicNameValuePair("seller_address", Constants.seller_address));
+                                            paramsx.add(new BasicNameValuePair("seller_address", Constants.seller_address+"%"+Constants.seller_address_detail));
                                             paramsx.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
+                                            paramsx.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
+                                            paramsx.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
                                             String resultx = NetCore.postResulttoNet(Url.modify_11, paramsx);
                                             JSONObject jsonObjectx = new JSONObject(resultx);
                                             if (jsonObjectx.getString("state").equals("0")) {
@@ -322,6 +326,14 @@ public class MineActivity extends AppCompatActivity {
         addImage = (ImageView) findViewById(R.id.add_image);
         bussName = (EditText) findViewById(R.id.mine_buss_name);
         bussAddr = (EditText) findViewById(R.id.mine_buss_addr);
+        bussAddrDetail = (EditText) findViewById(R.id.mine_buss_addr_detail);
+        bussAddr.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PickAddressActivity.class);
+                startActivity(intent);
+            }
+        });
         bussTel = (EditText) findViewById(R.id.mine_buss_tel);
         modify_info = (TextView) findViewById(R.id.modify_info);
         modify_info.setOnClickListener(new OnClickListener() {
@@ -352,6 +364,7 @@ public class MineActivity extends AppCompatActivity {
         });
         bussName.setText(Constants.seller_name);
         bussAddr.setText(Constants.seller_address);
+        bussAddrDetail.setText(Constants.seller_address_detail);
         bussTel.setText(Constants.seller_contact);
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.mipmap.add_image)
@@ -420,8 +433,10 @@ public class MineActivity extends AppCompatActivity {
                         params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                         params.add(new BasicNameValuePair("seller_img", Constants.seller_img));
                         params.add(new BasicNameValuePair("seller_name", name));
-                        params.add(new BasicNameValuePair("seller_address", address));
-                        params.add(new BasicNameValuePair("seller_contact", contact));
+                        params.add(new BasicNameValuePair("seller_address", Constants.seller_address+"%"+Constants.seller_address_detail));
+                        params.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
+                        params.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
+                        params.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
                         String result = NetCore.postResulttoNet(Url.modify_11, params);
                         JSONObject jsonObject = new JSONObject(result);
                         if(jsonObject.getString("state").equals("0")){
@@ -438,6 +453,15 @@ public class MineActivity extends AppCompatActivity {
                     }
                 }
             }).start();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(Constants.isPicked){
+            Constants.isPicked = false;
+            bussAddr.setText(Constants.seller_address);
         }
     }
 

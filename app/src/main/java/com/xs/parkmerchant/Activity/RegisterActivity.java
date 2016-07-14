@@ -30,7 +30,7 @@ import java.util.List;
  * Created by Man on 2016/7/7.
  */
 public class RegisterActivity extends AppCompatActivity{
-    private EditText seller_id, seller_password, seller_name, seller_address, seller_contact;
+    private EditText seller_id, seller_password, seller_name, seller_address, seller_contact, seller_address_detail;
     private TextView register;
     private SharedPreferences sharedPreferences;
     private BDMapLocation bdMapLocation;
@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity{
                     break;
                 case 2:
                     Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                    finish();
                     break;
                 case 3:
                     Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
@@ -51,8 +52,8 @@ public class RegisterActivity extends AppCompatActivity{
                     if(!bdMapLocation.getAddr().equals("addr")){
                         seller_address.setText(bdMapLocation.getAddr());
                         Constants.seller_address = bdMapLocation.getAddr();
-                        Constants.addr_lan = bdMapLocation.getLatitude();
-                        Constants.addr_lon = bdMapLocation.getLontitude();
+                        Constants.addr_lan = (float)bdMapLocation.getLatitude();
+                        Constants.addr_lon = (float)bdMapLocation.getLontitude();
                     }else{
                         seller_address.setText("定位失败...");
                     }
@@ -84,13 +85,15 @@ public class RegisterActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+        seller_address_detail = (EditText) findViewById(R.id.seller_address_detail);
         seller_contact = (EditText) findViewById(R.id.seller_contact);
         register = (TextView) findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getEditText();
-                if(Constants.seller_id.equals("") || Constants.seller_password.equals("") || Constants.seller_name.equals("") || Constants.seller_address.equals("") || Constants.seller_contact.equals("")){
+                if(Constants.seller_id.equals("") || Constants.seller_password.equals("") || Constants.seller_name.equals("")
+                        || Constants.seller_address.equals("") || Constants.seller_contact.equals("") || Constants.seller_address_detail.equals("")){
                     Toast.makeText(getApplicationContext(), "empty!", Toast.LENGTH_SHORT).show();
                 }else{
                     new Thread(new Runnable() {
@@ -101,9 +104,11 @@ public class RegisterActivity extends AppCompatActivity{
                                 params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                                 params.add(new BasicNameValuePair("seller_password", Constants.seller_password));
                                 params.add(new BasicNameValuePair("seller_name", Constants.seller_name));
-                                params.add(new BasicNameValuePair("seller_address", Constants.seller_address));///
+                                params.add(new BasicNameValuePair("seller_address", Constants.seller_address+"%"+Constants.seller_address_detail));///
                                 params.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
                                 params.add(new BasicNameValuePair("seller_img", Constants.seller_img));
+                                params.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
+                                params.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
                                 String result = NetCore.postResulttoNet(Url.register_2, params);
                                 Log.d("login", "result"+result);
                                 if(result!=null && !result.equals("")){
@@ -136,6 +141,9 @@ public class RegisterActivity extends AppCompatActivity{
         editor.putString("seller_name", Constants.seller_name);
         editor.putString("seller_password", Constants.seller_password);
         editor.putString("seller_address", Constants.seller_address);
+        editor.putString("seller_address_detail", Constants.seller_address_detail);
+        editor.putFloat("addr_lan", Constants.addr_lan);
+        editor.putFloat("addr_lon", Constants.addr_lon);
         editor.putString("seller_contact", Constants.seller_contact);
         editor.putString("seller_img", Constants.seller_img);
         editor.commit();
@@ -147,6 +155,15 @@ public class RegisterActivity extends AppCompatActivity{
         Constants.seller_name = seller_name.getText().toString().trim();
         Constants.seller_address = seller_address.getText().toString().trim();
         Constants.seller_contact = seller_contact.getText().toString().trim();
+        Constants.seller_address_detail = seller_address_detail.getText().toString().trim();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(Constants.isPicked){
+            Constants.isPicked = false;
+            seller_address.setText(Constants.seller_address);
+        }
+    }
 }

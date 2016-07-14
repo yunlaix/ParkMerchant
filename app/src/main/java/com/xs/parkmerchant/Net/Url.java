@@ -15,6 +15,8 @@ public class Url {
 
     public static String upload_img = "http://139.129.24.127/parking_app/Qiniu/GetToken.php";
 
+    public static String refresh_img = "http://139.129.24.127/parking_app/Qiniu/RefreshToken.php";
+
     public static String touxiang = "http://7xvu2c.com1.z0.glb.clouddn.com/";
 
     public static String modify_11 = "http://139.129.24.127/parking_app/Seller/seller_modifyinfo.php";

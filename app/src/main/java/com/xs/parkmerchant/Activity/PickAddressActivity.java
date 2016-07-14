@@ -42,6 +42,8 @@ public class PickAddressActivity extends AppCompatActivity{
     private OverlayOptions option;
     private GeoCoder geoCoder;
     private TextView address;
+    private double lan, lon;
+    private String addr="";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +55,12 @@ public class PickAddressActivity extends AppCompatActivity{
         pick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Constants.isPicked = true;
+                if(!addr.equals("")){
+                    Constants.isPicked = true;
+                    Constants.seller_address = addr;
+                    Constants.addr_lon = (float)lon;
+                    Constants.addr_lan = (float)lan;
+                }
                 finish();
             }
         });
@@ -77,6 +84,8 @@ public class PickAddressActivity extends AppCompatActivity{
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 Log.d("pickaddress", marker.getPosition().toString());
+                lan = marker.getPosition().latitude;
+                lon = marker.getPosition().longitude;
                 geoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(marker.getPosition()));
             }
 
@@ -100,6 +109,7 @@ public class PickAddressActivity extends AppCompatActivity{
                     Toast.makeText(PickAddressActivity.this, "抱歉，未能找到结果",Toast.LENGTH_LONG).show();
                 }else {
                     address.setText(result.getAddress());
+                    addr = result.getAddress();
                 }
                 Log.d("pick", "位置：" + result.getAddress());
             }

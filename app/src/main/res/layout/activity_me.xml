@@ -54,14 +54,14 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:id="@+id/add_image"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:src="@mipmap/add_image"/>
         <LinearLayout
             android:id="@+id/nn"
             android:layout_below="@id/add_image"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/listSize"
             android:orientation="horizontal"
@@ -105,6 +105,7 @@
                 android:layout_marginLeft="@dimen/textMargin"/>
             <EditText
                 android:id="@+id/mine_buss_addr"
+                android:editable="false"
                 android:enabled="false"
                 android:background="@null"
                 android:layout_width="0dp"
@@ -117,7 +118,36 @@
                 android:layout_marginLeft="@dimen/textMarginText"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/dd"
             android:layout_below="@id/aa"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/listSize"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/listMargin"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="详细地址"
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGreen"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMargin"/>
+            <EditText
+                android:id="@+id/mine_buss_addr_detail"
+                android:enabled="false"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="详细地址..."
+                android:textSize="@dimen/secondSize"
+                android:textColor="@color/textGray"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/textMarginText"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@id/dd"
             android:layout_width="match_parent"
             android:layout_height="@dimen/listSize"
             android:orientation="horizontal"
@@ -147,7 +177,7 @@
         </LinearLayout>
         <TextView
             android:id="@+id/modify_info"
-            android:layout_marginBottom="110dp"
+            android:layout_marginBottom="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentBottom="true"
@@ -160,7 +190,7 @@
             android:text="修改信息"/>
         <TextView
             android:id="@+id/modify_password"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="20dp"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="50dp"

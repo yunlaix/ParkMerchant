@@ -15,7 +15,8 @@ public class Constants {
     public static String seller_name="";
     public static String seller_password="";
     public static String seller_address="";
-    public static double addr_lan, addr_lon;
+    public static String seller_address_detail="";
+    public static float addr_lan, addr_lon;
     public static String seller_contact="";
     public static String seller_img="";
 
