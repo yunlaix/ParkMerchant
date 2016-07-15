@@ -322,6 +322,7 @@ public class MineActivity extends AppCompatActivity {
     }
 
     public void initView(){
+        ((TextView) findViewById(R.id.id)).setText(Constants.seller_id);
         back = (ImageView)findViewById(R.id.mine_back);
         logout = (ImageView)findViewById(R.id.logout);
         addImage = (ImageView) findViewById(R.id.add_image);
@@ -456,8 +457,8 @@ public class MineActivity extends AppCompatActivity {
                         params.add(new BasicNameValuePair("seller_name", name));
                         params.add(new BasicNameValuePair("seller_address", Constants.tmp_address+"%"+address_detail));
                         params.add(new BasicNameValuePair("seller_contact", contact));
-                        params.add(new BasicNameValuePair("seller_location_j", ""+Constants.tmp_lan));
-                        params.add(new BasicNameValuePair("seller_location_w", ""+Constants.tmp_lon));
+                        params.add(new BasicNameValuePair("seller_location_w", ""+Constants.tmp_lan));
+                        params.add(new BasicNameValuePair("seller_location_j", ""+Constants.tmp_lon));
                         String result = NetCore.postResulttoNet(Url.modify_11, params);
                         JSONObject jsonObject = new JSONObject(result);
                         if(jsonObject.getString("state").equals("0")){

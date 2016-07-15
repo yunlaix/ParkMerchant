@@ -14,7 +14,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TicketDetailContent {
@@ -87,8 +90,13 @@ public class TicketDetailContent {
                             for(int i=0; i<count; i++){
                                 JSONObject jo = jsonArray.getJSONObject(i);
                                 if(jo.getString("ticket_state").equals("1")) continue;
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(simpleDateFormat.parse(jo.getString("ticket_deadLine")));
+                                calendar.add(Calendar.DAY_OF_YEAR, -1);
                                 TicketDetailItem tmp = new TicketDetailItem(jo.getString("ticket_id"), jo.getString("user_name"),
-                                        jo.getString("ticket_deadLine"), jo.getString("ticket_usetime"),jo.getString("ticket_state"));
+                                        jo.getString("ticket_deadLine"), jo.getString("ticket_usetime"),jo.getString("ticket_state"), simpleDateFormat.format(calendar.getTime()));
+                                Log.d("ticket", simpleDateFormat.format(calendar.getTime()));
                                 items.add(tmp);
                             }
                             handler.sendEmptyMessage(1);}
@@ -119,14 +127,16 @@ public class TicketDetailContent {
         public final String user_name;
         public final String deadline;
         public final String usetime;
+        public final String generateTime;
         public final String state;
 
-        public TicketDetailItem(String t, String u, String d, String ut, String s) {
+        public TicketDetailItem(String t, String u, String d, String ut, String s, String g) {
             this.ticket_id = t;
             this.user_name = u;
             this.deadline = d;
             this.usetime = ut;
             this.state = s;
+            this.generateTime = g;
         }
     }
 }

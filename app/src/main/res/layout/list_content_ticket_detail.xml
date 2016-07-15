@@ -2,44 +2,56 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relative"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="100dp">
     <ImageView
         android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@mipmap/ticket_unused"/>
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:paddingBottom="40dp"
-        android:paddingLeft="10dp"
-        android:textSize="18sp"
-        android:textColor="#5e5e5e"
-        android:text="使用时间/使用期限"/>
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:background="@mipmap/me"/>
 
     <TextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:paddingTop="10dp"
-        android:paddingLeft="12dp"
-        android:textColor="#999999"
-        android:textSize="16sp"
-        android:text="板儿棒"/>
+        android:layout_alignTop="@id/background"
+        android:layout_toRightOf="@id/background"
+        android:layout_marginLeft="8dp"
+        android:textSize="18sp"
+        android:textColor="#5e5e5e"
+        android:text="用户名"/>
 
     <TextView
         android:id="@+id/ticket_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/background"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-        android:textColor="#fefefe"
-        android:textSize="30sp"
-        android:text="未使用"/>
+        android:layout_marginRight="15dp"
+        android:textColor="#5e5e5e"
+        android:textSize="18sp"
+        android:text="使用状态：已使用"/>
+
+    <TextView
+        android:id="@+id/time_generate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/background"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#999999"
+        android:textSize="16sp"
+        android:text="生成时间：2016-07-16 9:35:22"/>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/time_generate"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="#999999"
+        android:textSize="16sp"
+        android:text="使用时间：2016-07-16 10:35:22"/>
 </RelativeLayout>

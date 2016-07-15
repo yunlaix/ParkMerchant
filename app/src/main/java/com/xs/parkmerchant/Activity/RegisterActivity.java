@@ -118,8 +118,8 @@ public class RegisterActivity extends AppCompatActivity{
                                 params.add(new BasicNameValuePair("seller_address", Constants.seller_address+"%"+Constants.seller_address_detail));///
                                 params.add(new BasicNameValuePair("seller_contact", Constants.seller_contact));
                                 params.add(new BasicNameValuePair("seller_img", Constants.seller_img));
-                                params.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lan));
-                                params.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lon));
+                                params.add(new BasicNameValuePair("seller_location_w", ""+Constants.addr_lan));
+                                params.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lon));
                                 String result = NetCore.postResulttoNet(Url.register_2, params);
                                 Log.d("login", "result"+result);
                                 if(result!=null && !result.equals("")){

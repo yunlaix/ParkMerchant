@@ -32,26 +32,28 @@ public class TicketDetailAdapter extends BaseAdapter {
             view = mInflater.inflate(R.layout.list_content_ticket_detail, null);
             holder.user_name = (TextView) view.findViewById(R.id.user_name);
             holder.time = (TextView) view.findViewById(R.id.time);
+            holder.time_generate = (TextView) view.findViewById(R.id.time_generate);
             holder.ticket_state = (TextView) view.findViewById(R.id.ticket_state);
-            holder.background = (ImageView) view.findViewById(R.id.background);
+//            holder.background = (ImageView) view.findViewById(R.id.background);
             view.setTag(holder);
         }else{
             holder = (Holder) view.getTag();
         }
         if(mValues.get(i).state.equals("2")){//unused
-            holder.time.setText("有效期限："+mValues.get(i).deadline);
-            holder.background.setImageResource(R.mipmap.ticket_unused);
-            holder.ticket_state.setText("未使用");
+            holder.time.setText("有效时间："+mValues.get(i).deadline);
+//            holder.background.setImageResource(R.mipmap.ticket_unused);
+            holder.ticket_state.setText("使用状态：未使用");
         }else if(mValues.get(i).state.equals("3")){//out of time
-            holder.time.setText("有效期限："+mValues.get(i).deadline);
-            holder.background.setImageResource(R.mipmap.ticket_down);
-            holder.ticket_state.setText("已过期");
+            holder.time.setText("有效时间："+mValues.get(i).deadline);
+//            holder.background.setImageResource(R.mipmap.ticket_down);
+            holder.ticket_state.setText("使用状态：已过期");
         }else if(mValues.get(i).state.equals("4")){//used
             holder.time.setText("使用时间："+mValues.get(i).usetime);
-            holder.background.setImageResource(R.mipmap.ticket_used);
-            holder.ticket_state.setText("已使用");
+//            holder.background.setImageResource(R.mipmap.ticket_used);
+            holder.ticket_state.setText("使用状态：已使用");
         }
         holder.user_name.setText(mValues.get(i).user_name);
+        holder.time_generate.setText("生成时间："+mValues.get(i).generateTime);
         return view;
     }
 
@@ -71,7 +73,8 @@ public class TicketDetailAdapter extends BaseAdapter {
     private class Holder{
         private TextView user_name;
         private TextView time;
+        private TextView time_generate;
         private TextView ticket_state;
-        private ImageView background;
+//        private ImageView background;
     }
 }

@@ -107,8 +107,12 @@ public class QRActivity extends AppCompatActivity {
                 param.clear();
                 param.add(new BasicNameValuePair("ticket_id", ticket_id));
                 param.add(new BasicNameValuePair("activity_id", activity_id));
-                param.add(new BasicNameValuePair("ticket_deadline", Constants.activity_endttime));
-                Log.d("upload","uploadQR param"+ticket_id+" "+activity_id+" "+activity_time);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                param.add(new BasicNameValuePair("ticket_deadline", simpleDateFormat.format(calendar.getTime())));
+                Log.d("upload","uploadQR param"+ticket_id+" "+activity_id+" "+activity_time+"  "+simpleDateFormat.format(calendar.getTime()));
                 try {
                     String data = NetCore.postResulttoNet(Url.produceTicket, param);
                     JSONObject jb = new JSONObject(data);
