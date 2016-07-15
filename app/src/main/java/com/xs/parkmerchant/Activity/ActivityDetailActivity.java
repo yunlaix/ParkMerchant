@@ -214,7 +214,7 @@ public class ActivityDetailActivity extends AppCompatActivity {
             detailActivityLocation.setText(Constants.seller_address);
             detailActivityDescri.setText(Constants.activity_detail);
             if(!activity_img.equals(Constants.activity_img)){
-                activityDetailImage.setImageBitmap(Constants.activity_bitmap);
+                activityDetailImage.setBackground(new BitmapDrawable(Constants.activity_bitmap));
                 activity_img = Constants.activity_img;
             }
         }
