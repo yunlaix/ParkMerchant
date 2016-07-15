@@ -1,6 +1,7 @@
 package com.xs.parkmerchant.Activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -77,6 +78,7 @@ public class MineActivity extends AppCompatActivity {
     private final int REQUEST_CODE_TAKE_PHOTO = 3;
     private final int REQUEST_CAMERA = 4;
     private SharedPreferences sharedPreferences;
+    private ProgressDialog progressDialog;
 
     private Handler handler = new Handler(){
         @Override
@@ -98,9 +100,11 @@ public class MineActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "修改成功！", Toast.LENGTH_SHORT).show();
                 isModifyOn = false;
                 setSharePreference();
+                progressDialog.dismiss();
             }else if(msg.what==4){//modify fail
                 Toast.makeText(getApplicationContext(), "修改失败！", Toast.LENGTH_SHORT).show();
                 isModifyOn = false;
+                progressDialog.dismiss();
             }
             if(!Constants.isNetWorkConnected(getApplicationContext()))Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
         }
@@ -447,6 +451,7 @@ public class MineActivity extends AppCompatActivity {
             isModifyOn = false;
             Toast.makeText(getApplicationContext(), "请完善信息！", Toast.LENGTH_SHORT).show();
         }else{
+            progressDialog = android.app.ProgressDialog.show(MineActivity.this, "修改信息", "正在上传...");
             new Thread(new Runnable() {
                 @Override
                 public void run() {

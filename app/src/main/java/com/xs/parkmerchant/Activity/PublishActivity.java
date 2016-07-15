@@ -2,6 +2,7 @@ package com.xs.parkmerchant.Activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -79,9 +80,11 @@ public class PublishActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "发布失败！", Toast.LENGTH_SHORT).show();
             }
             if(!Constants.isNetWorkConnected(getApplicationContext()))Toast.makeText(getApplicationContext(), "网络无连接", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
         }
     };
     private boolean isUping = false;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -326,6 +329,7 @@ public class PublishActivity extends AppCompatActivity{
                         Constants.activity_endttime = ValueName[2];
                         Constants.activity_detail = ValueName[3];
                         Constants.activity_img = ValueName[4];
+                        progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(),  "上传成功!", Toast.LENGTH_LONG).show();
                         Constants.isPublished = true;
                         isUping = false;
@@ -346,6 +350,7 @@ public class PublishActivity extends AppCompatActivity{
             return;
         }
         isUping = true;
+        progressDialog = android.app.ProgressDialog.show(PublishActivity.this, "发布活动", "正在上传...");
         new Thread(new Runnable() {
             @Override
             public void run() {
