@@ -136,7 +136,7 @@ public class QRActivity extends AppCompatActivity {
 
     /**产生二维码*/
     private void createQR(String content) {
-        logo= BitmapFactory.decodeResource(super.getResources(),R.mipmap.logo_qr);
+        logo= BitmapFactory.decodeResource(super.getResources(),R.mipmap.icon512);
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
         int w = outMetrics.widthPixels * 6 / 11;//设置宽度

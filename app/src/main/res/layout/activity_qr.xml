@@ -39,7 +39,7 @@
             android:id="@+id/qr_image"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:src="@mipmap/logo_qr"
+            android:src="@mipmap/icon512"
             android:layout_marginTop="50dp"
             android:layout_gravity="center_horizontal"/>
 
