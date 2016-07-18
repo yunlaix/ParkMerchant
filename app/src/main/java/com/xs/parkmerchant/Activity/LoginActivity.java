@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity{
                                 params.add(new BasicNameValuePair("seller_id", Constants.seller_id));
                                 params.add(new BasicNameValuePair("seller_password", Constants.seller_password));
                                 String result = NetCore.postResulttoNet(Url.login_1, params);
-//                                Log.d("login", "result"+result);
+                                Log.d("login", "result"+result);
                                 JSONObject jsonObject = new JSONObject(result);
                                 if(jsonObject.getString("state").equals("0")){
                                     Constants.seller_name = jsonObject.getString("seller_name");

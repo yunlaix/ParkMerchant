@@ -52,6 +52,7 @@ public class QRActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch(msg.what){
                 case 1:
+                    QR_time.setText(activity_time);
                     Toast.makeText(getApplication(), "停车券生成成功", Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
@@ -71,10 +72,9 @@ public class QRActivity extends AppCompatActivity {
         Intent intent = getIntent();
         activity_id = intent.getStringExtra("activity_id");
         activity_name = intent.getStringExtra("activity_name");
-        activity_time = getDate();
+//        activity_time = getDate();
 
         QR_name.setText(activity_name);
-        QR_time.setText(activity_time);
 
         //context用来产生二维码
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -111,7 +111,8 @@ public class QRActivity extends AppCompatActivity {
                 calendar.setTime(new Date());
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                param.add(new BasicNameValuePair("ticket_deadline", simpleDateFormat.format(calendar.getTime())));
+                activity_time = simpleDateFormat.format(calendar.getTime());
+                param.add(new BasicNameValuePair("ticket_deadline", activity_time));
                 Log.d("upload","uploadQR param"+ticket_id+" "+activity_id+" "+activity_time+"  "+simpleDateFormat.format(calendar.getTime()));
                 try {
                     String data = NetCore.postResulttoNet(Url.produceTicket, param);
