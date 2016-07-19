@@ -12,7 +12,19 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_margin="17.5dp"
-        android:src="@mipmap/ticket_2"/>
+        android:src="@mipmap/ticket_num"/>
+
+    <TextView
+        android:id="@+id/tcount"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40dp"
+        android:gravity="center"
+        android:textColor="#fefefe"
+        android:textSize="26sp"
+        android:text="10"/>
+
     <TextView
         android:id="@+id/activity_name"
         android:layout_width="wrap_content"
@@ -47,16 +59,5 @@
         android:textSize="14.5sp"
         android:textColor="#5e5e5e"
         android:text="使用期限" />
-    <TextView
-        android:id="@+id/tcount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:padding="3dp"
-        android:background="@color/textGreen"
-        android:textColor="#fefefe"
-        android:text="10"/>
+
 </RelativeLayout>
