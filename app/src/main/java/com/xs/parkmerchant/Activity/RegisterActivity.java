@@ -1,5 +1,6 @@
 package com.xs.parkmerchant.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity{
                     break;
                 case 2:
                     Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                     finish();
                     break;
                 case 3:
@@ -59,8 +61,10 @@ public class RegisterActivity extends AppCompatActivity{
                     }
                     break;
             }
+            if(progressDialog!=null)progressDialog.dismiss();
         }
     };
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,6 +111,7 @@ public class RegisterActivity extends AppCompatActivity{
                         || Constants.seller_address.equals("") || Constants.seller_contact.equals("") || Constants.seller_address_detail.equals("")){
                     Toast.makeText(getApplicationContext(), "empty!", Toast.LENGTH_SHORT).show();
                 }else{
+                    progressDialog = android.app.ProgressDialog.show(RegisterActivity.this, "账号注册", "正在注册...");
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -122,17 +127,16 @@ public class RegisterActivity extends AppCompatActivity{
                                 params.add(new BasicNameValuePair("seller_location_j", ""+Constants.addr_lon));
                                 String result = NetCore.postResulttoNet(Url.register_2, params);
                                 Log.d("login", "result"+result);
-                                if(result!=null && !result.equals("")){
-                                    JSONObject jsonObject = new JSONObject(result);
-                                    String state = jsonObject.getString("state");
-                                    if(state.equals("0")){
-                                        setSharePreference();
-                                        handler.sendEmptyMessage(2);
-                                    }else{
-                                        handler.sendEmptyMessage(1);
-                                    }
+                                JSONObject jsonObject = new JSONObject(result);
+                                String state = jsonObject.getString("state");
+                                if(state.equals("0")){
+                                    setSharePreference();
+                                    handler.sendEmptyMessage(2);
+                                }else{
+                                    handler.sendEmptyMessage(1);
                                 }
                             }catch (Exception e){
+                                progressDialog.dismiss();
                                 e.printStackTrace();
                                 if(!Constants.isNetWorkConnected(getApplicationContext())) handler.sendEmptyMessage(3);
                             }
