@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.xs.parkmerchant.Activity.TicketDetailActivity;
 import com.xs.parkmerchant.Adapter.TicketDetailAdapter;
 import com.xs.parkmerchant.Adapter.TicketListViewAdapter;
 import org.apache.http.NameValuePair;
@@ -44,6 +45,7 @@ public class TicketDetailContent {
                 Toast.makeText(context, "没有更多数据！", Toast.LENGTH_SHORT).show();
             }
             isLoadingMore = false;
+            TicketDetailActivity.isLoadingMore = false;
             sync = false;
             swipeRefreshLayoutTicket.setRefreshing(false);
         }

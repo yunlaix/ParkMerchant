@@ -22,7 +22,7 @@ import com.xs.parkmerchant.R;
  */
 public class TicketDetailActivity extends AppCompatActivity{
 
-    private boolean isLoadingMore = false;
+    public static boolean isLoadingMore = false;
     private TicketDetailAdapter ticketDetailAdapter;
     private TicketDetailContent ticketDetailContent;
     private SwipeRefreshLayout swipeRefreshLayout;
